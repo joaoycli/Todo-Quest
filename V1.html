@@ -1,0 +1,311 @@
+<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quest Todo - Productivity RPG</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --secondary: #818cf8;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .credits {
+            background: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 0.5rem;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.25rem;
+        }
+
+        .task-list, .wishlist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .task-list li, .wishlist li {
+            background: #f9fafb;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-bar {
+            background: #e5e7eb;
+            height: 1rem;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            background: var(--success);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .streak {
+            color: var(--warning);
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Quest Todo</h1>
+            <div class="credits">Credits: <span id="totalCredits">0</span></div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Add Task</h2>
+                <form id="taskForm">
+                    <input type="text" id="taskName" placeholder="Task name" required="">
+                    <input type="number" id="timeEstimate" placeholder="Time estimate (hours)" required="" min="0" step="0.5">
+                    <select id="importance" required="">
+                        <option value="">Select importance</option>
+                        <option value="1">★</option>
+                        <option value="2">★★</option>
+                        <option value="3">★★★</option>
+                        <option value="4">★★★★</option>
+                        <option value="5">★★★★★</option>
+                    </select>
+                    <input type="date" id="deadline" required="">
+                    <button type="submit">Add Task</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h2>Add Wishlist Item</h2>
+                <form id="wishlistForm">
+                    <input type="text" id="itemName" placeholder="Item name" required="">
+                    <input type="number" id="itemCost" placeholder="Cost (HKD)" required="" min="0">
+                    <input type="number" id="timeline" placeholder="Timeline (weeks)" required="" min="1">
+                    <button type="submit">Add Item</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Tasks</h2>
+                <ul id="taskList" class="task-list"></ul>
+            </div>
+
+            <div class="card">
+                <h2>Wishlist</h2>
+                <ul id="wishlist" class="wishlist"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let state = {
+            tasks: [],
+            wishlist: [],
+            credits: 0,
+            streak: 0
+        };
+
+        // Load state from localStorage
+        function loadState() {
+            const savedState = localStorage.getItem('questTodoState');
+            if (savedState) {
+                state = JSON.parse(savedState);
+                updateUI();
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('questTodoState', JSON.stringify(state));
+        }
+
+        // Calculate credits for a task
+        function calculateCredits(importance, timeEstimate, deadline) {
+            const daysRemaining = Math.max(0, (new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
+            const urgency = daysRemaining / 7;
+            return Math.round((importance * 2 + Math.log(timeEstimate)) * (1 + urgency));
+        }
+
+        // Add task
+        document.getElementById('taskForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const task = {
+                name: document.getElementById('taskName').value,
+                timeEstimate: parseFloat(document.getElementById('timeEstimate').value),
+                importance: parseInt(document.getElementById('importance').value),
+                deadline: document.getElementById('deadline').value,
+                completed: false,
+                credits: calculateCredits(
+                    parseInt(document.getElementById('importance').value),
+                    parseFloat(document.getElementById('timeEstimate').value),
+                    document.getElementById('deadline').value
+                )
+            };
+            state.tasks.push(task);
+            saveState();
+            updateUI();
+            e.target.reset();
+        });
+
+        // Add wishlist item
+        document.getElementById('wishlistForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const item = {
+                name: document.getElementById('itemName').value,
+                cost: parseFloat(document.getElementById('itemCost').value),
+                timeline: parseInt(document.getElementById('timeline').value),
+                credits: Math.round(parseFloat(document.getElementById('itemCost').value) * 10),
+                progress: 0
+            };
+            state.wishlist.push(item);
+            saveState();
+            updateUI();
+            e.target.reset();
+        });
+
+        // Complete task
+        function completeTask(index) {
+            const task = state.tasks[index];
+            if (!task.completed) {
+                // Apply streak bonus
+                let bonus = 1 + (state.streak * 0.1);
+                
+                // Apply early completion bonus
+                const daysEarly = Math.max(0, (new Date(task.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+                bonus += daysEarly * 0.05;
+
+                state.credits += Math.round(task.credits * bonus);
+                state.streak++;
+                task.completed = true;
+                saveState();
+                updateUI();
+            }
+        }
+
+        // Update UI
+        function updateUI() {
+            // Update credits display
+            document.getElementById('totalCredits').textContent = state.credits;
+
+            // Update tasks list
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = state.tasks
+                .map((task, index) => `
+                    <li>
+                        <div>
+                            <strong>${task.name}</strong><br>
+                            ${task.importance}★ | ${task.timeEstimate}h | Due: ${task.deadline}<br>
+                            Credits: ${task.credits}
+                        </div>
+                        ${!task.completed ? 
+                            `<button onclick="completeTask(${index})">Complete</button>` :
+                            `<span style="color: var(--success)">✓ Done</span>`
+                        }
+                    </li>
+                `)
+                .join('');
+
+            // Update wishlist
+            const wishlist = document.getElementById('wishlist');
+            wishlist.innerHTML = state.wishlist
+                .map((item, index) => `
+                    <li>
+                        <div>
+                            <strong>${item.name}</strong><br>
+                            ${item.cost} HKD | ${item.timeline} weeks<br>
+                            Credits needed: ${item.credits}
+                            <div class="progress-bar">
+                                <div class="progress-bar-fill" style="width: ${Math.min(100, (state.credits / item.credits) * 100)}%"></div>
+                            </div>
+                        </div>
+                    </li>
+                `)
+                .join('');
+        }
+
+        // Initialize
+        loadState();
+
+        // Daily credit decay
+        setInterval(() => {
+            state.credits = Math.max(0, Math.round(state.credits * 0.98));
+            saveState();
+            updateUI();
+        }, 24 * 60 * 60 * 1000);
+    </script>
+
+
+</body></html>
