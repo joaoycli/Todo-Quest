@@ -16,6 +16,8 @@
             --rare: #9333ea;
             --epic: #c026d3;
             --legendary: #fbbf24;
+            --focus: #7dd3fc;
+            --rest: #f43f5e;
         }
 
         body {
@@ -41,6 +43,7 @@
         .stats {
             display: flex;
             gap: 1rem;
+            flex-wrap: wrap;
         }
 
         .credits {
@@ -101,6 +104,12 @@
 
         button:active {
             transform: translateY(1px);
+        }
+
+        button:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+            transform: none;
         }
 
         input, select {
@@ -364,6 +373,139 @@
             flex: 1;
         }
 
+        .pomodoro-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .pomodoro-modal.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .pomodoro-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .timer-display {
+            font-size: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            font-weight: bold;
+        }
+
+        .phase-indicator {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .focus-time {
+            color: var(--focus);
+        }
+
+        .rest-time {
+            color: var(--rest);
+        }
+
+        .pomodoro-stats {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .pomodoro-progress {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .pomodoro-segment {
+            flex: 1;
+            height: 8px;
+            margin: 0 2px;
+            border-radius: 4px;
+            background: #e5e7eb;
+        }
+
+        .pomodoro-segment.completed {
+            background: var(--success);
+        }
+
+        .pomodoro-segment.current {
+            background: var(--focus);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .quest-icon, .reward-icon {
+            font-size: 1.5rem;
+            margin-right: 0.5rem;
+            width: 2rem;
+            height: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #f3f4f6;
+            border-radius: 50%;
+        }
+
+        .task-header, .reward-header {
+            display: flex;
+            align-items: center;
+        }
+
+        .subtasks {
+            margin-top: 0.5rem;
+            padding-left: 1rem;
+            border-left: 2px dashed #e5e7eb;
+        }
+
+        .subtask-item {
+            padding: 0.5rem;
+            margin-bottom: 0.25rem;
+            background: #f3f4f6;
+            border-radius: 0.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .subtask-completed {
+            text-decoration: line-through;
+            opacity: 0.7;
+        }
+
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -378,6 +520,11 @@
                 width: 100%;
                 margin-top: 1rem;
                 justify-content: flex-end;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 0.5rem;
             }
         }
     </style>
@@ -402,6 +549,41 @@
             <div class="bonus-option" onclick="selectBonusOption('epic')">
                 <h3>Epic</h3>
                 <p>20% chance of <span id="epicAmount">100</span> credits</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="pomodoro-modal" id="pomodoroModal">
+        <div class="pomodoro-container">
+            <h2 id="pomodoroTaskName">Task Name</h2>
+            <div class="phase-indicator">
+                <span id="phaseType" class="focus-time">Focus Time</span>
+            </div>
+            <div class="timer-display" id="timerDisplay">25:00</div>
+            <div class="timer-controls">
+                <button id="startTimer" onclick="startPomodoroTimer()">Start</button>
+                <button id="pauseTimer" onclick="pausePomodoroTimer()" disabled>Pause</button>
+                <button id="skipTimer" onclick="skipPomodoroPhase()">Skip</button>
+                <button onclick="closePomodoroModal()">Exit</button>
+            </div>
+            
+            <div class="pomodoro-progress" id="pomodoroProgress">
+                <!-- Pomodoro segments will be added here -->
+            </div>
+            
+            <div class="pomodoro-stats">
+                <h3>Pomodoro Stats</h3>
+                <p>Completed: <span id="completedPomodoros">0</span> / <span id="totalPomodoros">4</span></p>
+                <p>Loot Bonus: +<span id="lootBonus">0</span>% chance of bonus rewards</p>
+            </div>
+            
+            <div class="subtasks" id="subtasksList">
+                <h3>Subtasks</h3>
+                <div class="subtask-form">
+                    <input type="text" id="subtaskInput" placeholder="Add a subtask">
+                    <button onclick="addSubtask()">Add</button>
+                </div>
+                <!-- Subtasks will be added here -->
             </div>
         </div>
     </div>
@@ -520,8 +702,198 @@
             xpToNextLevel: 100,
             lastDaily: null,
             bonusChallenge: null,
-            completionHistory: []
+            completionHistory: [],
+            activePomodoro: null
         };
+        
+        // Icon mapping for common quest and reward types
+        const iconMappings = {
+            // Work and study related
+            "work": "💼",
+            "study": "📚",
+            "code": "💻",
+            "program": "💻",
+            "programming": "💻",
+            "coding": "💻",
+            "assignment": "📝",
+            "homework": "📚",
+            "project": "🏗️",
+            "research": "🔬",
+            "presentation": "📊",
+            "meeting": "👥",
+            "email": "📧",
+            "write": "✍️",
+            "writing": "✍️",
+            "read": "📖",
+            "reading": "📖",
+            "learn": "🧠",
+            "course": "🎓",
+            "class": "🏫",
+            "lecture": "🎓",
+            "test": "📝",
+            "exam": "📝",
+            "quiz": "❓",
+            
+            // Health related
+            "workout": "💪",
+            "exercise": "🏃",
+            "run": "🏃",
+            "gym": "🏋️",
+            "fitness": "🏋️",
+            "yoga": "🧘",
+            "meditate": "🧘",
+            "meditation": "🧘",
+            "sleep": "😴",
+            "diet": "🥗",
+            "eat": "🍽️",
+            "cook": "🍳",
+            "cooking": "🍳",
+            "health": "❤️",
+            "doctor": "🩺",
+            "dentist": "🦷",
+            
+            // Home related
+            "clean": "🧹",
+            "cleaning": "🧹",
+            "laundry": "🧺",
+            "dishes": "🍽️",
+            "groceries": "🛒",
+            "shopping": "🛍️",
+            "organize": "📋",
+            "pack": "📦",
+            "unpack": "📦",
+            "move": "🚚",
+            "repair": "🔧",
+            "fix": "🔧",
+            "home": "🏠",
+            "house": "🏠",
+            "apartment": "🏢",
+            
+            // Leisure related
+            "game": "🎮",
+            "gaming": "🎮",
+            "play": "🎮",
+            "movie": "🎬",
+            "tv": "📺",
+            "show": "📺",
+            "music": "🎵",
+            "podcast": "🎧",
+            "book": "📚",
+            "novel": "📕",
+            "art": "🎨",
+            "draw": "✏️",
+            "painting": "🎨",
+            "craft": "🧶",
+            
+            // Travel related
+            "travel": "✈️",
+            "trip": "🧳",
+            "vacation": "🏖️",
+            "flight": "✈️",
+            "drive": "🚗",
+            "train": "🚂",
+            "bus": "🚌",
+            "taxi": "🚕",
+            "hotel": "🏨",
+            "booking": "📅",
+            "reservation": "📅",
+            "ticket": "🎫",
+            "passport": "🛂",
+            "visa": "🛂",
+            
+            // Social related
+            "call": "📞",
+            "phone": "📱",
+            "text": "💬",
+            "message": "💬",
+            "social": "👥",
+            "friend": "👫",
+            "family": "👪",
+            "party": "🎉",
+            "event": "🎭",
+            "date": "❤️",
+            "gift": "🎁",
+            "present": "🎁",
+            "birthday": "🎂",
+            "anniversary": "💍",
+            "wedding": "💒",
+            
+            // Financial related
+            "bill": "💰",
+            "payment": "💳",
+            "bank": "🏦",
+            "pay": "💵",
+            "money": "💰",
+            "tax": "📑",
+            "budget": "💹",
+            "invest": "📈",
+            "investment": "📈",
+            "save": "💰",
+            "savings": "💰",
+            "expense": "💸",
+            "debt": "💸",
+            "loan": "💸",
+            "insurance": "🔒",
+            
+            // Reward related
+            "clothes": "👕",
+            "shoes": "👟",
+            "watch": "⌚",
+            "jewelry": "💍",
+            "accessory": "👓",
+            "gadget": "🔌",
+            "phone": "📱",
+            "laptop": "💻",
+            "computer": "🖥️",
+            "camera": "📷",
+            "headphone": "🎧",
+            "speaker": "🔊",
+            "game": "🎮",
+            "console": "🎮",
+            "toy": "🧸",
+            "book": "📚",
+            "subscription": "📱",
+            "membership": "🔑",
+            "ticket": "🎫",
+            "trip": "✈️",
+            "vacation": "🏖️",
+            "restaurant": "🍽️",
+            "dinner": "🍽️",
+            "lunch": "🍽️",
+            "coffee": "☕",
+            "drink": "🍹",
+            "spa": "💆",
+            "massage": "💆",
+            "movie": "🎬",
+            "concert": "🎵",
+            "show": "🎭",
+            "gift": "🎁",
+            "donation": "❤️",
+            "charity": "❤️",
+            "savings": "💰",
+            "investment": "📈"
+        };
+        
+        // Determine icon for a given text
+        function determineIcon(text) {
+            const lowerText = text.toLowerCase();
+            
+            // Look for keyword matches
+            for (const [keyword, icon] of Object.entries(iconMappings)) {
+                if (lowerText.includes(keyword)) {
+                    return icon;
+                }
+            }
+            
+            // Default icons if no match found
+            if (text.length % 5 === 0) return "🔮";
+            if (text.length % 5 === 1) return "⚔️";
+            if (text.length % 5 === 2) return "🛡️";
+            if (text.length % 5 === 3) return "🧩";
+            if (text.length % 5 === 4) return "📋";
+            
+            return "📝"; // Default fallback
+        }
 
         // Load state from localStorage
         function loadState() {
@@ -534,6 +906,30 @@
                 if (!state.xp) state.xp = 0;
                 if (!state.xpToNextLevel) state.xpToNextLevel = 100;
                 if (!state.completionHistory) state.completionHistory = [];
+                if (!state.activePomodoro) state.activePomodoro = null;
+                
+                // Backward compatibility for icons
+                state.tasks.forEach(task => {
+                    if (!task.icon) {
+                        task.icon = determineIcon(task.name);
+                    }
+                    if (!task.subtasks) {
+                        task.subtasks = [];
+                    }
+                    if (!task.pomodoroStats) {
+                        task.pomodoroStats = {
+                            completed: 0,
+                            total: 0,
+                            lootBonusPercent: 0
+                        };
+                    }
+                });
+                
+                state.wishlist.forEach(item => {
+                    if (!item.icon) {
+                        item.icon = determineIcon(item.name);
+                    }
+                });
                 
                 // Check if streak should continue or reset
                 const today = new Date().toDateString();
@@ -543,6 +939,18 @@
                 if (dayDiff > 1) {
                     // Reset streak if more than a day has passed
                     state.streak = 0;
+                }
+                
+                // Check for active pomodoro session
+                if (state.activePomodoro) {
+                    // Resume active session or clean up if too much time has passed
+                    const now = new Date().getTime();
+                    const timeSinceLastActivity = now - state.activePomodoro.lastActive;
+                    
+                    if (timeSinceLastActivity > 30 * 60 * 1000) { // 30 minutes
+                        // Too much time has passed, clean up
+                        state.activePomodoro = null;
+                    }
                 }
                 
                 // Check for daily bonus challenge
@@ -770,6 +1178,7 @@
         document.getElementById('taskForm').addEventListener('submit', (e) => {
             e.preventDefault();
             
+            const taskName = document.getElementById('taskName').value;
             const importance = parseInt(document.getElementById('importance').value);
             const timeEstimate = parseFloat(document.getElementById('timeEstimate').value);
             const deadline = document.getElementById('deadline').value;
@@ -777,16 +1186,29 @@
             // Calculate task rarity
             const rarity = calculateTaskRarity(importance, timeEstimate, deadline);
             
+            // Determine a suitable icon
+            const icon = determineIcon(taskName);
+            
+            // Calculate recommended pomodoros based on time estimate
+            const recommendedPomodoros = Math.max(1, Math.ceil(timeEstimate * 2)); // 2 pomodoros per hour
+            
             const task = {
-                name: document.getElementById('taskName').value,
+                name: taskName,
                 timeEstimate: timeEstimate,
                 importance: importance,
                 deadline: deadline,
                 completed: false,
                 rarity: rarity,
+                icon: icon,
                 credits: calculateCredits(importance, timeEstimate, deadline, rarity),
                 xp: Math.round(importance * 10 + timeEstimate * 5), // Base XP
-                created: new Date().toISOString()
+                created: new Date().toISOString(),
+                subtasks: [],
+                pomodoroStats: {
+                    completed: 0,
+                    total: recommendedPomodoros,
+                    lootBonusPercent: 0
+                }
             };
             
             state.tasks.push(task);
@@ -801,9 +1223,13 @@
         document.getElementById('wishlistForm').addEventListener('submit', (e) => {
             e.preventDefault();
             
+            const itemName = document.getElementById('itemName').value;
             const cost = parseFloat(document.getElementById('itemCost').value);
             const timeline = parseInt(document.getElementById('timeline').value);
             const desireLevel = parseInt(document.getElementById('desireLevel').value);
+            
+            // Determine a suitable icon
+            const icon = determineIcon(itemName);
             
             // Base multiplier with variability
             const baseMultiplier = 9 + Math.random() * 2;
@@ -827,7 +1253,8 @@
             const headStart = Math.min(0.05 * totalCredits, 50);
             
             const item = {
-                name: document.getElementById('itemName').value,
+                name: itemName,
+                icon: icon,
                 cost: cost,
                 timeline: timeline,
                 desireLevel: desireLevel,
@@ -862,7 +1289,312 @@
             showNotification(`New reward added: ${item.name}`, 'primary');
         });
 
-        // Complete task with chance for critical success
+        // Open Pomodoro modal for a task
+        function startPomodoro(index) {
+            const task = state.tasks[index];
+            
+            // Set up the pomodoro modal
+            document.getElementById('pomodoroTaskName').textContent = task.name;
+            document.getElementById('phaseType').textContent = 'Focus Time';
+            document.getElementById('phaseType').className = 'focus-time';
+            document.getElementById('timerDisplay').textContent = '25:00';
+            
+            // Reset buttons
+            document.getElementById('startTimer').disabled = false;
+            document.getElementById('pauseTimer').disabled = true;
+            
+            // Set up pomodoro progress visualization
+            const progressContainer = document.getElementById('pomodoroProgress');
+            progressContainer.innerHTML = '';
+            
+            // Add segments for total pomodoros
+            for (let i = 0; i < task.pomodoroStats.total; i++) {
+                const segment = document.createElement('div');
+                segment.className = 'pomodoro-segment';
+                if (i < task.pomodoroStats.completed) {
+                    segment.classList.add('completed');
+                }
+                progressContainer.appendChild(segment);
+            }
+            
+            // Update stats display
+            document.getElementById('completedPomodoros').textContent = task.pomodoroStats.completed;
+            document.getElementById('totalPomodoros').textContent = task.pomodoroStats.total;
+            document.getElementById('lootBonus').textContent = task.pomodoroStats.lootBonusPercent;
+            
+            // Load subtasks
+            loadSubtasks(task);
+            
+            // Store task index
+            state.activePomodoro = {
+                taskIndex: index,
+                phase: 'focus',
+                timeRemaining: 25 * 60, // 25 minutes in seconds
+                running: false,
+                currentPomodoro: task.pomodoroStats.completed,
+                startTime: null,
+                lastActive: new Date().getTime()
+            };
+            
+            saveState();
+            
+            // Show the modal
+            document.getElementById('pomodoroModal').classList.add('show');
+        }
+        
+        // Load subtasks for a task
+        function loadSubtasks(task) {
+            const subtasksList = document.getElementById('subtasksList');
+            const subtasksContainer = document.createElement('div');
+            subtasksContainer.id = 'subtasksContainer';
+            
+            if (task.subtasks && task.subtasks.length > 0) {
+                task.subtasks.forEach((subtask, index) => {
+                    const subtaskElement = document.createElement('div');
+                    subtaskElement.className = 'subtask-item';
+                    if (subtask.completed) {
+                        subtaskElement.classList.add('subtask-completed');
+                    }
+                    
+                    subtaskElement.innerHTML = `
+                        <span>${subtask.name}</span>
+                        <div>
+                            ${!subtask.completed ? 
+                                `<button onclick="completeSubtask(${index})">Complete</button>` : 
+                                `<span style="color: var(--success)">✓</span>`
+                            }
+                        </div>
+                    `;
+                    
+                    subtasksContainer.appendChild(subtaskElement);
+                });
+            } else {
+                subtasksContainer.innerHTML = `<p>No subtasks yet. Add some to break down this quest!</p>`;
+            }
+            
+            // Replace existing subtasks
+            const existingContainer = document.getElementById('subtasksContainer');
+            if (existingContainer) {
+                existingContainer.remove();
+            }
+            
+            subtasksList.appendChild(subtasksContainer);
+        }
+        
+        // Add a subtask to the current active task
+        function addSubtask() {
+            const subtaskInput = document.getElementById('subtaskInput');
+            const subtaskName = subtaskInput.value.trim();
+            
+            if (subtaskName && state.activePomodoro) {
+                const taskIndex = state.activePomodoro.taskIndex;
+                const task = state.tasks[taskIndex];
+                
+                task.subtasks.push({
+                    name: subtaskName,
+                    completed: false,
+                    created: new Date().toISOString()
+                });
+                
+                saveState();
+                loadSubtasks(task);
+                subtaskInput.value = '';
+            }
+        }
+        
+        // Complete a subtask
+        function completeSubtask(subtaskIndex) {
+            if (state.activePomodoro) {
+                const taskIndex = state.activePomodoro.taskIndex;
+                const task = state.tasks[taskIndex];
+                
+                if (task.subtasks[subtaskIndex]) {
+                    task.subtasks[subtaskIndex].completed = true;
+                    
+                    // Award a small XP bonus for completing subtasks
+                    addXP(5);
+                    
+                    saveState();
+                    loadSubtasks(task);
+                    
+                    showNotification(`Subtask completed! +5 XP`);
+                }
+            }
+        }
+        
+        // Start Pomodoro timer
+        function startPomodoroTimer() {
+            if (!state.activePomodoro) return;
+            
+            // Update UI
+            document.getElementById('startTimer').disabled = true;
+            document.getElementById('pauseTimer').disabled = false;
+            
+            // Set start time if not already running
+            if (!state.activePomodoro.startTime) {
+                state.activePomodoro.startTime = new Date().getTime();
+            }
+            
+            state.activePomodoro.running = true;
+            saveState();
+            
+            // Start timer update interval
+            updatePomodoroTimer();
+        }
+        
+        // Update Pomodoro timer
+        function updatePomodoroTimer() {
+            if (!state.activePomodoro || !state.activePomodoro.running) return;
+            
+            const now = new Date().getTime();
+            const elapsed = Math.floor((now - state.activePomodoro.startTime) / 1000);
+            state.activePomodoro.timeRemaining = Math.max(0, (state.activePomodoro.phase === 'focus' ? 25 * 60 : 5 * 60) - elapsed);
+            state.activePomodoro.lastActive = now;
+            
+            // Update display
+            const minutes = Math.floor(state.activePomodoro.timeRemaining / 60);
+            const seconds = state.activePomodoro.timeRemaining % 60;
+            document.getElementById('timerDisplay').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Mark current segment as active
+            const segments = document.querySelectorAll('.pomodoro-segment');
+            if (segments.length > state.activePomodoro.currentPomodoro) {
+                // Remove current class from all segments
+                segments.forEach(seg => seg.classList.remove('current'));
+                // Add current class to active segment
+                if (state.activePomodoro.phase === 'focus') {
+                    segments[state.activePomodoro.currentPomodoro].classList.add('current');
+                }
+            }
+            
+            // Check if timer is complete
+            if (state.activePomodoro.timeRemaining <= 0) {
+                handlePomodoroComplete();
+            } else {
+                // Continue timer
+                saveState();
+                setTimeout(updatePomodoroTimer, 1000);
+            }
+        }
+        
+        // Handle Pomodoro completion
+        function handlePomodoroComplete() {
+            const taskIndex = state.activePomodoro.taskIndex;
+            const task = state.tasks[taskIndex];
+            
+            if (state.activePomodoro.phase === 'focus') {
+                // Completed a focus session
+                task.pomodoroStats.completed++;
+                
+                // Calculate loot bonus (each completed pomodoro increases chance)
+                task.pomodoroStats.lootBonusPercent = Math.min(50, task.pomodoroStats.completed * 5);
+                
+                // Award XP for completing a pomodoro
+                addXP(10);
+                
+                // Update UI
+                document.getElementById('completedPomodoros').textContent = task.pomodoroStats.completed;
+                document.getElementById('lootBonus').textContent = task.pomodoroStats.lootBonusPercent;
+                
+                // Mark segment as completed
+                const segments = document.querySelectorAll('.pomodoro-segment');
+                if (segments.length > state.activePomodoro.currentPomodoro) {
+                    segments[state.activePomodoro.currentPomodoro].classList.add('completed');
+                    segments[state.activePomodoro.currentPomodoro].classList.remove('current');
+                }
+                
+                // Show notification
+                showNotification(`Pomodoro completed! +10 XP, Loot bonus now ${task.pomodoroStats.lootBonusPercent}%`);
+                
+                // Switch to break phase
+                state.activePomodoro.phase = 'rest';
+                state.activePomodoro.timeRemaining = 5 * 60; // 5 minute break
+                state.activePomodoro.startTime = new Date().getTime();
+                state.activePomodoro.currentPomodoro++;
+                
+                // Update phase display
+                document.getElementById('phaseType').textContent = 'Rest Time';
+                document.getElementById('phaseType').className = 'rest-time';
+                
+            } else {
+                // Completed a rest phase
+                // Switch back to focus phase
+                state.activePomodoro.phase = 'focus';
+                state.activePomodoro.timeRemaining = 25 * 60; // 25 minute focus
+                state.activePomodoro.startTime = new Date().getTime();
+                
+                // Update phase display
+                document.getElementById('phaseType').textContent = 'Focus Time';
+                document.getElementById('phaseType').className = 'focus-time';
+                
+                showNotification(`Break complete! Ready for next focus session.`);
+            }
+            
+            saveState();
+            
+            // Auto-continue timer
+            updatePomodoroTimer();
+        }
+        
+        // Pause Pomodoro timer
+        function pausePomodoroTimer() {
+            if (!state.activePomodoro) return;
+            
+            state.activePomodoro.running = false;
+            saveState();
+            
+            // Update UI
+            document.getElementById('startTimer').disabled = false;
+            document.getElementById('pauseTimer').disabled = true;
+        }
+        
+        // Skip current Pomodoro phase
+        function skipPomodoroPhase() {
+            if (!state.activePomodoro) return;
+            
+            // If skipping focus phase, don't count it as completed
+            if (state.activePomodoro.phase === 'focus') {
+                state.activePomodoro.phase = 'rest';
+                state.activePomodoro.timeRemaining = 5 * 60; // 5 minute break
+                state.activePomodoro.startTime = new Date().getTime();
+                
+                // Update phase display
+                document.getElementById('phaseType').textContent = 'Rest Time';
+                document.getElementById('phaseType').className = 'rest-time';
+            } else {
+                // Skipping break phase
+                state.activePomodoro.phase = 'focus';
+                state.activePomodoro.timeRemaining = 25 * 60; // 25 minute focus
+                state.activePomodoro.startTime = new Date().getTime();
+                
+                // Update phase display
+                document.getElementById('phaseType').textContent = 'Focus Time';
+                document.getElementById('phaseType').className = 'focus-time';
+            }
+            
+            saveState();
+            
+            // If timer is running, continue updating
+            if (state.activePomodoro.running) {
+                updatePomodoroTimer();
+            }
+        }
+        
+        // Close Pomodoro modal
+        function closePomodoroModal() {
+            document.getElementById('pomodoroModal').classList.remove('show');
+            
+            // Pause timer if running
+            if (state.activePomodoro && state.activePomodoro.running) {
+                pausePomodoroTimer();
+            }
+            
+            // Keep the activePomodoro data for resuming later
+            saveState();
+            updateUI();
+        }
+
+        // Complete task with chance for critical success and pomodoro bonus
         function completeTask(index) {
             const task = state.tasks[index];
             if (!task.completed) {
@@ -898,16 +1630,19 @@
                     const roll = Math.floor(Math.random() * 20) + 1; // d20
                     dice.textContent = roll;
                     
-                    // Determine if critical success
+                    // Determine if critical success with pomodoro bonus
                     let criticalSuccess = false;
                     let criticalFail = false;
+                    
+                    // Pomodoro bonus increases critical chance
+                    const pomodoroBonus = task.pomodoroStats ? task.pomodoroStats.lootBonusPercent / 100 : 0;
                     
                     // Base critical chance
                     if (roll === 20) {
                         criticalSuccess = true;
                     } 
-                    // Streak increases critical chance
-                    else if (roll >= (20 - Math.min(5, Math.floor(state.streak / 2)))) {
+                    // Streak + Pomodoro increases critical chance
+                    else if (roll >= (20 - Math.min(5, Math.floor(state.streak / 2)) - Math.floor(pomodoroBonus * 10))) {
                         criticalSuccess = true;
                     }
                     // Very small chance of critical fail
@@ -922,6 +1657,11 @@
                     const daysEarly = Math.max(0, (new Date(task.deadline) - new Date()) / (1000 * 60 * 60 * 24));
                     const earlyBonus = daysEarly * 0.05;
                     bonus += earlyBonus;
+                    
+                    // Apply pomodoro bonus
+                    if (pomodoroBonus > 0) {
+                        bonus += pomodoroBonus;
+                    }
                     
                     // Rarity multipliers for more variance
                     const rarityMultipliers = {
@@ -957,6 +1697,11 @@
                     state.lastStreak = new Date().toDateString();
                     addXP(xpEarned);
                     
+                    // If this was the active pomodoro task, clear it
+                    if (state.activePomodoro && state.activePomodoro.taskIndex === index) {
+                        state.activePomodoro = null;
+                    }
+                    
                     // Show the result message
                     let message = '';
                     if (criticalSuccess) {
@@ -971,6 +1716,9 @@
                         if (earlyBonus > 0) {
                             message += ` (Early completion bonus!)`;
                         }
+                        if (pomodoroBonus > 0) {
+                            message += ` (Pomodoro bonus: ${Math.round(pomodoroBonus * 100)}%!)`;
+                        }
                     }
                     
                     // Chance for bonus loot for higher rarity tasks (Easter egg)
@@ -978,6 +1726,13 @@
                         const bonusCredits = Math.round(task.credits * 0.2);
                         state.credits += bonusCredits;
                         message += ` BONUS LOOT: +${bonusCredits} credits!`;
+                    }
+                    
+                    // Additional chance for bonus with pomodoro sessions
+                    if (task.pomodoroStats && task.pomodoroStats.completed > 0 && Math.random() < pomodoroBonus) {
+                        const pomodoroBonus = Math.round(task.credits * 0.3);
+                        state.credits += pomodoroBonus;
+                        message += ` POMODORO CHEST: +${pomodoroBonus} credits!`;
                     }
                     
                     // Show notification after roll
@@ -1010,6 +1765,11 @@
                 
                 // Show notification
                 showNotification(`Quest abandoned! -${penalty} credits. Streak reset!`, 'danger');
+                
+                // If this was the active pomodoro task, clear it
+                if (state.activePomodoro && state.activePomodoro.taskIndex === index) {
+                    state.activePomodoro = null;
+                }
                 
                 // Remove task
                 state.tasks.splice(index, 1);
@@ -1111,20 +1871,59 @@
                     // Get rarity name with proper capitalization
                     const rarityName = task.rarity.charAt(0).toUpperCase() + task.rarity.slice(1);
                     
+                    // Show pomodoro progress if applicable
+                    let pomodoroProgress = '';
+                    if (task.pomodoroStats && task.pomodoroStats.total > 0) {
+                        const percent = Math.round((task.pomodoroStats.completed / task.pomodoroStats.total) * 100);
+                        pomodoroProgress = `
+                            <div style="margin-top: 0.5rem;">
+                                <span style="font-size: 0.8rem;">Pomodoros: ${task.pomodoroStats.completed}/${task.pomodoroStats.total} (${percent}%)</span>
+                                <div class="progress-bar" style="height: 0.5rem;">
+                                    <div class="progress-bar-fill" style="width: ${percent}%; background: var(--focus);"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
+                    // Show subtasks if any
+                    let subtasksHTML = '';
+                    if (task.subtasks && task.subtasks.length > 0) {
+                        const completedSubtasks = task.subtasks.filter(st => st.completed).length;
+                        const subtaskPercent = Math.round((completedSubtasks / task.subtasks.length) * 100);
+                        
+                        subtasksHTML = `
+                            <div style="margin-top: 0.5rem;">
+                                <span style="font-size: 0.8rem;">Subtasks: ${completedSubtasks}/${task.subtasks.length} (${subtaskPercent}%)</span>
+                                <div class="progress-bar" style="height: 0.5rem;">
+                                    <div class="progress-bar-fill" style="width: ${subtaskPercent}%;"></div>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    
                     return `
                     <li class="${task.rarity}">
                         <div class="task-info">
-                            <strong>${task.name}</strong> <span style="font-size: 0.8em; color: var(--${task.rarity === 'common' ? 'secondary' : task.rarity});">[${rarityName}]</span><br>
-                            ${task.importance}★ | ${task.timeEstimate}h | Due: <span ${deadlineClass}>${task.deadline}</span><br>
-                            Reward: ${task.credits} credits (+${streakBonus} streak bonus), ${task.xp} XP
-                            <div class="tooltip">ⓘ
-                                <span class="tooltiptext">
-                                    Critical success chance: ${5 + Math.min(5, Math.floor(state.streak / 2))}%<br>
-                                    Critical rewards: 2x credits & XP
-                                </span>
+                            <div class="task-header">
+                                <div class="quest-icon">${task.icon}</div>
+                                <strong>${task.name}</strong> <span style="font-size: 0.8em; color: var(--${task.rarity === 'common' ? 'secondary' : task.rarity});">[${rarityName}]</span>
                             </div>
+                            <div style="margin-top: 0.5rem;">
+                                ${task.importance}★ | ${task.timeEstimate}h | Due: <span ${deadlineClass}>${task.deadline}</span><br>
+                                Reward: ${task.credits} credits (+${streakBonus} streak bonus), ${task.xp} XP
+                                <div class="tooltip">ⓘ
+                                    <span class="tooltiptext">
+                                        Critical success chance: ${5 + Math.min(5, Math.floor(state.streak / 2))}%<br>
+                                        Pomodoro bonus: +${task.pomodoroStats ? task.pomodoroStats.lootBonusPercent : 0}%<br>
+                                        Total critical chance: ${5 + Math.min(5, Math.floor(state.streak / 2)) + (task.pomodoroStats ? task.pomodoroStats.lootBonusPercent : 0)}%
+                                    </span>
+                                </div>
+                            </div>
+                            ${pomodoroProgress}
+                            ${subtasksHTML}
                         </div>
                         <div class="task-buttons">
+                            <button onclick="startPomodoro(${actualIndex})" style="background: var(--focus);">Pomodoro</button>
                             <button onclick="completeTask(${actualIndex})" style="background: var(--success);">Complete</button>
                             <button onclick="abandonTask(${actualIndex})" style="background: var(--danger);">Abandon</button>
                         </div>
@@ -1140,7 +1939,10 @@
                 .map((task) => `
                     <li style="opacity: 0.7;" class="${task.rarity}">
                         <div>
-                            <strong>${task.name}</strong> <span style="font-size: 0.8em; color: var(--${task.rarity === 'common' ? 'secondary' : task.rarity});">[${task.rarity.charAt(0).toUpperCase() + task.rarity.slice(1)}]</span><br>
+                            <div class="task-header">
+                                <div class="quest-icon">${task.icon}</div>
+                                <strong>${task.name}</strong> <span style="font-size: 0.8em; color: var(--${task.rarity === 'common' ? 'secondary' : task.rarity});">[${task.rarity.charAt(0).toUpperCase() + task.rarity.slice(1)}]</span>
+                            </div>
                             ${task.importance}★ | ${task.timeEstimate}h | Completed
                         </div>
                         <span style="color: var(--success)">✓ Done</span>
@@ -1173,11 +1975,15 @@
                     return `
                     <li>
                         <div style="width: 100%;">
-                            <strong>${item.name}</strong> ${isComplete ? '✅' : ''}
-                            <br>
-                            ${item.cost} HKD | ${item.timeline} weeks | Desire: ${item.desireLevel}/5
-                            <br>
-                            ${Math.round(progressPercent)}% complete | ${Math.round(item.progress)}/${item.credits} credits
+                            <div class="reward-header">
+                                <div class="reward-icon">${item.icon}</div>
+                                <strong>${item.name}</strong> ${isComplete ? '✅' : ''}
+                            </div>
+                            <div style="margin-top: 0.5rem;">
+                                ${item.cost} HKD | ${item.timeline} weeks | Desire: ${item.desireLevel}/5
+                                <br>
+                                ${Math.round(progressPercent)}% complete | ${Math.round(item.progress)}/${item.credits} credits
+                            </div>
                             <div class="progress-bar" style="position: relative;">
                                 ${milestonesHTML}
                                 <div class="progress-bar-fill" style="width: ${Math.min(100, displayProgressPercent)}%"></div>
