@@ -1,4 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -426,9 +428,9 @@
             <div class="card">
                 <h2>Add Quest</h2>
                 <form id="taskForm">
-                    <input type="text" id="taskName" placeholder="Quest name" required="">
-                    <input type="number" id="timeEstimate" placeholder="Time estimate (hours)" required="" min="0" step="0.5">
-                    <select id="importance" required="">
+                    <input type="text" id="taskName" placeholder="Quest name" required>
+                    <input type="number" id="timeEstimate" placeholder="Time estimate (hours)" required min="0" step="0.5">
+                    <select id="importance" required>
                         <option value="">Select difficulty</option>
                         <option value="1">Easy ★</option>
                         <option value="2">Normal ★★</option>
@@ -436,7 +438,7 @@
                         <option value="4">Very Hard ★★★★</option>
                         <option value="5">Epic ★★★★★</option>
                     </select>
-                    <input type="date" id="deadline" required="">
+                    <input type="date" id="deadline" required>
                     <button type="submit">Create Quest</button>
                 </form>
                 
@@ -474,10 +476,10 @@
             <div class="card">
                 <h2>Add Reward</h2>
                 <form id="wishlistForm">
-                    <input type="text" id="itemName" placeholder="Reward name" required="">
-                    <input type="number" id="itemCost" placeholder="Cost (HKD)" required="" min="0">
-                    <input type="number" id="timeline" placeholder="Timeline (weeks)" required="" min="1">
-                    <select id="desireLevel" required="">
+                    <input type="text" id="itemName" placeholder="Reward name" required>
+                    <input type="number" id="itemCost" placeholder="Cost (HKD)" required min="0">
+                    <input type="number" id="timeline" placeholder="Timeline (weeks)" required min="1">
+                    <select id="desireLevel" required>
                         <option value="">How much do you want this?</option>
                         <option value="1">Nice to have</option>
                         <option value="2">Want it</option>
@@ -1203,5 +1205,5 @@
         updateWishlistProgress();
         updateUI();
     </script>
-
-</body></html>
+</body>
+</html>
