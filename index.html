@@ -132,7 +132,7 @@
             border-radius: 0.25rem;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
@@ -367,6 +367,8 @@
         .task-buttons {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .task-info {
@@ -423,6 +425,7 @@
             justify-content: center;
             gap: 1rem;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
         .focus-time {
@@ -506,6 +509,18 @@
             opacity: 0.7;
         }
 
+        .pomodoro-btn {
+            background: var(--focus);
+        }
+
+        .complete-btn {
+            background: var(--success);
+        }
+
+        .abandon-btn {
+            background: var(--danger);
+        }
+
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -519,7 +534,7 @@
             .task-buttons {
                 width: 100%;
                 margin-top: 1rem;
-                justify-content: flex-end;
+                justify-content: space-between;
             }
             
             .stats {
@@ -583,7 +598,9 @@
                     <input type="text" id="subtaskInput" placeholder="Add a subtask">
                     <button onclick="addSubtask()">Add</button>
                 </div>
-                <!-- Subtasks will be added here -->
+                <div id="subtasksContainer">
+                    <!-- Subtasks will be added here -->
+                </div>
             </div>
         </div>
     </div>
@@ -1344,9 +1361,8 @@
         
         // Load subtasks for a task
         function loadSubtasks(task) {
-            const subtasksList = document.getElementById('subtasksList');
-            const subtasksContainer = document.createElement('div');
-            subtasksContainer.id = 'subtasksContainer';
+            const subtasksContainer = document.getElementById('subtasksContainer');
+            subtasksContainer.innerHTML = '';
             
             if (task.subtasks && task.subtasks.length > 0) {
                 task.subtasks.forEach((subtask, index) => {
@@ -1371,14 +1387,6 @@
             } else {
                 subtasksContainer.innerHTML = `<p>No subtasks yet. Add some to break down this quest!</p>`;
             }
-            
-            // Replace existing subtasks
-            const existingContainer = document.getElementById('subtasksContainer');
-            if (existingContainer) {
-                existingContainer.remove();
-            }
-            
-            subtasksList.appendChild(subtasksContainer);
         }
         
         // Add a subtask to the current active task
@@ -1617,7 +1625,7 @@
                 // Adjust completion UI
                 const taskElements = document.querySelectorAll('.task-list li');
                 if (taskElements[index]) {
-                    const completeBtn = taskElements[index].querySelector('button');
+                    const completeBtn = taskElements[index].querySelector('.complete-btn');
                     if (completeBtn) {
                         completeBtn.disabled = true;
                         completeBtn.textContent = 'Rolling...';
@@ -1923,9 +1931,9 @@
                             ${subtasksHTML}
                         </div>
                         <div class="task-buttons">
-                            <button onclick="startPomodoro(${actualIndex})" style="background: var(--focus);">Pomodoro</button>
-                            <button onclick="completeTask(${actualIndex})" style="background: var(--success);">Complete</button>
-                            <button onclick="abandonTask(${actualIndex})" style="background: var(--danger);">Abandon</button>
+                            <button onclick="startPomodoro(${actualIndex})" class="pomodoro-btn">Pomodoro</button>
+                            <button onclick="completeTask(${actualIndex})" class="complete-btn">Complete</button>
+                            <button onclick="abandonTask(${actualIndex})" class="abandon-btn">Abandon</button>
                         </div>
                     </li>
                 `})
