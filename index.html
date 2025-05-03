@@ -521,6 +521,219 @@
             background: var(--danger);
         }
 
+        /* Setup for pomodoro animation */
+        .pomodoro-animation {
+            width: 100%;
+            height: 120px;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+            background: #000;
+            border-radius: 0.5rem;
+        }
+
+        .pixel-scene {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            image-rendering: pixelated;
+        }
+
+        /* Animation elements */
+        .character {
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            width: 24px;
+            height: 32px;
+            background: #f43f5e;
+            animation: characterIdle 1s infinite alternate;
+        }
+
+        .forge {
+            position: absolute;
+            bottom: 10px;
+            left: 100px;
+            width: 40px;
+            height: 30px;
+            background: #6b7280;
+        }
+
+        .anvil {
+            position: absolute;
+            bottom: 30px;
+            left: 160px;
+            width: 30px;
+            height: 15px;
+            background: #4b5563;
+        }
+
+        .hammer {
+            position: absolute;
+            bottom: 50px;
+            left: 165px;
+            width: 20px;
+            height: 15px;
+            background: #9ca3af;
+            transform-origin: 50% 100%;
+            animation: hammerSwing 1s infinite;
+        }
+
+        .sparks {
+            position: absolute;
+            bottom: 50px;
+            left: 175px;
+            width: 2px;
+            height: 2px;
+            background: #fbbf24;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparksFly 0.5s infinite;
+        }
+
+        .magic-circle {
+            position: absolute;
+            bottom: 10px;
+            right: 50px;
+            width: 40px;
+            height: 10px;
+            border: 2px solid #818cf8;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: magicPulse 2s infinite;
+        }
+
+        .magic-particles {
+            position: absolute;
+            bottom: 30px;
+            right: 70px;
+            width: 3px;
+            height: 3px;
+            background: #818cf8;
+            border-radius: 50%;
+            animation: particleFloat 3s infinite;
+        }
+
+        @keyframes characterIdle {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-3px); }
+        }
+
+        @keyframes hammerSwing {
+            0% { transform: rotate(-30deg); }
+            10% { transform: rotate(-30deg); }
+            20% { transform: rotate(30deg); }
+            30% { transform: rotate(-30deg); }
+            100% { transform: rotate(-30deg); }
+        }
+
+        @keyframes sparksFly {
+            0% { opacity: 0; transform: translate(0, 0); }
+            20% { opacity: 1; }
+            100% { opacity: 0; transform: translate(10px, -20px); }
+        }
+
+        @keyframes magicPulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translate(0, 0); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translate(-30px, -40px); opacity: 0; }
+        }
+
+        /* Pomodoro setup screens */
+        .pomodoro-setup {
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .pomodoro-setup h3 {
+            margin-top: 0;
+        }
+
+        .time-selector {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .time-option {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .time-option.selected {
+            border-color: var(--focus);
+            background: rgba(125, 211, 252, 0.1);
+        }
+
+        .subtask-selection {
+            margin-top: 1rem;
+        }
+
+        .subtask-option {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .subtask-option.selected {
+            border-color: var(--focus);
+            background: rgba(125, 211, 252, 0.1);
+        }
+
+        .subtask-complete-prompt {
+            background: #f9fafb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .subtask-complete-prompt.show {
+            display: block;
+        }
+
+        .subtask-complete-options {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .animation-type-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            justify-content: center;
+        }
+
+        .animation-option {
+            padding: 0.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        .animation-option.selected {
+            border-color: var(--focus);
+            background: rgba(125, 211, 252, 0.1);
+        }
+
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -540,6 +753,10 @@
             .stats {
                 flex-direction: column;
                 gap: 0.5rem;
+            }
+
+            .time-selector {
+                flex-direction: column;
             }
         }
     </style>
@@ -571,35 +788,86 @@
     <div class="pomodoro-modal" id="pomodoroModal">
         <div class="pomodoro-container">
             <h2 id="pomodoroTaskName">Task Name</h2>
-            <div class="phase-indicator">
-                <span id="phaseType" class="focus-time">Focus Time</span>
-            </div>
-            <div class="timer-display" id="timerDisplay">25:00</div>
-            <div class="timer-controls">
-                <button id="startTimer" onclick="startPomodoroTimer()">Start</button>
-                <button id="pauseTimer" onclick="pausePomodoroTimer()" disabled>Pause</button>
-                <button id="skipTimer" onclick="skipPomodoroPhase()">Skip</button>
-                <button onclick="closePomodoroModal()">Exit</button>
-            </div>
             
-            <div class="pomodoro-progress" id="pomodoroProgress">
-                <!-- Pomodoro segments will be added here -->
-            </div>
-            
-            <div class="pomodoro-stats">
-                <h3>Pomodoro Stats</h3>
-                <p>Completed: <span id="completedPomodoros">0</span> / <span id="totalPomodoros">4</span></p>
-                <p>Loot Bonus: +<span id="lootBonus">0</span>% chance of bonus rewards</p>
-            </div>
-            
-            <div class="subtasks" id="subtasksList">
-                <h3>Subtasks</h3>
-                <div class="subtask-form">
-                    <input type="text" id="subtaskInput" placeholder="Add a subtask">
-                    <button onclick="addSubtask()">Add</button>
+            <!-- Pomodoro Setup -->
+            <div id="pomodoroSetup" class="pomodoro-setup">
+                <h3>Choose a Subtask</h3>
+                <div id="subtaskSelection" class="subtask-selection">
+                    <!-- Subtask options will be inserted here -->
+                    <div class="subtask-option" onclick="selectSubtask('new')">+ Create New Subtask</div>
                 </div>
-                <div id="subtasksContainer">
-                    <!-- Subtasks will be added here -->
+                
+                <div id="newSubtaskForm" style="display: none; margin-top: 1rem;">
+                    <input type="text" id="newSubtaskInput" placeholder="Enter subtask description">
+                    <button onclick="createSubtask()">Create</button>
+                </div>
+                
+                <h3>Focus Duration</h3>
+                <div class="time-selector">
+                    <div class="time-option" data-value="15" onclick="selectFocusTime(15)">15 min</div>
+                    <div class="time-option selected" data-value="25" onclick="selectFocusTime(25)">25 min</div>
+                    <div class="time-option" data-value="45" onclick="selectFocusTime(45)">45 min</div>
+                </div>
+                
+                <h3>Break Duration</h3>
+                <div class="time-selector">
+                    <div class="time-option" data-value="3" onclick="selectBreakTime(3)">3 min</div>
+                    <div class="time-option selected" data-value="5" onclick="selectBreakTime(5)">5 min</div>
+                    <div class="time-option" data-value="10" onclick="selectBreakTime(10)">10 min</div>
+                </div>
+                
+                <h3>Animation Style</h3>
+                <div class="animation-type-selector">
+                    <div class="animation-option selected" data-type="forge" onclick="selectAnimationType('forge')">Forge ⚒️</div>
+                    <div class="animation-option" data-type="magic" onclick="selectAnimationType('magic')">Magic ✨</div>
+                    <div class="animation-option" data-type="combat" onclick="selectAnimationType('combat')">Combat ⚔️</div>
+                </div>
+                
+                <div style="margin-top: 1rem; text-align: center;">
+                    <button onclick="startFocusSession()">Start Session</button>
+                    <button onclick="closePomodoroModal()" style="background: #9ca3af;">Cancel</button>
+                </div>
+            </div>
+            
+            <!-- Timer Display (initially hidden) -->
+            <div id="pomodoroTimer" style="display: none;">
+                <div class="phase-indicator">
+                    <span id="phaseType" class="focus-time">Focus Time</span>
+                </div>
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                
+                <div class="pomodoro-animation">
+                    <div class="pixel-scene" id="animationScene">
+                        <!-- Animation elements will be added dynamically -->
+                    </div>
+                </div>
+                
+                <div class="timer-controls">
+                    <button id="startTimer" onclick="startPomodoroTimer()">Start</button>
+                    <button id="pauseTimer" onclick="pausePomodoroTimer()" disabled>Pause</button>
+                    <button id="skipTimer" onclick="skipPomodoroPhase()">Skip</button>
+                    <button onclick="abandonPomodoroSession()">Exit</button>
+                </div>
+                
+                <div class="pomodoro-progress" id="pomodoroProgress">
+                    <!-- Pomodoro segments will be added here -->
+                </div>
+                
+                <div class="pomodoro-stats">
+                    <h3>Session Stats</h3>
+                    <p><strong>Working on:</strong> <span id="currentSubtask">Subtask name</span></p>
+                    <p>Sessions completed: <span id="completedPomodoros">0</span></p>
+                    <p>Efficiency bonus: +<span id="efficiencyBonus">0</span>% chance of bonus rewards</p>
+                </div>
+            </div>
+            
+            <!-- Subtask Completion Prompt (hidden until needed) -->
+            <div id="subtaskCompletePrompt" class="subtask-complete-prompt">
+                <h3>Time's up!</h3>
+                <p>Did you complete the subtask: <strong id="completionSubtaskName">Subtask name</strong>?</p>
+                <div class="subtask-complete-options">
+                    <button onclick="handleSubtaskComplete(true)" style="background: var(--success);">Yes, completed!</button>
+                    <button onclick="handleSubtaskComplete(false)" style="background: var(--primary);">Not yet, continue</button>
                 </div>
             </div>
         </div>
@@ -723,193 +991,265 @@
             activePomodoro: null
         };
         
-        // Icon mapping for common quest and reward types
+        // Advanced icon mapping based on context, categories and natural language
         const iconMappings = {
-            // Work and study related
-            "work": "💼",
-            "study": "📚",
-            "code": "💻",
-            "program": "💻",
-            "programming": "💻",
-            "coding": "💻",
-            "assignment": "📝",
-            "homework": "📚",
-            "project": "🏗️",
-            "research": "🔬",
-            "presentation": "📊",
-            "meeting": "👥",
-            "email": "📧",
-            "write": "✍️",
-            "writing": "✍️",
-            "read": "📖",
-            "reading": "📖",
-            "learn": "🧠",
-            "course": "🎓",
-            "class": "🏫",
-            "lecture": "🎓",
-            "test": "📝",
-            "exam": "📝",
-            "quiz": "❓",
+            // Work and Education
+            "work": ["💼", "🏢", "📊", "📈", "📉", "🗂️"],
+            "office": ["💼", "🏢", "🖥️", "📞", "📠", "📎"],
+            "job": ["💼", "👔", "🧑‍💼", "👩‍💼", "👨‍💼"],
+            "business": ["💼", "📊", "📈", "📉", "🏢", "💰"],
+            "email": ["📧", "📨", "📩", "💌"],
+            "meeting": ["👥", "🗣️", "👔", "📅", "⏰"],
+            "presentation": ["📊", "📈", "📉", "🎤", "🎭"],
+            "report": ["📑", "📝", "📋", "📊", "🖊️"],
+            "project": ["🏗️", "📋", "📊", "⚙️", "🔧", "📝"],
+            "deadline": ["⏰", "⏱️", "📅", "📆", "🗓️"],
             
-            // Health related
-            "workout": "💪",
-            "exercise": "🏃",
-            "run": "🏃",
-            "gym": "🏋️",
-            "fitness": "🏋️",
-            "yoga": "🧘",
-            "meditate": "🧘",
-            "meditation": "🧘",
-            "sleep": "😴",
-            "diet": "🥗",
-            "eat": "🍽️",
-            "cook": "🍳",
-            "cooking": "🍳",
-            "health": "❤️",
-            "doctor": "🩺",
-            "dentist": "🦷",
+            "study": ["📚", "🧠", "🎓", "📝", "📖"],
+            "learn": ["📚", "🧠", "🎓", "📝", "📖"],
+            "school": ["🏫", "📚", "🎒", "✏️", "📝"],
+            "college": ["🎓", "🏫", "📚", "📝", "🧠"],
+            "university": ["🎓", "🏫", "📚", "📝", "🧠"],
+            "class": ["📚", "🎓", "🏫", "👨‍🏫", "👩‍🏫"],
+            "course": ["📚", "🎓", "🏫", "👨‍🎓", "👩‍🎓"],
+            "lecture": ["🎓", "📚", "🏫", "👨‍🏫", "👩‍🏫"],
+            "homework": ["📚", "📝", "✏️", "📓", "📔"],
+            "assignment": ["📝", "📚", "✏️", "📋", "📎"],
+            "essay": ["📝", "✏️", "📄", "📃", "🖊️"],
+            "exam": ["📝", "✍️", "📄", "📑", "🧠"],
+            "test": ["📝", "✍️", "📄", "📑", "🧠"],
+            "quiz": ["❓", "❔", "🧠", "📝", "✍️"],
+            "research": ["🔬", "🔍", "📚", "🧠", "📊"],
+            "paper": ["📄", "📃", "📝", "✍️", "🖊️"],
+            "thesis": ["📚", "📝", "🎓", "🧠", "📑"],
             
-            // Home related
-            "clean": "🧹",
-            "cleaning": "🧹",
-            "laundry": "🧺",
-            "dishes": "🍽️",
-            "groceries": "🛒",
-            "shopping": "🛍️",
-            "organize": "📋",
-            "pack": "📦",
-            "unpack": "📦",
-            "move": "🚚",
-            "repair": "🔧",
-            "fix": "🔧",
-            "home": "🏠",
-            "house": "🏠",
-            "apartment": "🏢",
+            // Technology and Programming
+            "code": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
+            "program": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
+            "programming": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
+            "coding": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
+            "develop": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "🚀"],
+            "software": ["💻", "🖥️", "💿", "📱", "⚙️"],
+            "app": ["📱", "💻", "🖥️", "📲", "🚀"],
+            "website": ["🌐", "💻", "🖥️", "🖱️", "🔗"],
+            "database": ["💾", "🗃️", "📊", "🔢", "🔍"],
+            "debug": ["🐞", "🔍", "💻", "🔧", "⚙️"],
+            "fix": ["🔧", "⚙️", "🧰", "🔨", "💻"],
+            "computer": ["🖥️", "💻", "⌨️", "🖱️", "🔌"],
+            "laptop": ["💻", "⌨️", "🔌", "📱", "🖥️"],
+            "tech": ["💻", "🖥️", "📱", "⚙️", "🔧"],
             
-            // Leisure related
-            "game": "🎮",
-            "gaming": "🎮",
-            "play": "🎮",
-            "movie": "🎬",
-            "tv": "📺",
-            "show": "📺",
-            "music": "🎵",
-            "podcast": "🎧",
-            "book": "📚",
-            "novel": "📕",
-            "art": "🎨",
-            "draw": "✏️",
-            "painting": "🎨",
-            "craft": "🧶",
+            // Health and Fitness
+            "health": ["❤️", "🩺", "💉", "💊", "🏥"],
+            "doctor": ["👨‍⚕️", "👩‍⚕️", "🩺", "🏥", "💉"],
+            "medical": ["🩺", "💉", "💊", "🏥", "👨‍⚕️"],
+            "hospital": ["🏥", "👨‍⚕️", "👩‍⚕️", "🩺", "💉"],
+            "medication": ["💊", "💉", "👨‍⚕️", "👩‍⚕️", "🩺"],
+            "appointment": ["📅", "⏰", "👨‍⚕️", "👩‍⚕️", "🩺"],
+            "checkup": ["🩺", "👨‍⚕️", "👩‍⚕️", "❤️", "🏥"],
             
-            // Travel related
-            "travel": "✈️",
-            "trip": "🧳",
-            "vacation": "🏖️",
-            "flight": "✈️",
-            "drive": "🚗",
-            "train": "🚂",
-            "bus": "🚌",
-            "taxi": "🚕",
-            "hotel": "🏨",
-            "booking": "📅",
-            "reservation": "📅",
-            "ticket": "🎫",
-            "passport": "🛂",
-            "visa": "🛂",
+            "workout": ["💪", "🏋️", "🏃", "🧘", "🤸"],
+            "exercise": ["🏃", "💪", "🏋️", "🧘", "🚴"],
+            "gym": ["🏋️", "💪", "🏃", "🤸", "⚖️"],
+            "fitness": ["💪", "🏋️", "🏃", "🧘", "⚖️"],
+            "run": ["🏃", "👟", "🎽", "⏱️", "🏆"],
+            "jog": ["🏃", "👟", "🎽", "⏱️", "🌳"],
+            "yoga": ["🧘", "🧘‍♀️", "🧘‍♂️", "🏊", "💆"],
+            "swim": ["🏊", "🏊‍♀️", "🏊‍♂️", "🩲", "🌊"],
+            "bike": ["🚴", "🚴‍♀️", "🚴‍♂️", "🚲", "🏆"],
+            "weight": ["⚖️", "🏋️", "💪", "🥗", "🍎"],
+            "diet": ["🥗", "🍎", "🥦", "⚖️", "💪"],
+            "nutrition": ["🥗", "🍎", "🥦", "⚖️", "💪"],
+            "meal": ["🍽️", "🍲", "🥗", "🍛", "🍱"],
+            "cook": ["🍳", "👨‍🍳", "👩‍🍳", "🔪", "🍲"],
+            "recipe": ["📝", "🍲", "🍳", "🍽️", "👨‍🍳"],
+            "food": ["🍽️", "🍲", "🥗", "🍛", "🍱"],
             
-            // Social related
-            "call": "📞",
-            "phone": "📱",
-            "text": "💬",
-            "message": "💬",
-            "social": "👥",
-            "friend": "👫",
-            "family": "👪",
-            "party": "🎉",
-            "event": "🎭",
-            "date": "❤️",
-            "gift": "🎁",
-            "present": "🎁",
-            "birthday": "🎂",
-            "anniversary": "💍",
-            "wedding": "💒",
+            "sleep": ["😴", "💤", "🛌", "🌙", "🛏️"],
+            "rest": ["😴", "💤", "🛌", "🌙", "🛏️"],
+            "meditate": ["🧘", "🧘‍♀️", "🧘‍♂️", "💆", "💭"],
+            "meditation": ["🧘", "🧘‍♀️", "🧘‍♂️", "💆", "💭"],
+            "relax": ["💆", "🧘", "🛌", "🍵", "📖"],
             
-            // Financial related
-            "bill": "💰",
-            "payment": "💳",
-            "bank": "🏦",
-            "pay": "💵",
-            "money": "💰",
-            "tax": "📑",
-            "budget": "💹",
-            "invest": "📈",
-            "investment": "📈",
-            "save": "💰",
-            "savings": "💰",
-            "expense": "💸",
-            "debt": "💸",
-            "loan": "💸",
-            "insurance": "🔒",
+            // Home and Daily Life
+            "home": ["🏠", "🏡", "🏘️", "🛋️", "🛌"],
+            "house": ["🏠", "🏡", "🏘️", "🛋️", "🛌"],
+            "apartment": ["🏢", "🏙️", "🌆", "🛋️", "🛌"],
+            "clean": ["🧹", "🧼", "🧽", "🧴", "🗑️"],
+            "cleaning": ["🧹", "🧼", "🧽", "🧴", "🗑️"],
+            "laundry": ["🧺", "👕", "👖", "🧼", "🧴"],
+            "dishes": ["🍽️", "🧼", "🧽", "🍴", "🥄"],
+            "groceries": ["🛒", "🍎", "🥦", "🥕", "🛍️"],
+            "shopping": ["🛍️", "🛒", "👜", "👕", "👖"],
+            "organize": ["📋", "📁", "🗄️", "📑", "📎"],
+            "pack": ["📦", "🧳", "🎒", "👜", "👕"],
+            "unpack": ["📦", "🧳", "🎒", "👜", "👕"],
+            "move": ["🚚", "📦", "🏠", "🏡", "🏘️"],
+            "repair": ["🔧", "⚙️", "🔨", "🧰", "🛠️"],
             
-            // Reward related
-            "clothes": "👕",
-            "shoes": "👟",
-            "watch": "⌚",
-            "jewelry": "💍",
-            "accessory": "👓",
-            "gadget": "🔌",
-            "phone": "📱",
-            "laptop": "💻",
-            "computer": "🖥️",
-            "camera": "📷",
-            "headphone": "🎧",
-            "speaker": "🔊",
-            "game": "🎮",
-            "console": "🎮",
-            "toy": "🧸",
-            "book": "📚",
-            "subscription": "📱",
-            "membership": "🔑",
-            "ticket": "🎫",
-            "trip": "✈️",
-            "vacation": "🏖️",
-            "restaurant": "🍽️",
-            "dinner": "🍽️",
-            "lunch": "🍽️",
-            "coffee": "☕",
-            "drink": "🍹",
-            "spa": "💆",
-            "massage": "💆",
-            "movie": "🎬",
-            "concert": "🎵",
-            "show": "🎭",
-            "gift": "🎁",
-            "donation": "❤️",
-            "charity": "❤️",
-            "savings": "💰",
-            "investment": "📈"
+            // Finances and Money
+            "money": ["💰", "💵", "💸", "💲", "💹"],
+            "finance": ["💰", "💵", "💸", "💹", "📊"],
+            "budget": ["💹", "💰", "💵", "📊", "📝"],
+            "pay": ["💵", "💸", "💳", "💰", "🧾"],
+            "bill": ["💰", "💵", "🧾", "📃", "📝"],
+            "tax": ["📑", "💰", "💵", "📝", "📋"],
+            "bank": ["🏦", "💰", "💵", "💳", "💹"],
+            "invest": ["📈", "💹", "💰", "📊", "💵"],
+            "investment": ["📈", "💹", "💰", "📊", "💵"],
+            "save": ["💰", "💹", "🏦", "💵", "💲"],
+            "expense": ["💸", "💰", "💵", "📝", "🧾"],
+            
+            // Social and Relationships
+            "call": ["📞", "📱", "☎️", "👥", "💬"],
+            "phone": ["📱", "📞", "☎️", "👥", "💬"],
+            "text": ["💬", "📱", "📞", "👥", "💌"],
+            "message": ["💬", "📱", "📞", "👥", "💌"],
+            "chat": ["💬", "👥", "🗣️", "📱", "💌"],
+            "social": ["👥", "👨‍👩‍👧‍👦", "💬", "👪", "👫"],
+            "friend": ["👫", "👭", "👬", "👥", "💬"],
+            "family": ["👪", "👨‍👩‍👧‍👦", "👨‍👩‍👧", "👨‍👩‍👦", "❤️"],
+            "party": ["🎉", "🎊", "🎈", "🎂", "🥳"],
+            "date": ["❤️", "💕", "💑", "👫", "🌹"],
+            "gift": ["🎁", "🎀", "💝", "🎊", "🎉"],
+            "birthday": ["🎂", "🎁", "🎊", "🎉", "🎈"],
+            "wedding": ["💒", "💍", "👰", "🤵", "💐"],
+            "anniversary": ["💍", "❤️", "💑", "💐", "🎉"],
+            
+            // Travel and Transportation
+            "travel": ["✈️", "🧳", "🗺️", "🏖️", "🏝️"],
+            "trip": ["🧳", "✈️", "🗺️", "🏖️", "🚗"],
+            "vacation": ["🏖️", "🏝️", "🧳", "✈️", "⛱️"],
+            "flight": ["✈️", "🛫", "🛬", "🧳", "🔍"],
+            "airport": ["✈️", "🛫", "🛬", "🧳", "🏢"],
+            "hotel": ["🏨", "🛌", "🧳", "🚿", "🛎️"],
+            "drive": ["🚗", "🚘", "🚙", "🛣️", "🚦"],
+            "car": ["🚗", "🚘", "🚙", "🛣️", "🚦"],
+            "bus": ["🚌", "🚏", "🚍", "🚎", "🚐"],
+            "train": ["🚂", "🚆", "🚄", "🚅", "🚉"],
+            "bike": ["🚲", "🚴", "🚵", "🚴‍♀️", "🚴‍♂️"],
+            
+            // Entertainment and Leisure
+            "game": ["🎮", "🎲", "🎯", "🎪", "🎭"],
+            "gaming": ["🎮", "🎲", "🎯", "🎪", "🎭"],
+            "play": ["🎮", "🎲", "🎯", "🎪", "🎭"],
+            "movie": ["🎬", "🍿", "🎞️", "🎦", "🎥"],
+            "film": ["🎬", "🍿", "🎞️", "🎦", "🎥"],
+            "tv": ["📺", "🎬", "🍿", "📡", "🎦"],
+            "show": ["📺", "🎬", "🎭", "🎪", "🎦"],
+            "theater": ["🎭", "🎬", "🎪", "🎟️", "🎦"],
+            "concert": ["🎵", "🎸", "🎤", "🎷", "🎺"],
+            "music": ["🎵", "🎸", "🎤", "🎷", "🎺"],
+            "instrument": ["🎸", "🎹", "🎻", "🎷", "🎺"],
+            "album": ["💿", "📀", "🎵", "🎶", "🎧"],
+            "podcast": ["🎧", "🎤", "🎙️", "📱", "🎵"],
+            "book": ["📚", "📖", "📕", "📗", "📘"],
+            "read": ["📖", "📚", "📕", "📗", "📘"],
+            "novel": ["📕", "📖", "📚", "📗", "📘"],
+            "art": ["🎨", "🖼️", "🖌️", "🎭", "🎪"],
+            "draw": ["✏️", "🖌️", "🎨", "🖍️", "🖊️"],
+            "paint": ["🎨", "🖌️", "🖼️", "🖍️", "✏️"],
+            "craft": ["🧶", "🧵", "🧸", "🎨", "✂️"],
+            "hobby": ["🎨", "📷", "🎮", "🎭", "🎯"],
+            
+            // Reward related items
+            "clothes": ["👕", "👖", "👗", "👚", "👔"],
+            "shoes": ["👟", "👞", "👠", "👡", "👢"],
+            "watch": ["⌚", "⏱️", "⏰", "🕰️", "⏲️"],
+            "jewelry": ["💍", "💎", "👑", "👒", "📿"],
+            "accessory": ["👓", "🕶️", "👜", "👝", "📿"],
+            "gadget": ["🔌", "📱", "⌚", "📷", "🖥️"],
+            "phone": ["📱", "📲", "☎️", "📞", "📳"],
+            "laptop": ["💻", "⌨️", "🖱️", "🔌", "🖥️"],
+            "computer": ["🖥️", "⌨️", "🖱️", "🔌", "💻"],
+            "camera": ["📷", "📸", "📹", "🎥", "📽️"],
+            "headphone": ["🎧", "🎵", "🎶", "🎸", "🎷"],
+            "speaker": ["🔊", "📢", "🎵", "🎶", "🎤"],
+            "console": ["🎮", "🕹️", "📺", "🎲", "🎯"],
+            "toy": ["🧸", "🪀", "🪁", "🎲", "🎯"],
+            "book": ["📚", "📖", "📕", "📗", "📘"],
+            "subscription": ["📱", "💻", "📺", "🎵", "📚"],
+            "membership": ["🔑", "🪪", "💳", "🏆", "🎖️"],
+            "ticket": ["🎫", "🎟️", "🎭", "🎪", "🎬"],
+            "restaurant": ["🍽️", "🍴", "🥣", "🍛", "🍱"],
+            "dinner": ["🍽️", "🍴", "🥘", "🍛", "🍱"],
+            "lunch": ["🍽️", "🍴", "🥪", "🍱", "🥗"],
+            "coffee": ["☕", "🧋", "🥤", "🍵", "🫖"],
+            "drink": ["🍹", "🍸", "🥤", "🧃", "🍷"],
+            "spa": ["💆", "💆‍♀️", "💆‍♂️", "🧖", "🧖‍♀️"],
+            "massage": ["💆", "💆‍♀️", "💆‍♂️", "🧖", "🧖‍♀️"],
+            "donation": ["❤️", "🧡", "💛", "💚", "💙"],
+            "charity": ["❤️", "🧡", "💛", "💚", "💙"],
+            "savings": ["💰", "💵", "💸", "💲", "💹"],
+            "investment": ["📈", "💹", "💰", "💵", "💲"]
         };
         
-        // Determine icon for a given text
+        // Additional categories for icon detection
+        const categoryPatterns = [
+            {category: "food", patterns: ["eat", "meal", "food", "cook", "lunch", "dinner", "breakfast", "restaurant", "menu", "diet", "nutrition"], icons: ["🍽️", "🍴", "🥘", "🍲", "🥗", "🍱", "🍛", "🍜", "🍝", "🍕", "🍔", "🌮", "🌯", "🍣", "🍤", "🍦", "🍰"]},
+            {category: "creative", patterns: ["create", "design", "art", "write", "draw", "paint", "craft", "build", "make", "develop"], icons: ["🎨", "✏️", "🖌️", "📝", "✍️", "🧶", "🧵", "🖼️", "📐", "📏", "🔨"]},
+            {category: "productivity", patterns: ["task", "goal", "plan", "organize", "schedule", "track", "manage", "achieve", "focus", "habit"], icons: ["📋", "✅", "📝", "⏰", "📊", "📈", "📉", "📅", "🗓️", "🔍", "📒"]},
+            {category: "communication", patterns: ["talk", "speak", "discuss", "message", "call", "chat", "contact", "email", "meeting", "interview"], icons: ["💬", "📞", "📱", "📧", "🗣️", "👥", "🤝", "📢", "📣", "📨"]},
+            {category: "digital", patterns: ["online", "digital", "internet", "web", "app", "site", "device", "tech", "computer", "software", "hardware"], icons: ["💻", "🖥️", "📱", "🌐", "📱", "⌨️", "🖱️", "💾", "📲", "🔌"]},
+            {category: "wellness", patterns: ["health", "wellbeing", "wellness", "self-care", "mindful", "mental", "balance", "therapy", "calm", "peace"], icons: ["🧘", "💆", "🧠", "❤️", "🌱", "🔆", "💫", "💧", "🌿", "🍃", "🌈"]},
+            {category: "adventure", patterns: ["explore", "adventure", "discover", "travel", "journey", "trip", "experience", "visit", "tour", "hike"], icons: ["🗺️", "🧭", "🏔️", "🏝️", "🏖️", "🌋", "🏞️", "🚵", "🧗", "⛰️", "🌄"]},
+            {category: "learning", patterns: ["learn", "study", "education", "course", "skill", "knowledge", "practice", "train", "master", "improve"], icons: ["📚", "🧠", "🎓", "📝", "📖", "🔍", "🧩", "📊", "📈", "🔬", "📓"]},
+            {category: "finance", patterns: ["money", "finance", "saving", "budget", "invest", "earn", "spend", "cost", "price", "purchase", "buy"], icons: ["💰", "💵", "💳", "💲", "💹", "📊", "📈", "📉", "🏦", "💸", "🧾"]},
+            {category: "gaming", patterns: ["game", "play", "gaming", "level", "score", "achievement", "quest", "mission", "challenge", "reward"], icons: ["🎮", "🎲", "🎯", "🎪", "🎭", "🎨", "🎪", "🎯", "🎪", "🎭", "🎯"]},
+            {category: "relationship", patterns: ["friend", "family", "relationship", "partner", "date", "love", "social", "connect", "bond", "together"], icons: ["❤️", "👪", "👫", "👬", "👭", "💑", "👨‍👩‍👧‍👦", "🤝", "🫂", "💖", "💞"]},
+            {category: "home", patterns: ["home", "house", "apartment", "room", "decor", "furniture", "clean", "organize", "arrange", "maintain"], icons: ["🏠", "🏡", "🧹", "🛋️", "🛏️", "🪑", "🚪", "🧺", "🧼", "🪴", "🪟"]},
+        ];
+        
+        // Determine icons for a given text using advanced natural language analysis
         function determineIcon(text) {
-            const lowerText = text.toLowerCase();
+            if (!text) return "📝"; // Default fallback
             
-            // Look for keyword matches
-            for (const [keyword, icon] of Object.entries(iconMappings)) {
-                if (lowerText.includes(keyword)) {
-                    return icon;
+            const lowerText = text.toLowerCase();
+            const words = lowerText.split(/\s+|,|\.|\(|\)|\[|\]|\/|-|_/);
+            
+            // First, try to find direct keyword matches
+            for (const word of words) {
+                if (word.length > 2 && iconMappings[word]) {
+                    // If we have a direct match, randomly select from available options
+                    const icons = iconMappings[word];
+                    return icons[Math.floor(Math.random() * icons.length)];
                 }
             }
             
-            // Default icons if no match found
-            if (text.length % 5 === 0) return "🔮";
-            if (text.length % 5 === 1) return "⚔️";
-            if (text.length % 5 === 2) return "🛡️";
-            if (text.length % 5 === 3) return "🧩";
-            if (text.length % 5 === 4) return "📋";
+            // Next, try partial matches (words containing our keywords)
+            for (const [keyword, icons] of Object.entries(iconMappings)) {
+                if (keyword.length > 3 && lowerText.includes(keyword)) {
+                    return icons[Math.floor(Math.random() * icons.length)];
+                }
+            }
             
-            return "📝"; // Default fallback
+            // Try to detect category based on patterns
+            for (const category of categoryPatterns) {
+                for (const pattern of category.patterns) {
+                    if (lowerText.includes(pattern)) {
+                        return category.icons[Math.floor(Math.random() * category.icons.length)];
+                    }
+                }
+            }
+            
+            // Use semantic analysis based on word length and word count
+            // (This creates a deterministic but less obvious pattern than just length % 5)
+            const totalWordLength = words.reduce((sum, word) => sum + word.length, 0);
+            const wordCount = words.length;
+            
+            // Use a combination of factors to create variety
+            const iconIndex = (totalWordLength * 3 + wordCount * 7) % 25;
+            
+            // Emoji clusters based on general themes
+            const generalIcons = [
+                "📝", "✅", "🎯", "🔍", "📊", // Productivity & Goals
+                "🧩", "🎲", "🎮", "🏆", "🎯", // Games & Challenges
+                "⚡", "✨", "💫", "🌟", "⭐", // Energy & Inspiration
+                "📦", "🛠️", "🔧", "⚙️", "🧰", // Tools & Building
+                "🔮", "🌈", "🪄", "🧿", "🎭"  // Magic & Creative
+            ];
+            
+            return generalIcons[iconIndex];
         }
 
         // Load state from localStorage
@@ -925,7 +1265,7 @@
                 if (!state.completionHistory) state.completionHistory = [];
                 if (!state.activePomodoro) state.activePomodoro = null;
                 
-                // Backward compatibility for icons
+                // Backward compatibility for icons and stats
                 state.tasks.forEach(task => {
                     if (!task.icon) {
                         task.icon = determineIcon(task.name);
@@ -935,8 +1275,7 @@
                     }
                     if (!task.pomodoroStats) {
                         task.pomodoroStats = {
-                            completed: 0,
-                            total: 0,
+                            completedSessions: 0,
                             lootBonusPercent: 0
                         };
                     }
@@ -1222,9 +1561,10 @@
                 created: new Date().toISOString(),
                 subtasks: [],
                 pomodoroStats: {
-                    completed: 0,
-                    total: recommendedPomodoros,
-                    lootBonusPercent: 0
+                    completedSessions: 0,
+                    sessionsUsed: 0,
+                    lootBonusPercent: 0,
+                    sessionHistory: []
                 }
             };
             
@@ -1305,52 +1645,48 @@
             
             showNotification(`New reward added: ${item.name}`, 'primary');
         });
-
+        
         // Open Pomodoro modal for a task
         function startPomodoro(index) {
             const task = state.tasks[index];
             
-            // Set up the pomodoro modal
+            // Update task name in the modal
             document.getElementById('pomodoroTaskName').textContent = task.name;
-            document.getElementById('phaseType').textContent = 'Focus Time';
-            document.getElementById('phaseType').className = 'focus-time';
-            document.getElementById('timerDisplay').textContent = '25:00';
             
-            // Reset buttons
-            document.getElementById('startTimer').disabled = false;
-            document.getElementById('pauseTimer').disabled = true;
+            // Show setup screen, hide timer screen
+            document.getElementById('pomodoroSetup').style.display = 'block';
+            document.getElementById('pomodoroTimer').style.display = 'none';
+            document.getElementById('subtaskCompletePrompt').classList.remove('show');
             
-            // Set up pomodoro progress visualization
-            const progressContainer = document.getElementById('pomodoroProgress');
-            progressContainer.innerHTML = '';
+            // Populate subtask selection
+            populateSubtaskSelection(task);
             
-            // Add segments for total pomodoros
-            for (let i = 0; i < task.pomodoroStats.total; i++) {
-                const segment = document.createElement('div');
-                segment.className = 'pomodoro-segment';
-                if (i < task.pomodoroStats.completed) {
-                    segment.classList.add('completed');
+            // Reset time selections to defaults
+            document.querySelectorAll('.time-option').forEach(option => {
+                option.classList.remove('selected');
+                if ((option.dataset.value === '25' && option.parentElement.classList.contains('time-selector')) || 
+                    (option.dataset.value === '5' && !option.parentElement.classList.contains('time-selector'))) {
+                    option.classList.add('selected');
                 }
-                progressContainer.appendChild(segment);
-            }
+            });
             
-            // Update stats display
-            document.getElementById('completedPomodoros').textContent = task.pomodoroStats.completed;
-            document.getElementById('totalPomodoros').textContent = task.pomodoroStats.total;
-            document.getElementById('lootBonus').textContent = task.pomodoroStats.lootBonusPercent;
+            // Reset animation selection
+            document.querySelectorAll('.animation-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.type === 'forge') {
+                    option.classList.add('selected');
+                }
+            });
             
-            // Load subtasks
-            loadSubtasks(task);
-            
-            // Store task index
+            // Store task index in activePomodoro
             state.activePomodoro = {
                 taskIndex: index,
-                phase: 'focus',
-                timeRemaining: 25 * 60, // 25 minutes in seconds
-                running: false,
-                currentPomodoro: task.pomodoroStats.completed,
-                startTime: null,
-                lastActive: new Date().getTime()
+                subtaskIndex: null,
+                focusDuration: 25,
+                breakDuration: 5,
+                phase: 'setup',
+                animationType: 'forge',
+                sessionsForCompletion: 0
             };
             
             saveState();
@@ -1359,74 +1695,256 @@
             document.getElementById('pomodoroModal').classList.add('show');
         }
         
-        // Load subtasks for a task
-        function loadSubtasks(task) {
-            const subtasksContainer = document.getElementById('subtasksContainer');
-            subtasksContainer.innerHTML = '';
+        // Populate subtask selection
+        function populateSubtaskSelection(task) {
+            const subtaskSelection = document.getElementById('subtaskSelection');
+            // Keep the "Create New Subtask" option
+            subtaskSelection.innerHTML = '<div class="subtask-option" onclick="selectSubtask(\'new\')">+ Create New Subtask</div>';
             
+            // Add existing subtasks
             if (task.subtasks && task.subtasks.length > 0) {
                 task.subtasks.forEach((subtask, index) => {
-                    const subtaskElement = document.createElement('div');
-                    subtaskElement.className = 'subtask-item';
-                    if (subtask.completed) {
-                        subtaskElement.classList.add('subtask-completed');
+                    if (!subtask.completed) {
+                        const subtaskOption = document.createElement('div');
+                        subtaskOption.className = 'subtask-option';
+                        subtaskOption.textContent = subtask.name;
+                        subtaskOption.onclick = () => selectSubtask(index);
+                        subtaskSelection.insertBefore(subtaskOption, subtaskSelection.firstChild);
                     }
-                    
-                    subtaskElement.innerHTML = `
-                        <span>${subtask.name}</span>
-                        <div>
-                            ${!subtask.completed ? 
-                                `<button onclick="completeSubtask(${index})">Complete</button>` : 
-                                `<span style="color: var(--success)">✓</span>`
-                            }
-                        </div>
-                    `;
-                    
-                    subtasksContainer.appendChild(subtaskElement);
                 });
+            }
+            
+            // Hide new subtask form
+            document.getElementById('newSubtaskForm').style.display = 'none';
+        }
+        
+        // Select a subtask for pomodoro
+        function selectSubtask(index) {
+            // Remove selection from all options
+            document.querySelectorAll('.subtask-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            if (index === 'new') {
+                // Show new subtask form
+                document.getElementById('newSubtaskForm').style.display = 'block';
+                document.getElementById('newSubtaskInput').focus();
+                
+                // Mark the "Create New" option as selected
+                document.querySelector('.subtask-option').classList.add('selected');
             } else {
-                subtasksContainer.innerHTML = `<p>No subtasks yet. Add some to break down this quest!</p>`;
+                // Hide new subtask form
+                document.getElementById('newSubtaskForm').style.display = 'none';
+                
+                // Update activePomodoro state
+                state.activePomodoro.subtaskIndex = index;
+                
+                // Mark the selected subtask
+                document.querySelectorAll('.subtask-option').forEach((option, i) => {
+                    if (i === index + 1) { // +1 because the first option is "Create New"
+                        option.classList.add('selected');
+                    }
+                });
             }
         }
         
-        // Add a subtask to the current active task
-        function addSubtask() {
-            const subtaskInput = document.getElementById('subtaskInput');
+        // Create a new subtask
+        function createSubtask() {
+            const subtaskInput = document.getElementById('newSubtaskInput');
             const subtaskName = subtaskInput.value.trim();
             
             if (subtaskName && state.activePomodoro) {
                 const taskIndex = state.activePomodoro.taskIndex;
                 const task = state.tasks[taskIndex];
                 
-                task.subtasks.push({
+                const newSubtask = {
                     name: subtaskName,
                     completed: false,
                     created: new Date().toISOString()
-                });
+                };
+                
+                task.subtasks.push(newSubtask);
+                
+                // Set the new subtask as the active one
+                state.activePomodoro.subtaskIndex = task.subtasks.length - 1;
                 
                 saveState();
-                loadSubtasks(task);
+                populateSubtaskSelection(task);
+                
+                // Select the newly created subtask
+                document.querySelectorAll('.subtask-option').forEach((option, i) => {
+                    if (i === 0) { // The new subtask will be the first one
+                        option.classList.add('selected');
+                    }
+                });
+                
                 subtaskInput.value = '';
+                document.getElementById('newSubtaskForm').style.display = 'none';
             }
         }
         
-        // Complete a subtask
-        function completeSubtask(subtaskIndex) {
-            if (state.activePomodoro) {
-                const taskIndex = state.activePomodoro.taskIndex;
-                const task = state.tasks[taskIndex];
-                
-                if (task.subtasks[subtaskIndex]) {
-                    task.subtasks[subtaskIndex].completed = true;
-                    
-                    // Award a small XP bonus for completing subtasks
-                    addXP(5);
-                    
-                    saveState();
-                    loadSubtasks(task);
-                    
-                    showNotification(`Subtask completed! +5 XP`);
+        // Select focus time
+        function selectFocusTime(duration) {
+            document.querySelectorAll('.time-selector:first-of-type .time-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.value == duration) {
+                    option.classList.add('selected');
                 }
+            });
+            
+            state.activePomodoro.focusDuration = duration;
+        }
+        
+        // Select break time
+        function selectBreakTime(duration) {
+            document.querySelectorAll('.time-selector:nth-of-type(2) .time-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.value == duration) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            state.activePomodoro.breakDuration = duration;
+        }
+        
+        // Select animation type
+        function selectAnimationType(type) {
+            document.querySelectorAll('.animation-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.type === type) {
+                    option.classList.add('selected');
+                }
+            });
+            
+            state.activePomodoro.animationType = type;
+        }
+        
+        // Start the focus session
+        function startFocusSession() {
+            if (!state.activePomodoro || state.activePomodoro.subtaskIndex === null) {
+                alert("Please select a subtask first!");
+                return;
+            }
+            
+            const taskIndex = state.activePomodoro.taskIndex;
+            const subtaskIndex = state.activePomodoro.subtaskIndex;
+            const task = state.tasks[taskIndex];
+            const subtask = task.subtasks[subtaskIndex];
+            
+            // Hide setup, show timer
+            document.getElementById('pomodoroSetup').style.display = 'none';
+            document.getElementById('pomodoroTimer').style.display = 'block';
+            
+            // Set up timer display
+            document.getElementById('phaseType').textContent = 'Focus Time';
+            document.getElementById('phaseType').className = 'focus-time';
+            document.getElementById('timerDisplay').textContent = `${state.activePomodoro.focusDuration}:00`;
+            document.getElementById('currentSubtask').textContent = subtask.name;
+            
+            // Reset session stats in UI
+            document.getElementById('completedPomodoros').textContent = '0';
+            document.getElementById('efficiencyBonus').textContent = '0';
+            
+            // Create session info
+            state.activePomodoro.phase = 'focus';
+            state.activePomodoro.timeRemaining = state.activePomodoro.focusDuration * 60; // in seconds
+            state.activePomodoro.running = false;
+            state.activePomodoro.startTime = null;
+            state.activePomodoro.lastActive = new Date().getTime();
+            state.activePomodoro.sessionsCompleted = 0;
+            
+            // Set up animation based on selected type
+            setupAnimation(state.activePomodoro.animationType);
+            
+            // Reset buttons
+            document.getElementById('startTimer').disabled = false;
+            document.getElementById('pauseTimer').disabled = true;
+            
+            saveState();
+        }
+        
+        // Set up pixel animation based on type
+        function setupAnimation(type) {
+            const animationScene = document.getElementById('animationScene');
+            animationScene.innerHTML = '';
+            
+            switch (type) {
+                case 'forge':
+                    // Create forge elements
+                    const character = document.createElement('div');
+                    character.className = 'character';
+                    
+                    const forge = document.createElement('div');
+                    forge.className = 'forge';
+                    
+                    const anvil = document.createElement('div');
+                    anvil.className = 'anvil';
+                    
+                    const hammer = document.createElement('div');
+                    hammer.className = 'hammer';
+                    
+                    const sparks = document.createElement('div');
+                    sparks.className = 'sparks';
+                    
+                    animationScene.appendChild(character);
+                    animationScene.appendChild(forge);
+                    animationScene.appendChild(anvil);
+                    animationScene.appendChild(hammer);
+                    animationScene.appendChild(sparks);
+                    
+                    // Add multiple sparks
+                    for (let i = 0; i < 5; i++) {
+                        const sparkClone = sparks.cloneNode();
+                        sparkClone.style.animationDelay = `${i * 0.1}s`;
+                        sparkClone.style.left = `${175 + Math.random() * 10}px`;
+                        animationScene.appendChild(sparkClone);
+                    }
+                    break;
+                    
+                case 'magic':
+                    // Create magic elements
+                    const magicCharacter = document.createElement('div');
+                    magicCharacter.className = 'character';
+                    magicCharacter.style.background = '#818cf8';
+                    
+                    const magicCircle = document.createElement('div');
+                    magicCircle.className = 'magic-circle';
+                    
+                    animationScene.appendChild(magicCharacter);
+                    animationScene.appendChild(magicCircle);
+                    
+                    // Add multiple particles
+                    for (let i = 0; i < 8; i++) {
+                        const particle = document.createElement('div');
+                        particle.className = 'magic-particles';
+                        particle.style.animationDelay = `${i * 0.4}s`;
+                        particle.style.right = `${50 + Math.random() * 40}px`;
+                        particle.style.bottom = `${20 + Math.random() * 30}px`;
+                        animationScene.appendChild(particle);
+                    }
+                    break;
+                    
+                case 'combat':
+                    // Create combat elements
+                    const warrior = document.createElement('div');
+                    warrior.className = 'character';
+                    warrior.style.background = '#ef4444';
+                    
+                    // Add enemies
+                    for (let i = 0; i < 3; i++) {
+                        const enemy = document.createElement('div');
+                        enemy.className = 'character';
+                        enemy.style.background = '#4b5563';
+                        enemy.style.width = '20px';
+                        enemy.style.height = '25px';
+                        enemy.style.left = `${180 + i * 40}px`;
+                        enemy.style.animation = 'characterIdle 1.2s infinite alternate';
+                        enemy.style.animationDelay = `${i * 0.2}s`;
+                        animationScene.appendChild(enemy);
+                    }
+                    
+                    animationScene.appendChild(warrior);
+                    break;
             }
         }
         
@@ -1456,7 +1974,11 @@
             
             const now = new Date().getTime();
             const elapsed = Math.floor((now - state.activePomodoro.startTime) / 1000);
-            state.activePomodoro.timeRemaining = Math.max(0, (state.activePomodoro.phase === 'focus' ? 25 * 60 : 5 * 60) - elapsed);
+            const phaseDuration = state.activePomodoro.phase === 'focus' ? 
+                                 state.activePomodoro.focusDuration * 60 : 
+                                 state.activePomodoro.breakDuration * 60;
+                                 
+            state.activePomodoro.timeRemaining = Math.max(0, phaseDuration - elapsed);
             state.activePomodoro.lastActive = now;
             
             // Update display
@@ -1464,20 +1986,9 @@
             const seconds = state.activePomodoro.timeRemaining % 60;
             document.getElementById('timerDisplay').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
-            // Mark current segment as active
-            const segments = document.querySelectorAll('.pomodoro-segment');
-            if (segments.length > state.activePomodoro.currentPomodoro) {
-                // Remove current class from all segments
-                segments.forEach(seg => seg.classList.remove('current'));
-                // Add current class to active segment
-                if (state.activePomodoro.phase === 'focus') {
-                    segments[state.activePomodoro.currentPomodoro].classList.add('current');
-                }
-            }
-            
             // Check if timer is complete
             if (state.activePomodoro.timeRemaining <= 0) {
-                handlePomodoroComplete();
+                handlePomodoroPhaseComplete();
             } else {
                 // Continue timer
                 saveState();
@@ -1485,63 +1996,133 @@
             }
         }
         
-        // Handle Pomodoro completion
-        function handlePomodoroComplete() {
-            const taskIndex = state.activePomodoro.taskIndex;
-            const task = state.tasks[taskIndex];
+        // Handle Pomodoro phase completion
+        function handlePomodoroPhaseComplete() {
+            // Pause the timer
+            state.activePomodoro.running = false;
             
             if (state.activePomodoro.phase === 'focus') {
                 // Completed a focus session
-                task.pomodoroStats.completed++;
+                state.activePomodoro.sessionsCompleted++;
                 
-                // Calculate loot bonus (each completed pomodoro increases chance)
-                task.pomodoroStats.lootBonusPercent = Math.min(50, task.pomodoroStats.completed * 5);
+                document.getElementById('completedPomodoros').textContent = state.activePomodoro.sessionsCompleted;
                 
-                // Award XP for completing a pomodoro
-                addXP(10);
+                // Show subtask completion prompt
+                document.getElementById('pomodoroTimer').style.display = 'none';
+                document.getElementById('subtaskCompletePrompt').classList.add('show');
                 
-                // Update UI
-                document.getElementById('completedPomodoros').textContent = task.pomodoroStats.completed;
-                document.getElementById('lootBonus').textContent = task.pomodoroStats.lootBonusPercent;
+                const taskIndex = state.activePomodoro.taskIndex;
+                const subtaskIndex = state.activePomodoro.subtaskIndex;
+                const task = state.tasks[taskIndex];
+                const subtask = task.subtasks[subtaskIndex];
                 
-                // Mark segment as completed
-                const segments = document.querySelectorAll('.pomodoro-segment');
-                if (segments.length > state.activePomodoro.currentPomodoro) {
-                    segments[state.activePomodoro.currentPomodoro].classList.add('completed');
-                    segments[state.activePomodoro.currentPomodoro].classList.remove('current');
-                }
+                document.getElementById('completionSubtaskName').textContent = subtask.name;
                 
-                // Show notification
-                showNotification(`Pomodoro completed! +10 XP, Loot bonus now ${task.pomodoroStats.lootBonusPercent}%`);
-                
-                // Switch to break phase
-                state.activePomodoro.phase = 'rest';
-                state.activePomodoro.timeRemaining = 5 * 60; // 5 minute break
-                state.activePomodoro.startTime = new Date().getTime();
-                state.activePomodoro.currentPomodoro++;
-                
-                // Update phase display
-                document.getElementById('phaseType').textContent = 'Rest Time';
-                document.getElementById('phaseType').className = 'rest-time';
-                
+                // Play completion sound
+                // const sound = new Audio('completion.mp3');
+                // sound.play();
             } else {
-                // Completed a rest phase
+                // Completed a break phase
                 // Switch back to focus phase
                 state.activePomodoro.phase = 'focus';
-                state.activePomodoro.timeRemaining = 25 * 60; // 25 minute focus
-                state.activePomodoro.startTime = new Date().getTime();
+                state.activePomodoro.timeRemaining = state.activePomodoro.focusDuration * 60; // reset to full focus time
+                state.activePomodoro.startTime = null;
                 
                 // Update phase display
                 document.getElementById('phaseType').textContent = 'Focus Time';
                 document.getElementById('phaseType').className = 'focus-time';
+                document.getElementById('timerDisplay').textContent = `${state.activePomodoro.focusDuration}:00`;
+                
+                // Show timer screen
+                document.getElementById('pomodoroTimer').style.display = 'block';
+                document.getElementById('subtaskCompletePrompt').classList.remove('show');
+                
+                // Reset buttons
+                document.getElementById('startTimer').disabled = false;
+                document.getElementById('pauseTimer').disabled = true;
                 
                 showNotification(`Break complete! Ready for next focus session.`);
             }
             
             saveState();
+        }
+        
+        // Handle subtask completion response
+        function handleSubtaskComplete(isCompleted) {
+            const taskIndex = state.activePomodoro.taskIndex;
+            const subtaskIndex = state.activePomodoro.subtaskIndex;
+            const task = state.tasks[taskIndex];
             
-            // Auto-continue timer
-            updatePomodoroTimer();
+            if (isCompleted) {
+                // Mark subtask as completed
+                task.subtasks[subtaskIndex].completed = true;
+                
+                // Store how many sessions were needed for completion
+                state.activePomodoro.sessionsForCompletion = state.activePomodoro.sessionsCompleted;
+                
+                // Award XP for completing subtask
+                addXP(15);
+                
+                // Update pomodoro stats
+                task.pomodoroStats.completedSessions += state.activePomodoro.sessionsCompleted;
+                task.pomodoroStats.sessionsUsed += state.activePomodoro.sessionsCompleted;
+                
+                // Calculate efficiency bonus - the fewer sessions needed, the bigger the bonus
+                // We use a baseline of 2 sessions to determine efficiency
+                const expectedSessions = 2;
+                const efficiencyBonus = Math.max(0, Math.min(30, Math.round((expectedSessions / state.activePomodoro.sessionsCompleted) * 20)));
+                
+                // Update loot bonus chance
+                task.pomodoroStats.lootBonusPercent = Math.min(50, task.pomodoroStats.lootBonusPercent + efficiencyBonus);
+                
+                // Log the session
+                task.pomodoroStats.sessionHistory.push({
+                    subtask: task.subtasks[subtaskIndex].name,
+                    sessions: state.activePomodoro.sessionsCompleted,
+                    efficiencyBonus: efficiencyBonus,
+                    completed: true,
+                    timestamp: new Date().toISOString()
+                });
+                
+                // Update bonus display
+                document.getElementById('efficiencyBonus').textContent = efficiencyBonus;
+                
+                showNotification(`Subtask completed! +15 XP, Loot bonus +${efficiencyBonus}%!`);
+                
+                // Close the pomodoro modal
+                setTimeout(() => {
+                    closePomodoroModal();
+                }, 2000);
+            } else {
+                // Continue with the task - switch to break phase
+                state.activePomodoro.phase = 'rest';
+                state.activePomodoro.timeRemaining = state.activePomodoro.breakDuration * 60;
+                state.activePomodoro.startTime = null;
+                
+                // Update phase display
+                document.getElementById('phaseType').textContent = 'Rest Time';
+                document.getElementById('phaseType').className = 'rest-time';
+                document.getElementById('timerDisplay').textContent = `${state.activePomodoro.breakDuration}:00`;
+                
+                // Show timer screen again
+                document.getElementById('pomodoroTimer').style.display = 'block';
+                document.getElementById('subtaskCompletePrompt').classList.remove('show');
+                
+                // Reset buttons
+                document.getElementById('startTimer').disabled = false;
+                document.getElementById('pauseTimer').disabled = true;
+                
+                // Log the incomplete session
+                task.pomodoroStats.sessionsUsed += state.activePomodoro.sessionsCompleted;
+                task.pomodoroStats.sessionHistory.push({
+                    subtask: task.subtasks[subtaskIndex].name,
+                    sessions: state.activePomodoro.sessionsCompleted,
+                    completed: false,
+                    timestamp: new Date().toISOString()
+                });
+            }
+            
+            saveState();
         }
         
         // Pause Pomodoro timer
@@ -1560,45 +2141,64 @@
         function skipPomodoroPhase() {
             if (!state.activePomodoro) return;
             
-            // If skipping focus phase, don't count it as completed
             if (state.activePomodoro.phase === 'focus') {
-                state.activePomodoro.phase = 'rest';
-                state.activePomodoro.timeRemaining = 5 * 60; // 5 minute break
-                state.activePomodoro.startTime = new Date().getTime();
-                
-                // Update phase display
-                document.getElementById('phaseType').textContent = 'Rest Time';
-                document.getElementById('phaseType').className = 'rest-time';
+                // If skipping focus phase, don't count it as completed
+                handlePomodoroPhaseComplete();
             } else {
-                // Skipping break phase
+                // Simply end the break phase
                 state.activePomodoro.phase = 'focus';
-                state.activePomodoro.timeRemaining = 25 * 60; // 25 minute focus
-                state.activePomodoro.startTime = new Date().getTime();
+                state.activePomodoro.timeRemaining = state.activePomodoro.focusDuration * 60;
+                state.activePomodoro.startTime = null;
                 
                 // Update phase display
                 document.getElementById('phaseType').textContent = 'Focus Time';
                 document.getElementById('phaseType').className = 'focus-time';
+                document.getElementById('timerDisplay').textContent = `${state.activePomodoro.focusDuration}:00`;
+                
+                // Reset buttons
+                document.getElementById('startTimer').disabled = false;
+                document.getElementById('pauseTimer').disabled = true;
             }
             
+            state.activePomodoro.running = false;
             saveState();
-            
-            // If timer is running, continue updating
-            if (state.activePomodoro.running) {
-                updatePomodoroTimer();
+        }
+        
+        // Abandon pomodoro session
+        function abandonPomodoroSession() {
+            // If any sessions were completed, still count them
+            if (state.activePomodoro && state.activePomodoro.sessionsCompleted > 0) {
+                const taskIndex = state.activePomodoro.taskIndex;
+                const subtaskIndex = state.activePomodoro.subtaskIndex;
+                const task = state.tasks[taskIndex];
+                
+                if (task && task.subtasks && task.subtasks[subtaskIndex]) {
+                    // Log the abandoned session
+                    task.pomodoroStats.sessionsUsed += state.activePomodoro.sessionsCompleted;
+                    task.pomodoroStats.sessionHistory.push({
+                        subtask: task.subtasks[subtaskIndex].name,
+                        sessions: state.activePomodoro.sessionsCompleted,
+                        completed: false,
+                        abandoned: true,
+                        timestamp: new Date().toISOString()
+                    });
+                }
             }
+            
+            state.activePomodoro = null;
+            saveState();
+            closePomodoroModal();
         }
         
         // Close Pomodoro modal
         function closePomodoroModal() {
             document.getElementById('pomodoroModal').classList.remove('show');
             
-            // Pause timer if running
+            // If timer was running, pause it
             if (state.activePomodoro && state.activePomodoro.running) {
                 pausePomodoroTimer();
             }
             
-            // Keep the activePomodoro data for resuming later
-            saveState();
             updateUI();
         }
 
@@ -1671,6 +2271,13 @@
                         bonus += pomodoroBonus;
                     }
                     
+                    // Calculate subtask completion bonus
+                    const subtaskCompletionRate = task.subtasks.length ? 
+                       task.subtasks.filter(subtask => subtask.completed).length / task.subtasks.length : 0;
+                    
+                    const subtaskBonus = subtaskCompletionRate * 0.15; // Up to 15% bonus for all subtasks
+                    bonus += subtaskBonus;
+                    
                     // Rarity multipliers for more variance
                     const rarityMultipliers = {
                         'common': 1,
@@ -1727,6 +2334,9 @@
                         if (pomodoroBonus > 0) {
                             message += ` (Pomodoro bonus: ${Math.round(pomodoroBonus * 100)}%!)`;
                         }
+                        if (subtaskBonus > 0) {
+                            message += ` (Subtask bonus: ${Math.round(subtaskBonus * 100)}%!)`;
+                        }
                     }
                     
                     // Chance for bonus loot for higher rarity tasks (Easter egg)
@@ -1737,7 +2347,7 @@
                     }
                     
                     // Additional chance for bonus with pomodoro sessions
-                    if (task.pomodoroStats && task.pomodoroStats.completed > 0 && Math.random() < pomodoroBonus) {
+                    if (task.pomodoroStats && task.pomodoroStats.completedSessions > 0 && Math.random() < pomodoroBonus) {
                         const pomodoroBonus = Math.round(task.credits * 0.3);
                         state.credits += pomodoroBonus;
                         message += ` POMODORO CHEST: +${pomodoroBonus} credits!`;
@@ -1881,14 +2491,10 @@
                     
                     // Show pomodoro progress if applicable
                     let pomodoroProgress = '';
-                    if (task.pomodoroStats && task.pomodoroStats.total > 0) {
-                        const percent = Math.round((task.pomodoroStats.completed / task.pomodoroStats.total) * 100);
+                    if (task.pomodoroStats && task.pomodoroStats.lootBonusPercent > 0) {
                         pomodoroProgress = `
                             <div style="margin-top: 0.5rem;">
-                                <span style="font-size: 0.8rem;">Pomodoros: ${task.pomodoroStats.completed}/${task.pomodoroStats.total} (${percent}%)</span>
-                                <div class="progress-bar" style="height: 0.5rem;">
-                                    <div class="progress-bar-fill" style="width: ${percent}%; background: var(--focus);"></div>
-                                </div>
+                                <span style="font-size: 0.8rem;">Pomodoro bonus: +${task.pomodoroStats.lootBonusPercent}% chance of bonus rewards</span>
                             </div>
                         `;
                     }
