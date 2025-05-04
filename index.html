@@ -540,12 +540,10 @@
             overflow: hidden;
         }
 
-        /* Enhanced 8-bit style animations */
+        /* Pixel art elements - Updated to use CSS instead of background images */
         .pixel-art {
             position: absolute;
             image-rendering: pixelated;
-            background-size: 100% 100%;
-            background-repeat: no-repeat;
         }
 
         /* Forge animation elements */
@@ -555,8 +553,6 @@
             left: 40px;
             width: 32px;
             height: 48px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAnElEQVR42mNgGAWjYBQMRvDjzu3/h9Y0/N/VZk8VvK/L+v+HO7f/7+mwowretabif//k0v/7oHLdVMJ7Wnz/b504///G4e3/D3ZYUQUfaLL8f3HdzP+Pr534f3y2E1Xx4Vbn/0+vXPx/69jO/0cX+lAFH5/v/f/+2SMMUzNdqYIPzgNrHsT45Eo/quDj83z/P7ly4f/JRZ5UwYMerBkF1AAAE59Nw0K9IncAAAAASUVORK5CYII=');
-            animation: characterForgeIdle 0.8s steps(1) infinite;
             z-index: 10;
         }
 
@@ -566,7 +562,6 @@
             left: 100px;
             width: 40px;
             height: 40px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAhklEQVR42u3XwQ2AIAwF0E7kSI7kSI7kKI6C0YQEQgW/CSft3YT3Cy0tAXoUJo3M3LbZV6JTEb3vK9HXvgKdZNT7x+qT99Vn1PnQ6jP2VQLdZ5T7YdSn2FcJdJtR5Udfn2pfJdBdRr0/+/qs+yqB5xnN+gzrK4FuMpr1Gdo3/4OjOAEGNTHTGH71ZwAAAABJRU5ErkJggg==');
             z-index: 5;
         }
 
@@ -576,7 +571,6 @@
             left: 160px;
             width: 32px;
             height: 16px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAA2ElEQVR42sWVMQ6DMAxFfQJGRsZeoKdg7cgROAp3YMsIIyMjIyNXCH8SRY2TOI6qlvSTUWzHz05MHPcP6BmXdULRJuCB5Pn8MYDWyNrgFABSIB+VQiBLkFVZfwXy5RCEBlLXTwBeDkEKQQ5A3Y6Bw8kBsJaDqgS2AO3oST2ZhBHRd8+lvQWdSm+MPO9SZwLwUO6JLZ91UDkALeK7Hjuo6nrTr7rP9LM0D7o0NsDdN1IPQIfmQb/X9j80D2rxsxlMH6Df6G2G0zLSJthbxtMhsLeM6aWsZQK8ASVcbWd5B7PdAAAAAElFTkSuQmCC');
             z-index: 8;
         }
 
@@ -586,9 +580,7 @@
             left: 180px;
             width: 16px;
             height: 24px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAAAdklEQVR42mNgGFHg2YXDD8AB9l988vT/5adP/798+vT/i6dP/7948uSpnLTkUwYGBgb8Bjx//vTpixdPnwMxiA0Vv3z5/D9BA54/fwbVDBV//uLpc5IGgGySXQE1YBQMbgNAmi9deYqKQWLEGnDlygMGYsDgNmAkAQB8b9YKz3HtFwAAAABJRU5ErkJggg==');
             transform-origin: 50% 100%;
-            animation: pixelHammerSwing 1s steps(1) infinite;
             z-index: 9;
         }
 
@@ -598,83 +590,14 @@
             left: 175px;
             width: 16px;
             height: 16px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAhklEQVR42mNgGPKAEZ8CWRm5/0qqav+VVFSRMEiMgYGBYcvmzf9Xrlz5f/WqVUgYJIbXAJAGkCaQRnQDQHy8BsA0wjTDDQGJgQBOA2CaYYbAMMgQDANgmmGaYQBmCFYDYJphmmEAZAhWA0CaYZpBAKYJrwEwzTAA04TXAJgmEMambtABAIPgf0m5T8QHAAAAAElFTkSuQmCC');
-            animation: pixelSparksFly 0.5s steps(1) infinite;
             opacity: 0;
             z-index: 10;
         }
 
-        /* Magic animation elements */
-        .pixel-mage {
-            position: absolute;
-            bottom: 30px;
-            left: 40px;
-            width: 32px;
-            height: 48px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAnklEQVR42mNgGAWjYBQMAnBmfcP/o9Ob/59dVUsVfGJN+/8dc2r/H++wogpeNKXo/4bZtf+3tFhTBW+cXfu/r7Pw/8ZWG6rgjW2O/9tr0v/3VmVSBe+eWvt/QVXZ/6aKDKrg/TMa/s8Aau6szqUK3j+16X9HefH/htIsquD9wNptLkn/31pFRfx/W3nF/7aSfKrgQQ/WjAJqAAA+xE5DSqJ9QQAAAABJRU5ErkJggg==');
-            animation: characterMagicIdle 0.8s steps(1) infinite;
-            z-index: 10;
-        }
-
-        .pixel-magic-circle {
-            position: absolute;
-            bottom: 25px;
-            right: 50px;
-            width: 48px;
-            height: 16px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAgCAYAAABU1PscAAAArElEQVR42u2XwQ3AIAgAyyAO4iAO4igO5x6+jfSkViK0yfXRF0EuXNJwhBk3bTKLiLYrORFe7X8GzPSvEm4NSLZ/lXBrQKr9s4RbA5Lun018c4FbA/rYbwgn9mwCSff/JRCm9u8E3CaQdP+TBVwnkHT/swXcJhCmz38WcJtA0v3PF3CdQNL9h48WmRb3BEI0YCQQpnuglzDpnuhpg5sFkq0EcAO2fwNQl4gbgA8NWoSHXJcTTAAAAABJRU5ErkJggg==');
-            animation: magicCirclePulse 2s steps(1) infinite;
-            opacity: 0.7;
-            z-index: 5;
-        }
-
-        .pixel-magic-particle {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAX0lEQVR42mNgGPKAEZ8CWRm5/0qqav+VVFSRMEiMgYGBYcvmzf9Xrlz5f/WqVUgYJIbXAJAGkCaQRnQDQHy8BsA0wjTDDQGJEQRwA0Aa0DVjGEIMwGkIyBCYoUM5BAYdAADts3KdUT+aOAAAAABJRU5ErkJggg==');
-            animation: magicParticleFloat 3s steps(1) infinite;
-            z-index: 7;
-        }
-
-        /* Combat animation elements */
-        .pixel-warrior {
-            position: absolute;
-            bottom: 30px;
-            left: 40px;
-            width: 32px;
-            height: 48px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAlUlEQVR42mNgGAWjYBSQDfbvXPL/8tHt/29d3POf2vjGqb3/L+zf+P/64W1UwVfP7P9/evfK/9cObacKvnxy9//jOxb9v7RvPVXw5aO7/h/dtvD/+e1LqIIvH9r+f8/aBf93r5lPFXx53/r/25bP/r915Wyq4Mv71v3fsmTG/83LZlEFX9qzFortWBiGMQgPBUwVMApGATIAAJiETcOWJnkVAAAAAElFTkSuQmCC');
-            animation: characterCombatIdle 0.8s steps(1) infinite;
-            z-index: 10;
-        }
-
-        .pixel-enemy {
-            position: absolute;
-            bottom: 35px;
-            width: 24px;
-            height: 40px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAoCAYAAADkDTpVAAAAk0lEQVR42mNgGAVDGvx/8OH/vvOP/j++8oQq+PGVx//3X3j0//+HB1TBDy8/+X/g8mOq4weXH/0/eOUJdQ24/AgY/aOuBrXlTVQ34MiVx6PBPJo0BmlFMRrMo0ljkCbqUTCP1mlDujSOtmxG67QJBSfVKwqyDKB6VUm2AdSoTMkygBoNAlINoFrLZBQMGgAAcwZ11Q1EG1QAAAAASUVORK5CYII=');
-            animation: enemyIdle 0.8s steps(1) infinite;
-            z-index: 8;
-        }
-
-        .pixel-sword {
-            position: absolute;
-            bottom: 45px;
-            left: 70px;
-            width: 32px;
-            height: 8px;
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAATklEQVR42mNgGAWjYBQQAW7cuPH/1KlT/69du0YV/PfP7/+gFMkArBGM7e3t/8vIyPzX0dGhCgZphGHkFDkKRg0YNWA0BkZjYDQGqBsDAId4MgEPZs8zAAAAAElFTkSuQmCC');
-            animation: swordSlash 2s steps(1) infinite;
-            opacity: 0;
-            z-index: 9;
-        }
-
-        /* Animation keyframes */
+        /* Animation keyframes - Keep these */
         @keyframes characterForgeIdle {
-            0%, 50% { background-position: 0 0; }
-            25%, 75% { background-position: -32px 0; }
+            0%, 50% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-2px); }
         }
 
         @keyframes pixelHammerSwing {
@@ -690,13 +613,13 @@
         }
 
         @keyframes characterMagicIdle {
-            0%, 50% { background-position: 0 0; }
-            25%, 75% { background-position: -32px 0; }
+            0%, 50% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-2px); }
         }
 
         @keyframes magicCirclePulse {
-            0%, 100% { transform: scale(1); opacity: 0.7; width: 48px; }
-            50% { transform: scale(1.2); opacity: 0.9; width: 64px; }
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 0.9; }
         }
 
         @keyframes magicParticleFloat {
@@ -707,13 +630,13 @@
         }
 
         @keyframes characterCombatIdle {
-            0%, 50% { background-position: 0 0; }
-            25%, 75% { background-position: -32px 0; }
+            0%, 50% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-2px); }
         }
 
         @keyframes enemyIdle {
-            0%, 50% { background-position: 0 0; }
-            25%, 75% { background-position: -24px 0; }
+            0%, 50% { transform: translateX(0); }
+            25%, 75% { transform: translateX(-2px); }
         }
 
         @keyframes swordSlash {
@@ -988,7 +911,7 @@
                 
                 <div class="pomodoro-animation">
                     <div class="pixel-scene" id="animationScene">
-                        <!-- Animation elements will be added dynamically using the 8-bit style -->
+                        <!-- Animation elements will be added dynamically -->
                     </div>
                 </div>
                 
@@ -1890,26 +1813,32 @@
         
         // Select focus time
         function selectFocusTime(duration) {
+            // First remove selected class from all options
             document.querySelectorAll('.focus-time-selector .time-option').forEach(option => {
                 option.classList.remove('selected');
-                if (option.dataset.value == duration) {
-                    option.classList.add('selected');
-                }
             });
             
-            state.activePomodoro.focusDuration = duration;
+            // Then add selected class to the clicked option
+            document.querySelector(`.focus-time-selector .time-option[data-value="${duration}"]`).classList.add('selected');
+            
+            if (state.activePomodoro) {
+                state.activePomodoro.focusDuration = duration;
+            }
         }
         
-        // Select break time
+        // Select break time - FIXED to correctly highlight the selected option
         function selectBreakTime(duration) {
+            // First remove selected class from all options
             document.querySelectorAll('.break-time-selector .time-option').forEach(option => {
                 option.classList.remove('selected');
-                if (option.dataset.value == duration) {
-                    option.classList.add('selected');
-                }
             });
             
-            state.activePomodoro.breakDuration = duration;
+            // Then add selected class to the clicked option
+            document.querySelector(`.break-time-selector .time-option[data-value="${duration}"]`).classList.add('selected');
+            
+            if (state.activePomodoro) {
+                state.activePomodoro.breakDuration = duration;
+            }
         }
         
         // Select animation type
@@ -1968,33 +1897,73 @@
             saveState();
         }
         
-        // Set up pixel animation based on type
+        // Set up pixel animation based on type - UPDATED to use SVG instead of background images
         function setupAnimation(type) {
             const animationScene = document.getElementById('animationScene');
             animationScene.innerHTML = '';
             
             switch (type) {
                 case 'forge':
-                    // Create forge animation with 8-bit style elements
+                    // Create character
                     const character = document.createElement('div');
                     character.className = 'pixel-art pixel-character';
+                    character.style.animation = 'characterForgeIdle 0.8s steps(1) infinite';
+                    character.innerHTML = `
+                        <svg width="32" height="48" viewBox="0 0 32 48">
+                            <rect x="12" y="8" width="8" height="8" fill="#6d28d9" />
+                            <rect x="10" y="16" width="12" height="16" fill="#6d28d9" />
+                            <rect x="6" y="18" width="4" height="8" fill="#6d28d9" />
+                            <rect x="22" y="18" width="4" height="8" fill="#6d28d9" />
+                            <rect x="10" y="32" width="4" height="12" fill="#6d28d9" />
+                            <rect x="18" y="32" width="4" height="12" fill="#6d28d9" />
+                        </svg>
+                    `;
                     
+                    // Create forge
                     const forge = document.createElement('div');
                     forge.className = 'pixel-art pixel-forge';
+                    forge.innerHTML = `
+                        <svg width="40" height="40" viewBox="0 0 40 40">
+                            <rect x="5" y="20" width="30" height="15" fill="#71717a" />
+                            <rect x="10" y="10" width="20" height="10" fill="#ef4444" />
+                            <rect x="15" y="5" width="10" height="5" fill="#f59e0b" />
+                        </svg>
+                    `;
                     
+                    // Create anvil
                     const anvil = document.createElement('div');
                     anvil.className = 'pixel-art pixel-anvil';
+                    anvil.innerHTML = `
+                        <svg width="32" height="16" viewBox="0 0 32 16">
+                            <rect x="4" y="4" width="24" height="8" fill="#71717a" />
+                            <rect x="8" y="12" width="16" height="4" fill="#52525b" />
+                        </svg>
+                    `;
                     
+                    // Create hammer with animation
                     const hammer = document.createElement('div');
                     hammer.className = 'pixel-art pixel-hammer';
+                    hammer.style.animation = 'pixelHammerSwing 1s steps(1) infinite';
+                    hammer.innerHTML = `
+                        <svg width="16" height="24" viewBox="0 0 16 24">
+                            <rect x="4" y="2" width="8" height="6" fill="#71717a" />
+                            <rect x="6" y="8" width="4" height="14" fill="#92400e" />
+                        </svg>
+                    `;
                     
-                    // Add multiple sparks
+                    // Add sparks with animation
                     for (let i = 0; i < 3; i++) {
-                        const spark = document.createElement('div');
-                        spark.className = 'pixel-art pixel-sparks';
-                        spark.style.left = `${175 + Math.random() * 10}px`;
-                        spark.style.animationDelay = `${i * 0.2}s`;
-                        animationScene.appendChild(spark);
+                        const sparks = document.createElement('div');
+                        sparks.className = 'pixel-art pixel-sparks';
+                        sparks.style.left = `${175 + i * 5}px`;
+                        sparks.style.animation = `pixelSparksFly 0.5s ${i * 0.2}s steps(1) infinite`;
+                        sparks.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <circle cx="8" cy="8" r="3" fill="#fbbf24" />
+                                <circle cx="8" cy="8" r="1" fill="#f59e0b" />
+                            </svg>
+                        `;
+                        animationScene.appendChild(sparks);
                     }
                     
                     animationScene.appendChild(forge);
@@ -2004,12 +1973,32 @@
                     break;
                     
                 case 'magic':
-                    // Create magic animation with 8-bit style elements
+                    // Create mage character
                     const mage = document.createElement('div');
-                    mage.className = 'pixel-art pixel-mage';
+                    mage.className = 'pixel-art pixel-character';
+                    mage.style.animation = 'characterMagicIdle 0.8s steps(1) infinite';
+                    mage.innerHTML = `
+                        <svg width="32" height="48" viewBox="0 0 32 48">
+                            <rect x="12" y="4" width="8" height="8" fill="#8b5cf6" />
+                            <rect x="10" y="12" width="12" height="16" fill="#8b5cf6" />
+                            <rect x="6" y="14" width="4" height="8" fill="#8b5cf6" />
+                            <rect x="22" y="14" width="4" height="8" fill="#8b5cf6" />
+                            <rect x="10" y="28" width="4" height="12" fill="#8b5cf6" />
+                            <rect x="18" y="28" width="4" height="12" fill="#8b5cf6" />
+                            <polygon points="8,4 16,0 24,4 16,8" fill="#a78bfa" />
+                        </svg>
+                    `;
                     
+                    // Create magic circle
                     const magicCircle = document.createElement('div');
                     magicCircle.className = 'pixel-art pixel-magic-circle';
+                    magicCircle.style.animation = 'magicCirclePulse 2s steps(1) infinite';
+                    magicCircle.innerHTML = `
+                        <svg width="48" height="16" viewBox="0 0 48 16">
+                            <ellipse cx="24" cy="8" rx="20" ry="6" fill="none" stroke="#a78bfa" stroke-width="2" />
+                            <ellipse cx="24" cy="8" rx="10" ry="3" fill="#a78bfa" opacity="0.5" />
+                        </svg>
+                    `;
                     
                     // Add magic particles
                     for (let i = 0; i < 5; i++) {
@@ -2017,7 +2006,13 @@
                         particle.className = 'pixel-art pixel-magic-particle';
                         particle.style.bottom = `${30 + Math.random() * 40}px`;
                         particle.style.right = `${50 + Math.random() * 40}px`;
-                        particle.style.animationDelay = `${i * 0.5}s`;
+                        particle.style.animation = `magicParticleFloat 3s ${i * 0.5}s steps(1) infinite`;
+                        particle.innerHTML = `
+                            <svg width="16" height="16" viewBox="0 0 16 16">
+                                <circle cx="8" cy="8" r="4" fill="#a78bfa" />
+                                <circle cx="8" cy="8" r="2" fill="#c4b5fd" />
+                            </svg>
+                        `;
                         animationScene.appendChild(particle);
                     }
                     
@@ -2026,23 +2021,50 @@
                     break;
                     
                 case 'combat':
-                    // Create combat animation with 8-bit style elements
+                    // Create warrior character
                     const warrior = document.createElement('div');
-                    warrior.className = 'pixel-art pixel-warrior';
+                    warrior.className = 'pixel-art pixel-character';
+                    warrior.style.animation = 'characterCombatIdle 0.8s steps(1) infinite';
+                    warrior.innerHTML = `
+                        <svg width="32" height="48" viewBox="0 0 32 48">
+                            <rect x="12" y="8" width="8" height="8" fill="#ef4444" />
+                            <rect x="10" y="16" width="12" height="16" fill="#ef4444" />
+                            <rect x="6" y="18" width="4" height="8" fill="#ef4444" />
+                            <rect x="22" y="18" width="4" height="8" fill="#ef4444" />
+                            <rect x="10" y="32" width="4" height="12" fill="#ef4444" />
+                            <rect x="18" y="32" width="4" height="12" fill="#ef4444" />
+                        </svg>
+                    `;
                     
                     // Add enemies
                     for (let i = 0; i < 3; i++) {
                         const enemy = document.createElement('div');
                         enemy.className = 'pixel-art pixel-enemy';
                         enemy.style.left = `${160 + i * 50}px`;
-                        enemy.style.animationDelay = `${i * 0.3}s`;
+                        enemy.style.animation = `enemyIdle 0.8s ${i * 0.3}s steps(1) infinite`;
+                        enemy.innerHTML = `
+                            <svg width="24" height="40" viewBox="0 0 24 40">
+                                <rect x="8" y="4" width="8" height="8" fill="#71717a" />
+                                <rect x="6" y="12" width="12" height="16" fill="#71717a" />
+                                <rect x="4" y="14" width="2" height="6" fill="#71717a" />
+                                <rect x="18" y="14" width="2" height="6" fill="#71717a" />
+                                <rect x="6" y="28" width="4" height="8" fill="#71717a" />
+                                <rect x="14" y="28" width="4" height="8" fill="#71717a" />
+                            </svg>
+                        `;
                         animationScene.appendChild(enemy);
                     }
                     
-                    // Add sword attack effect
+                    // Create sword with animation
                     const sword = document.createElement('div');
                     sword.className = 'pixel-art pixel-sword';
-                    sword.style.animationDelay = '0.5s';
+                    sword.style.animation = 'swordSlash 2s steps(1) infinite';
+                    sword.innerHTML = `
+                        <svg width="32" height="8" viewBox="0 0 32 8">
+                            <rect x="0" y="3" width="24" height="2" fill="#d1d5db" />
+                            <rect x="24" y="0" width="8" height="8" fill="#9ca3af" />
+                        </svg>
+                    `;
                     
                     animationScene.appendChild(sword);
                     animationScene.appendChild(warrior);
