@@ -537,113 +537,190 @@
             height: 100%;
             position: relative;
             image-rendering: pixelated;
+            overflow: hidden;
         }
 
-        /* Animation elements */
-        .character {
+        /* Enhanced 8-bit style animations */
+        .pixel-art {
             position: absolute;
-            bottom: 20px;
+            image-rendering: pixelated;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        /* Forge animation elements */
+        .pixel-character {
+            position: absolute;
+            bottom: 30px;
             left: 40px;
-            width: 24px;
-            height: 32px;
-            background: #f43f5e;
-            animation: characterIdle 1s infinite alternate;
+            width: 32px;
+            height: 48px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAnElEQVR42mNgGAWjYBQMRvDjzu3/h9Y0/N/VZk8VvK/L+v+HO7f/7+mwowretabif//k0v/7oHLdVMJ7Wnz/b504///G4e3/D3ZYUQUfaLL8f3HdzP+Pr534f3y2E1Xx4Vbn/0+vXPx/69jO/0cX+lAFH5/v/f/+2SMMUzNdqYIPzgNrHsT45Eo/quDj83z/P7ly4f/JRZ5UwYMerBkF1AAAE59Nw0K9IncAAAAASUVORK5CYII=');
+            animation: characterForgeIdle 0.8s steps(1) infinite;
+            z-index: 10;
         }
 
-        .forge {
+        .pixel-forge {
             position: absolute;
-            bottom: 10px;
+            bottom: 30px;
             left: 100px;
             width: 40px;
-            height: 30px;
-            background: #6b7280;
+            height: 40px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAhklEQVR42u3XwQ2AIAwF0E7kSI7kSI7kKI6C0YQEQgW/CSft3YT3Cy0tAXoUJo3M3LbZV6JTEb3vK9HXvgKdZNT7x+qT99Vn1PnQ6jP2VQLdZ5T7YdSn2FcJdJtR5Udfn2pfJdBdRr0/+/qs+yqB5xnN+gzrK4FuMpr1Gdo3/4OjOAEGNTHTGH71ZwAAAABJRU5ErkJggg==');
+            z-index: 5;
         }
 
-        .anvil {
+        .pixel-anvil {
             position: absolute;
-            bottom: 30px;
+            bottom: 55px;
             left: 160px;
-            width: 30px;
-            height: 15px;
-            background: #4b5563;
+            width: 32px;
+            height: 16px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAQCAYAAAB3AH1ZAAAA2ElEQVR42sWVMQ6DMAxFfQJGRsZeoKdg7cgROAp3YMsIIyMjIyNXCH8SRY2TOI6qlvSTUWzHz05MHPcP6BmXdULRJuCB5Pn8MYDWyNrgFABSIB+VQiBLkFVZfwXy5RCEBlLXTwBeDkEKQQ5A3Y6Bw8kBsJaDqgS2AO3oST2ZhBHRd8+lvQWdSm+MPO9SZwLwUO6JLZ91UDkALeK7Hjuo6nrTr7rP9LM0D7o0NsDdN1IPQIfmQb/X9j80D2rxsxlMH6Df6G2G0zLSJthbxtMhsLeM6aWsZQK8ASVcbWd5B7PdAAAAAElFTkSuQmCC');
+            z-index: 8;
         }
 
-        .hammer {
+        .pixel-hammer {
             position: absolute;
-            bottom: 50px;
-            left: 165px;
-            width: 20px;
-            height: 15px;
-            background: #9ca3af;
+            bottom: 60px;
+            left: 180px;
+            width: 16px;
+            height: 24px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAYCAYAAADzoH0MAAAAdklEQVR42mNgGFHg2YXDD8AB9l988vT/5adP/798+vT/i6dP/7948uSpnLTkUwYGBgb8Bjx//vTpixdPnwMxiA0Vv3z5/D9BA54/fwbVDBV//uLpc5IGgGySXQE1YBQMbgNAmi9deYqKQWLEGnDlygMGYsDgNmAkAQB8b9YKz3HtFwAAAABJRU5ErkJggg==');
             transform-origin: 50% 100%;
-            animation: hammerSwing 1s infinite;
+            animation: pixelHammerSwing 1s steps(1) infinite;
+            z-index: 9;
         }
 
-        .sparks {
+        .pixel-sparks {
             position: absolute;
-            bottom: 50px;
+            bottom: 65px;
             left: 175px;
-            width: 2px;
-            height: 2px;
-            background: #fbbf24;
-            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAhklEQVR42mNgGPKAEZ8CWRm5/0qqav+VVFSRMEiMgYGBYcvmzf9Xrlz5f/WqVUgYJIbXAJAGkCaQRnQDQHy8BsA0wjTDDQGJgQBOA2CaYYbAMMgQDANgmmGaYQBmCFYDYJphmmEAZAhWA0CaYZpBAKYJrwEwzTAA04TXAJgmEMambtABAIPgf0m5T8QHAAAAAElFTkSuQmCC');
+            animation: pixelSparksFly 0.5s steps(1) infinite;
             opacity: 0;
-            animation: sparksFly 0.5s infinite;
+            z-index: 10;
         }
 
-        .magic-circle {
-            position: absolute;
-            bottom: 10px;
-            right: 50px;
-            width: 40px;
-            height: 10px;
-            border: 2px solid #818cf8;
-            border-radius: 50%;
-            opacity: 0.7;
-            animation: magicPulse 2s infinite;
-        }
-
-        .magic-particles {
+        /* Magic animation elements */
+        .pixel-mage {
             position: absolute;
             bottom: 30px;
-            right: 70px;
-            width: 3px;
-            height: 3px;
-            background: #818cf8;
-            border-radius: 50%;
-            animation: particleFloat 3s infinite;
+            left: 40px;
+            width: 32px;
+            height: 48px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAnklEQVR42mNgGAWjYBQMAnBmfcP/o9Ob/59dVUsVfGJN+/8dc2r/H++wogpeNKXo/4bZtf+3tFhTBW+cXfu/r7Pw/8ZWG6rgjW2O/9tr0v/3VmVSBe+eWvt/QVXZ/6aKDKrg/TMa/s8Aau6szqUK3j+16X9HefH/htIsquD9wNptLkn/31pFRfx/W3nF/7aSfKrgQQ/WjAJqAAA+xE5DSqJ9QQAAAABJRU5ErkJggg==');
+            animation: characterMagicIdle 0.8s steps(1) infinite;
+            z-index: 10;
         }
 
-        @keyframes characterIdle {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-3px); }
+        .pixel-magic-circle {
+            position: absolute;
+            bottom: 25px;
+            right: 50px;
+            width: 48px;
+            height: 16px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAgCAYAAABU1PscAAAArElEQVR42u2XwQ3AIAgAyyAO4iAO4igO5x6+jfSkViK0yfXRF0EuXNJwhBk3bTKLiLYrORFe7X8GzPSvEm4NSLZ/lXBrQKr9s4RbA5Lun018c4FbA/rYbwgn9mwCSff/JRCm9u8E3CaQdP+TBVwnkHT/swXcJhCmz38WcJtA0v3PF3CdQNL9h48WmRb3BEI0YCQQpnuglzDpnuhpg5sFkq0EcAO2fwNQl4gbgA8NWoSHXJcTTAAAAABJRU5ErkJggg==');
+            animation: magicCirclePulse 2s steps(1) infinite;
+            opacity: 0.7;
+            z-index: 5;
         }
 
-        @keyframes hammerSwing {
-            0% { transform: rotate(-30deg); }
-            10% { transform: rotate(-30deg); }
-            20% { transform: rotate(30deg); }
-            30% { transform: rotate(-30deg); }
-            100% { transform: rotate(-30deg); }
+        .pixel-magic-particle {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAX0lEQVR42mNgGPKAEZ8CWRm5/0qqav+VVFSRMEiMgYGBYcvmzf9Xrlz5f/WqVUgYJIbXAJAGkCaQRnQDQHy8BsA0wjTDDQGJEQRwA0Aa0DVjGEIMwGkIyBCYoUM5BAYdAADts3KdUT+aOAAAAABJRU5ErkJggg==');
+            animation: magicParticleFloat 3s steps(1) infinite;
+            z-index: 7;
         }
 
-        @keyframes sparksFly {
-            0% { opacity: 0; transform: translate(0, 0); }
-            20% { opacity: 1; }
-            100% { opacity: 0; transform: translate(10px, -20px); }
+        /* Combat animation elements */
+        .pixel-warrior {
+            position: absolute;
+            bottom: 30px;
+            left: 40px;
+            width: 32px;
+            height: 48px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAAlUlEQVR42mNgGAWjYBSQDfbvXPL/8tHt/29d3POf2vjGqb3/L+zf+P/64W1UwVfP7P9/evfK/9cObacKvnxy9//jOxb9v7RvPVXw5aO7/h/dtvD/+e1LqIIvH9r+f8/aBf93r5lPFXx53/r/25bP/r915Wyq4Mv71v3fsmTG/83LZlEFX9qzFortWBiGMQgPBUwVMApGATIAAJiETcOWJnkVAAAAAElFTkSuQmCC');
+            animation: characterCombatIdle 0.8s steps(1) infinite;
+            z-index: 10;
         }
 
-        @keyframes magicPulse {
-            0% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 0.9; }
-            100% { transform: scale(1); opacity: 0.7; }
+        .pixel-enemy {
+            position: absolute;
+            bottom: 35px;
+            width: 24px;
+            height: 40px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAoCAYAAADkDTpVAAAAk0lEQVR42mNgGAVDGvx/8OH/vvOP/j++8oQq+PGVx//3X3j0//+HB1TBDy8/+X/g8mOq4weXH/0/eOUJdQ24/AgY/aOuBrXlTVQ34MiVx6PBPJo0BmlFMRrMo0ljkCbqUTCP1mlDujSOtmxG67QJBSfVKwqyDKB6VUm2AdSoTMkygBoNAlINoFrLZBQMGgAAcwZ11Q1EG1QAAAAASUVORK5CYII=');
+            animation: enemyIdle 0.8s steps(1) infinite;
+            z-index: 8;
         }
 
-        @keyframes particleFloat {
-            0% { transform: translate(0, 0); opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translate(-30px, -40px); opacity: 0; }
+        .pixel-sword {
+            position: absolute;
+            bottom: 45px;
+            left: 70px;
+            width: 32px;
+            height: 8px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAATklEQVR42mNgGAWjYBQQAW7cuPH/1KlT/69du0YV/PfP7/+gFMkArBGM7e3t/8vIyPzX0dGhCgZphGHkFDkKRg0YNWA0BkZjYDQGqBsDAId4MgEPZs8zAAAAAElFTkSuQmCC');
+            animation: swordSlash 2s steps(1) infinite;
+            opacity: 0;
+            z-index: 9;
+        }
+
+        /* Animation keyframes */
+        @keyframes characterForgeIdle {
+            0%, 50% { background-position: 0 0; }
+            25%, 75% { background-position: -32px 0; }
+        }
+
+        @keyframes pixelHammerSwing {
+            0%, 10%, 100% { transform: rotate(-45deg); }
+            20%, 30% { transform: rotate(30deg); }
+            40%, 90% { transform: rotate(-45deg); }
+        }
+
+        @keyframes pixelSparksFly {
+            0%, 90%, 100% { opacity: 0; transform: translate(0, 0); }
+            20%, 40% { opacity: 1; transform: translate(3px, -5px); }
+            60%, 80% { opacity: 0.7; transform: translate(8px, -12px); }
+        }
+
+        @keyframes characterMagicIdle {
+            0%, 50% { background-position: 0 0; }
+            25%, 75% { background-position: -32px 0; }
+        }
+
+        @keyframes magicCirclePulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; width: 48px; }
+            50% { transform: scale(1.2); opacity: 0.9; width: 64px; }
+        }
+
+        @keyframes magicParticleFloat {
+            0%, 100% { transform: translate(0, 0); opacity: 0; }
+            20%, 30% { opacity: 1; transform: translate(-10px, -15px); }
+            40%, 60% { opacity: 0.8; transform: translate(-20px, -25px); }
+            70%, 90% { opacity: 0.3; transform: translate(-30px, -40px); }
+        }
+
+        @keyframes characterCombatIdle {
+            0%, 50% { background-position: 0 0; }
+            25%, 75% { background-position: -32px 0; }
+        }
+
+        @keyframes enemyIdle {
+            0%, 50% { background-position: 0 0; }
+            25%, 75% { background-position: -24px 0; }
+        }
+
+        @keyframes swordSlash {
+            0%, 80%, 100% { opacity: 0; transform: rotate(0deg); }
+            10%, 20% { opacity: 1; transform: rotate(-30deg); }
+            30%, 40% { opacity: 1; transform: rotate(45deg) translate(10px, -5px); }
+            50%, 70% { opacity: 0.7; transform: rotate(60deg) translate(15px, -10px); }
         }
 
         /* Pomodoro setup screens */
@@ -671,6 +748,12 @@
             border: 2px solid #e5e7eb;
             border-radius: 0.5rem;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .time-option:hover {
+            border-color: var(--secondary);
+            background: rgba(129, 140, 248, 0.1);
         }
 
         .time-option.selected {
@@ -688,6 +771,11 @@
             border: 2px solid #e5e7eb;
             border-radius: 0.5rem;
             cursor: pointer;
+        }
+
+        .subtask-option:hover {
+            border-color: var(--secondary);
+            background: rgba(129, 140, 248, 0.1);
         }
 
         .subtask-option.selected {
@@ -727,11 +815,69 @@
             border: 2px solid #e5e7eb;
             border-radius: 0.5rem;
             cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .animation-option:hover {
+            border-color: var(--secondary);
+            background: rgba(129, 140, 248, 0.1);
         }
 
         .animation-option.selected {
             border-color: var(--focus);
             background: rgba(125, 211, 252, 0.1);
+        }
+
+        /* Data Management UI */
+        .data-management {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f9fafb;
+            border-radius: 0.5rem;
+        }
+
+        .profile-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .profile-item {
+            flex: 1;
+            text-align: center;
+            padding: 0.5rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 100px;
+        }
+
+        .profile-item:hover {
+            border-color: var(--secondary);
+            background: rgba(129, 140, 248, 0.1);
+        }
+
+        .profile-item.active {
+            border-color: var(--primary);
+            background: rgba(79, 70, 229, 0.1);
+        }
+
+        .export-link {
+            display: inline-block;
+            margin: 0.5rem 0;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .export-link:hover {
+            text-decoration: underline;
+        }
+
+        #importData {
+            height: 100px;
+            resize: vertical;
         }
 
         @media (max-width: 768px) {
@@ -756,6 +902,10 @@
             }
 
             .time-selector {
+                flex-direction: column;
+            }
+            
+            .profile-selector {
                 flex-direction: column;
             }
         }
@@ -803,14 +953,14 @@
                 </div>
                 
                 <h3>Focus Duration</h3>
-                <div class="time-selector">
+                <div class="time-selector focus-time-selector">
                     <div class="time-option" data-value="15" onclick="selectFocusTime(15)">15 min</div>
                     <div class="time-option selected" data-value="25" onclick="selectFocusTime(25)">25 min</div>
                     <div class="time-option" data-value="45" onclick="selectFocusTime(45)">45 min</div>
                 </div>
                 
                 <h3>Break Duration</h3>
-                <div class="time-selector">
+                <div class="time-selector break-time-selector">
                     <div class="time-option" data-value="3" onclick="selectBreakTime(3)">3 min</div>
                     <div class="time-option selected" data-value="5" onclick="selectBreakTime(5)">5 min</div>
                     <div class="time-option" data-value="10" onclick="selectBreakTime(10)">10 min</div>
@@ -838,7 +988,7 @@
                 
                 <div class="pomodoro-animation">
                     <div class="pixel-scene" id="animationScene">
-                        <!-- Animation elements will be added dynamically -->
+                        <!-- Animation elements will be added dynamically using the 8-bit style -->
                     </div>
                 </div>
                 
@@ -956,6 +1106,36 @@
                     </select>
                     <button type="submit">Add Reward</button>
                 </form>
+                
+                <!-- Data Management Section -->
+                <div class="data-management">
+                    <h3>Data Management</h3>
+                    <p>Save your progress across devices and browsers:</p>
+                    
+                    <div class="profile-section">
+                        <label for="profileName">Profile Name:</label>
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <input type="text" id="profileName" placeholder="Enter profile name">
+                            <button onclick="saveProfile()" style="width: auto;">Save</button>
+                        </div>
+                        
+                        <div id="profileSelector" class="profile-selector">
+                            <!-- Profiles will be added here -->
+                            <div class="profile-item active" onclick="selectProfile('default')">Default</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <button onclick="exportData()" style="background: var(--info);">Export Data</button>
+                        <a href="#" id="downloadLink" class="export-link" style="display: none;">Download Data</a>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        <h4>Import Data</h4>
+                        <textarea id="importData" placeholder="Paste your exported data here"></textarea>
+                        <button onclick="importData()" style="background: var(--warning);">Import</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -973,6 +1153,10 @@
     </div>
 
     <script>
+        // Store all profiles
+        let profiles = {};
+        let currentProfile = 'default';
+        
         // State management
         let state = {
             tasks: [],
@@ -991,272 +1175,185 @@
             activePomodoro: null
         };
         
-        // Advanced icon mapping based on context, categories and natural language
-        const iconMappings = {
-            // Work and Education
-            "work": ["💼", "🏢", "📊", "📈", "📉", "🗂️"],
-            "office": ["💼", "🏢", "🖥️", "📞", "📠", "📎"],
-            "job": ["💼", "👔", "🧑‍💼", "👩‍💼", "👨‍💼"],
-            "business": ["💼", "📊", "📈", "📉", "🏢", "💰"],
-            "email": ["📧", "📨", "📩", "💌"],
-            "meeting": ["👥", "🗣️", "👔", "📅", "⏰"],
-            "presentation": ["📊", "📈", "📉", "🎤", "🎭"],
-            "report": ["📑", "📝", "📋", "📊", "🖊️"],
-            "project": ["🏗️", "📋", "📊", "⚙️", "🔧", "📝"],
-            "deadline": ["⏰", "⏱️", "📅", "📆", "🗓️"],
-            
-            "study": ["📚", "🧠", "🎓", "📝", "📖"],
-            "learn": ["📚", "🧠", "🎓", "📝", "📖"],
-            "school": ["🏫", "📚", "🎒", "✏️", "📝"],
-            "college": ["🎓", "🏫", "📚", "📝", "🧠"],
-            "university": ["🎓", "🏫", "📚", "📝", "🧠"],
-            "class": ["📚", "🎓", "🏫", "👨‍🏫", "👩‍🏫"],
-            "course": ["📚", "🎓", "🏫", "👨‍🎓", "👩‍🎓"],
-            "lecture": ["🎓", "📚", "🏫", "👨‍🏫", "👩‍🏫"],
-            "homework": ["📚", "📝", "✏️", "📓", "📔"],
-            "assignment": ["📝", "📚", "✏️", "📋", "📎"],
-            "essay": ["📝", "✏️", "📄", "📃", "🖊️"],
-            "exam": ["📝", "✍️", "📄", "📑", "🧠"],
-            "test": ["📝", "✍️", "📄", "📑", "🧠"],
-            "quiz": ["❓", "❔", "🧠", "📝", "✍️"],
-            "research": ["🔬", "🔍", "📚", "🧠", "📊"],
-            "paper": ["📄", "📃", "📝", "✍️", "🖊️"],
-            "thesis": ["📚", "📝", "🎓", "🧠", "📑"],
-            
-            // Technology and Programming
-            "code": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
-            "program": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
-            "programming": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
-            "coding": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "💾"],
-            "develop": ["💻", "👨‍💻", "👩‍💻", "⌨️", "🖥️", "🚀"],
-            "software": ["💻", "🖥️", "💿", "📱", "⚙️"],
-            "app": ["📱", "💻", "🖥️", "📲", "🚀"],
-            "website": ["🌐", "💻", "🖥️", "🖱️", "🔗"],
-            "database": ["💾", "🗃️", "📊", "🔢", "🔍"],
-            "debug": ["🐞", "🔍", "💻", "🔧", "⚙️"],
-            "fix": ["🔧", "⚙️", "🧰", "🔨", "💻"],
-            "computer": ["🖥️", "💻", "⌨️", "🖱️", "🔌"],
-            "laptop": ["💻", "⌨️", "🔌", "📱", "🖥️"],
-            "tech": ["💻", "🖥️", "📱", "⚙️", "🔧"],
-            
-            // Health and Fitness
-            "health": ["❤️", "🩺", "💉", "💊", "🏥"],
-            "doctor": ["👨‍⚕️", "👩‍⚕️", "🩺", "🏥", "💉"],
-            "medical": ["🩺", "💉", "💊", "🏥", "👨‍⚕️"],
-            "hospital": ["🏥", "👨‍⚕️", "👩‍⚕️", "🩺", "💉"],
-            "medication": ["💊", "💉", "👨‍⚕️", "👩‍⚕️", "🩺"],
-            "appointment": ["📅", "⏰", "👨‍⚕️", "👩‍⚕️", "🩺"],
-            "checkup": ["🩺", "👨‍⚕️", "👩‍⚕️", "❤️", "🏥"],
-            
-            "workout": ["💪", "🏋️", "🏃", "🧘", "🤸"],
+        // Load icon mappings
+        const iconCategories = {
+            // Work and study category
+            "work": ["💼", "🏢", "📊", "💻", "📝"],
+            "study": ["📚", "🧠", "🎓", "📝", "✏️"],
+            // Health category
+            "health": ["❤️", "🏥", "🩺", "💊", "🥗"],
             "exercise": ["🏃", "💪", "🏋️", "🧘", "🚴"],
-            "gym": ["🏋️", "💪", "🏃", "🤸", "⚖️"],
-            "fitness": ["💪", "🏋️", "🏃", "🧘", "⚖️"],
-            "run": ["🏃", "👟", "🎽", "⏱️", "🏆"],
-            "jog": ["🏃", "👟", "🎽", "⏱️", "🌳"],
-            "yoga": ["🧘", "🧘‍♀️", "🧘‍♂️", "🏊", "💆"],
-            "swim": ["🏊", "🏊‍♀️", "🏊‍♂️", "🩲", "🌊"],
-            "bike": ["🚴", "🚴‍♀️", "🚴‍♂️", "🚲", "🏆"],
-            "weight": ["⚖️", "🏋️", "💪", "🥗", "🍎"],
-            "diet": ["🥗", "🍎", "🥦", "⚖️", "💪"],
-            "nutrition": ["🥗", "🍎", "🥦", "⚖️", "💪"],
-            "meal": ["🍽️", "🍲", "🥗", "🍛", "🍱"],
-            "cook": ["🍳", "👨‍🍳", "👩‍🍳", "🔪", "🍲"],
-            "recipe": ["📝", "🍲", "🍳", "🍽️", "👨‍🍳"],
-            "food": ["🍽️", "🍲", "🥗", "🍛", "🍱"],
-            
-            "sleep": ["😴", "💤", "🛌", "🌙", "🛏️"],
-            "rest": ["😴", "💤", "🛌", "🌙", "🛏️"],
-            "meditate": ["🧘", "🧘‍♀️", "🧘‍♂️", "💆", "💭"],
-            "meditation": ["🧘", "🧘‍♀️", "🧘‍♂️", "💆", "💭"],
-            "relax": ["💆", "🧘", "🛌", "🍵", "📖"],
-            
-            // Home and Daily Life
-            "home": ["🏠", "🏡", "🏘️", "🛋️", "🛌"],
-            "house": ["🏠", "🏡", "🏘️", "🛋️", "🛌"],
-            "apartment": ["🏢", "🏙️", "🌆", "🛋️", "🛌"],
-            "clean": ["🧹", "🧼", "🧽", "🧴", "🗑️"],
-            "cleaning": ["🧹", "🧼", "🧽", "🧴", "🗑️"],
-            "laundry": ["🧺", "👕", "👖", "🧼", "🧴"],
-            "dishes": ["🍽️", "🧼", "🧽", "🍴", "🥄"],
-            "groceries": ["🛒", "🍎", "🥦", "🥕", "🛍️"],
-            "shopping": ["🛍️", "🛒", "👜", "👕", "👖"],
-            "organize": ["📋", "📁", "🗄️", "📑", "📎"],
-            "pack": ["📦", "🧳", "🎒", "👜", "👕"],
-            "unpack": ["📦", "🧳", "🎒", "👜", "👕"],
-            "move": ["🚚", "📦", "🏠", "🏡", "🏘️"],
-            "repair": ["🔧", "⚙️", "🔨", "🧰", "🛠️"],
-            
-            // Finances and Money
-            "money": ["💰", "💵", "💸", "💲", "💹"],
-            "finance": ["💰", "💵", "💸", "💹", "📊"],
-            "budget": ["💹", "💰", "💵", "📊", "📝"],
-            "pay": ["💵", "💸", "💳", "💰", "🧾"],
-            "bill": ["💰", "💵", "🧾", "📃", "📝"],
-            "tax": ["📑", "💰", "💵", "📝", "📋"],
-            "bank": ["🏦", "💰", "💵", "💳", "💹"],
-            "invest": ["📈", "💹", "💰", "📊", "💵"],
-            "investment": ["📈", "💹", "💰", "📊", "💵"],
-            "save": ["💰", "💹", "🏦", "💵", "💲"],
-            "expense": ["💸", "💰", "💵", "📝", "🧾"],
-            
-            // Social and Relationships
-            "call": ["📞", "📱", "☎️", "👥", "💬"],
-            "phone": ["📱", "📞", "☎️", "👥", "💬"],
-            "text": ["💬", "📱", "📞", "👥", "💌"],
-            "message": ["💬", "📱", "📞", "👥", "💌"],
-            "chat": ["💬", "👥", "🗣️", "📱", "💌"],
-            "social": ["👥", "👨‍👩‍👧‍👦", "💬", "👪", "👫"],
-            "friend": ["👫", "👭", "👬", "👥", "💬"],
-            "family": ["👪", "👨‍👩‍👧‍👦", "👨‍👩‍👧", "👨‍👩‍👦", "❤️"],
-            "party": ["🎉", "🎊", "🎈", "🎂", "🥳"],
-            "date": ["❤️", "💕", "💑", "👫", "🌹"],
-            "gift": ["🎁", "🎀", "💝", "🎊", "🎉"],
-            "birthday": ["🎂", "🎁", "🎊", "🎉", "🎈"],
-            "wedding": ["💒", "💍", "👰", "🤵", "💐"],
-            "anniversary": ["💍", "❤️", "💑", "💐", "🎉"],
-            
-            // Travel and Transportation
-            "travel": ["✈️", "🧳", "🗺️", "🏖️", "🏝️"],
-            "trip": ["🧳", "✈️", "🗺️", "🏖️", "🚗"],
-            "vacation": ["🏖️", "🏝️", "🧳", "✈️", "⛱️"],
-            "flight": ["✈️", "🛫", "🛬", "🧳", "🔍"],
-            "airport": ["✈️", "🛫", "🛬", "🧳", "🏢"],
-            "hotel": ["🏨", "🛌", "🧳", "🚿", "🛎️"],
-            "drive": ["🚗", "🚘", "🚙", "🛣️", "🚦"],
-            "car": ["🚗", "🚘", "🚙", "🛣️", "🚦"],
-            "bus": ["🚌", "🚏", "🚍", "🚎", "🚐"],
-            "train": ["🚂", "🚆", "🚄", "🚅", "🚉"],
-            "bike": ["🚲", "🚴", "🚵", "🚴‍♀️", "🚴‍♂️"],
-            
-            // Entertainment and Leisure
-            "game": ["🎮", "🎲", "🎯", "🎪", "🎭"],
-            "gaming": ["🎮", "🎲", "🎯", "🎪", "🎭"],
-            "play": ["🎮", "🎲", "🎯", "🎪", "🎭"],
-            "movie": ["🎬", "🍿", "🎞️", "🎦", "🎥"],
-            "film": ["🎬", "🍿", "🎞️", "🎦", "🎥"],
-            "tv": ["📺", "🎬", "🍿", "📡", "🎦"],
-            "show": ["📺", "🎬", "🎭", "🎪", "🎦"],
-            "theater": ["🎭", "🎬", "🎪", "🎟️", "🎦"],
-            "concert": ["🎵", "🎸", "🎤", "🎷", "🎺"],
-            "music": ["🎵", "🎸", "🎤", "🎷", "🎺"],
-            "instrument": ["🎸", "🎹", "🎻", "🎷", "🎺"],
-            "album": ["💿", "📀", "🎵", "🎶", "🎧"],
-            "podcast": ["🎧", "🎤", "🎙️", "📱", "🎵"],
-            "book": ["📚", "📖", "📕", "📗", "📘"],
-            "read": ["📖", "📚", "📕", "📗", "📘"],
-            "novel": ["📕", "📖", "📚", "📗", "📘"],
-            "art": ["🎨", "🖼️", "🖌️", "🎭", "🎪"],
-            "draw": ["✏️", "🖌️", "🎨", "🖍️", "🖊️"],
-            "paint": ["🎨", "🖌️", "🖼️", "🖍️", "✏️"],
-            "craft": ["🧶", "🧵", "🧸", "🎨", "✂️"],
-            "hobby": ["🎨", "📷", "🎮", "🎭", "🎯"],
-            
-            // Reward related items
-            "clothes": ["👕", "👖", "👗", "👚", "👔"],
-            "shoes": ["👟", "👞", "👠", "👡", "👢"],
-            "watch": ["⌚", "⏱️", "⏰", "🕰️", "⏲️"],
-            "jewelry": ["💍", "💎", "👑", "👒", "📿"],
-            "accessory": ["👓", "🕶️", "👜", "👝", "📿"],
-            "gadget": ["🔌", "📱", "⌚", "📷", "🖥️"],
-            "phone": ["📱", "📲", "☎️", "📞", "📳"],
-            "laptop": ["💻", "⌨️", "🖱️", "🔌", "🖥️"],
-            "computer": ["🖥️", "⌨️", "🖱️", "🔌", "💻"],
-            "camera": ["📷", "📸", "📹", "🎥", "📽️"],
-            "headphone": ["🎧", "🎵", "🎶", "🎸", "🎷"],
-            "speaker": ["🔊", "📢", "🎵", "🎶", "🎤"],
-            "console": ["🎮", "🕹️", "📺", "🎲", "🎯"],
-            "toy": ["🧸", "🪀", "🪁", "🎲", "🎯"],
-            "book": ["📚", "📖", "📕", "📗", "📘"],
-            "subscription": ["📱", "💻", "📺", "🎵", "📚"],
-            "membership": ["🔑", "🪪", "💳", "🏆", "🎖️"],
-            "ticket": ["🎫", "🎟️", "🎭", "🎪", "🎬"],
-            "restaurant": ["🍽️", "🍴", "🥣", "🍛", "🍱"],
-            "dinner": ["🍽️", "🍴", "🥘", "🍛", "🍱"],
-            "lunch": ["🍽️", "🍴", "🥪", "🍱", "🥗"],
-            "coffee": ["☕", "🧋", "🥤", "🍵", "🫖"],
-            "drink": ["🍹", "🍸", "🥤", "🧃", "🍷"],
-            "spa": ["💆", "💆‍♀️", "💆‍♂️", "🧖", "🧖‍♀️"],
-            "massage": ["💆", "💆‍♀️", "💆‍♂️", "🧖", "🧖‍♀️"],
-            "donation": ["❤️", "🧡", "💛", "💚", "💙"],
-            "charity": ["❤️", "🧡", "💛", "💚", "💙"],
-            "savings": ["💰", "💵", "💸", "💲", "💹"],
-            "investment": ["📈", "💹", "💰", "💵", "💲"]
+            // Home category
+            "home": ["🏠", "🧹", "🛏️", "🍽️", "🧺"],
+            // Entertainment category
+            "entertainment": ["🎮", "📺", "🎬", "🎵", "📚"],
+            // Finances category
+            "finance": ["💰", "💵", "💳", "📊", "💹"],
+            // Generic fallbacks
+            "task": ["📋", "✅", "⏰", "📝", "🎯"],
+            "reward": ["🎁", "🏆", "💎", "🎖️", "✨"]
         };
         
-        // Additional categories for icon detection
-        const categoryPatterns = [
-            {category: "food", patterns: ["eat", "meal", "food", "cook", "lunch", "dinner", "breakfast", "restaurant", "menu", "diet", "nutrition"], icons: ["🍽️", "🍴", "🥘", "🍲", "🥗", "🍱", "🍛", "🍜", "🍝", "🍕", "🍔", "🌮", "🌯", "🍣", "🍤", "🍦", "🍰"]},
-            {category: "creative", patterns: ["create", "design", "art", "write", "draw", "paint", "craft", "build", "make", "develop"], icons: ["🎨", "✏️", "🖌️", "📝", "✍️", "🧶", "🧵", "🖼️", "📐", "📏", "🔨"]},
-            {category: "productivity", patterns: ["task", "goal", "plan", "organize", "schedule", "track", "manage", "achieve", "focus", "habit"], icons: ["📋", "✅", "📝", "⏰", "📊", "📈", "📉", "📅", "🗓️", "🔍", "📒"]},
-            {category: "communication", patterns: ["talk", "speak", "discuss", "message", "call", "chat", "contact", "email", "meeting", "interview"], icons: ["💬", "📞", "📱", "📧", "🗣️", "👥", "🤝", "📢", "📣", "📨"]},
-            {category: "digital", patterns: ["online", "digital", "internet", "web", "app", "site", "device", "tech", "computer", "software", "hardware"], icons: ["💻", "🖥️", "📱", "🌐", "📱", "⌨️", "🖱️", "💾", "📲", "🔌"]},
-            {category: "wellness", patterns: ["health", "wellbeing", "wellness", "self-care", "mindful", "mental", "balance", "therapy", "calm", "peace"], icons: ["🧘", "💆", "🧠", "❤️", "🌱", "🔆", "💫", "💧", "🌿", "🍃", "🌈"]},
-            {category: "adventure", patterns: ["explore", "adventure", "discover", "travel", "journey", "trip", "experience", "visit", "tour", "hike"], icons: ["🗺️", "🧭", "🏔️", "🏝️", "🏖️", "🌋", "🏞️", "🚵", "🧗", "⛰️", "🌄"]},
-            {category: "learning", patterns: ["learn", "study", "education", "course", "skill", "knowledge", "practice", "train", "master", "improve"], icons: ["📚", "🧠", "🎓", "📝", "📖", "🔍", "🧩", "📊", "📈", "🔬", "📓"]},
-            {category: "finance", patterns: ["money", "finance", "saving", "budget", "invest", "earn", "spend", "cost", "price", "purchase", "buy"], icons: ["💰", "💵", "💳", "💲", "💹", "📊", "📈", "📉", "🏦", "💸", "🧾"]},
-            {category: "gaming", patterns: ["game", "play", "gaming", "level", "score", "achievement", "quest", "mission", "challenge", "reward"], icons: ["🎮", "🎲", "🎯", "🎪", "🎭", "🎨", "🎪", "🎯", "🎪", "🎭", "🎯"]},
-            {category: "relationship", patterns: ["friend", "family", "relationship", "partner", "date", "love", "social", "connect", "bond", "together"], icons: ["❤️", "👪", "👫", "👬", "👭", "💑", "👨‍👩‍👧‍👦", "🤝", "🫂", "💖", "💞"]},
-            {category: "home", patterns: ["home", "house", "apartment", "room", "decor", "furniture", "clean", "organize", "arrange", "maintain"], icons: ["🏠", "🏡", "🧹", "🛋️", "🛏️", "🪑", "🚪", "🧺", "🧼", "🪴", "🪟"]},
-        ];
-        
-        // Determine icons for a given text using advanced natural language analysis
+        // Determine icon for a given text (simplified approach)
         function determineIcon(text) {
             if (!text) return "📝"; // Default fallback
             
             const lowerText = text.toLowerCase();
-            const words = lowerText.split(/\s+|,|\.|\(|\)|\[|\]|\/|-|_/);
             
-            // First, try to find direct keyword matches
-            for (const word of words) {
-                if (word.length > 2 && iconMappings[word]) {
-                    // If we have a direct match, randomly select from available options
-                    const icons = iconMappings[word];
+            // Check each category for keyword matches
+            for (const [category, icons] of Object.entries(iconCategories)) {
+                if (lowerText.includes(category)) {
                     return icons[Math.floor(Math.random() * icons.length)];
                 }
             }
             
-            // Next, try partial matches (words containing our keywords)
-            for (const [keyword, icons] of Object.entries(iconMappings)) {
-                if (keyword.length > 3 && lowerText.includes(keyword)) {
-                    return icons[Math.floor(Math.random() * icons.length)];
-                }
-            }
-            
-            // Try to detect category based on patterns
-            for (const category of categoryPatterns) {
-                for (const pattern of category.patterns) {
-                    if (lowerText.includes(pattern)) {
-                        return category.icons[Math.floor(Math.random() * category.icons.length)];
-                    }
-                }
-            }
-            
-            // Use semantic analysis based on word length and word count
-            // (This creates a deterministic but less obvious pattern than just length % 5)
-            const totalWordLength = words.reduce((sum, word) => sum + word.length, 0);
-            const wordCount = words.length;
-            
-            // Use a combination of factors to create variety
-            const iconIndex = (totalWordLength * 3 + wordCount * 7) % 25;
-            
-            // Emoji clusters based on general themes
-            const generalIcons = [
-                "📝", "✅", "🎯", "🔍", "📊", // Productivity & Goals
-                "🧩", "🎲", "🎮", "🏆", "🎯", // Games & Challenges
-                "⚡", "✨", "💫", "🌟", "⭐", // Energy & Inspiration
-                "📦", "🛠️", "🔧", "⚙️", "🧰", // Tools & Building
-                "🔮", "🌈", "🪄", "🧿", "🎭"  // Magic & Creative
-            ];
-            
-            return generalIcons[iconIndex];
+            // Use a more deterministic approach for variety
+            const charCode = text.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+            const allIcons = Object.values(iconCategories).flat();
+            return allIcons[charCode % allIcons.length];
         }
 
-        // Load state from localStorage
+        // Initialize and load profiles
+        function initProfiles() {
+            const savedProfiles = localStorage.getItem('questTodoProfiles');
+            if (savedProfiles) {
+                profiles = JSON.parse(savedProfiles);
+                updateProfileSelector();
+            } else {
+                // Create default profile with current state
+                profiles = {
+                    'default': state
+                };
+                saveProfilesToStorage();
+            }
+        }
+        
+        // Save all profiles to localStorage
+        function saveProfilesToStorage() {
+            localStorage.setItem('questTodoProfiles', JSON.stringify(profiles));
+        }
+        
+        // Update the profile selector UI
+        function updateProfileSelector() {
+            const selector = document.getElementById('profileSelector');
+            selector.innerHTML = '';
+            
+            Object.keys(profiles).forEach(profile => {
+                const profileItem = document.createElement('div');
+                profileItem.className = 'profile-item' + (profile === currentProfile ? ' active' : '');
+                profileItem.textContent = profile;
+                profileItem.onclick = () => selectProfile(profile);
+                selector.appendChild(profileItem);
+            });
+        }
+        
+        // Select a profile
+        function selectProfile(profileName) {
+            if (profiles[profileName]) {
+                // Save current state to current profile first
+                if (currentProfile && profiles[currentProfile]) {
+                    profiles[currentProfile] = {...state};
+                }
+                
+                // Switch to new profile
+                currentProfile = profileName;
+                state = {...profiles[profileName]};
+                saveProfilesToStorage();
+                updateUI();
+                updateProfileSelector();
+                
+                showNotification(`Switched to profile: ${profileName}`, 'primary');
+            }
+        }
+        
+        // Save current state as a new profile
+        function saveProfile() {
+            const profileNameInput = document.getElementById('profileName');
+            const profileName = profileNameInput.value.trim();
+            
+            if (profileName) {
+                // Save current state to current profile
+                profiles[currentProfile] = {...state};
+                
+                // Create new profile if it doesn't exist
+                if (!profiles[profileName]) {
+                    profiles[profileName] = {...state};
+                    currentProfile = profileName;
+                    saveProfilesToStorage();
+                    updateProfileSelector();
+                    showNotification(`Created new profile: ${profileName}`, 'primary');
+                } else {
+                    // Update existing profile
+                    profiles[profileName] = {...state};
+                    currentProfile = profileName;
+                    saveProfilesToStorage();
+                    updateProfileSelector();
+                    showNotification(`Updated profile: ${profileName}`, 'primary');
+                }
+                
+                profileNameInput.value = '';
+            } else {
+                showNotification('Please enter a profile name', 'danger');
+            }
+        }
+        
+        // Export data to file
+        function exportData() {
+            // Save current state to current profile
+            profiles[currentProfile] = {...state};
+            saveProfilesToStorage();
+            
+            // Create a data URL for download
+            const dataStr = JSON.stringify(profiles);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            
+            // Create download link
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.setAttribute('href', dataUri);
+            downloadLink.setAttribute('download', 'quest-todo-data.json');
+            downloadLink.style.display = 'inline-block';
+            
+            // Also put in textarea for easy copying
+            document.getElementById('importData').value = dataStr;
+            
+            showNotification('Data ready for export!', 'primary');
+        }
+        
+        // Import data from textarea
+        function importData() {
+            const importData = document.getElementById('importData').value.trim();
+            
+            if (importData) {
+                try {
+                    const importedProfiles = JSON.parse(importData);
+                    
+                    // Validate the imported data
+                    if (typeof importedProfiles === 'object' && Object.keys(importedProfiles).length > 0) {
+                        // Merge with existing profiles
+                        profiles = {...profiles, ...importedProfiles};
+                        saveProfilesToStorage();
+                        updateProfileSelector();
+                        
+                        showNotification('Data imported successfully!', 'success');
+                    } else {
+                        showNotification('Invalid data format', 'danger');
+                    }
+                } catch (error) {
+                    showNotification('Error importing data: ' + error.message, 'danger');
+                }
+            } else {
+                showNotification('Please enter data to import', 'danger');
+            }
+        }
+
+        // Load state from profiles
         function loadState() {
-            const savedState = localStorage.getItem('questTodoState');
-            if (savedState) {
-                state = JSON.parse(savedState);
+            // First initialize profiles
+            initProfiles();
+            
+            // Then load the current profile's state
+            if (profiles[currentProfile]) {
+                state = {...profiles[currentProfile]};
                 
                 // Backward compatibility
                 if (!state.level) state.level = 1;
@@ -1316,9 +1413,11 @@
             }
         }
 
-        // Save state to localStorage
+        // Save state to current profile
         function saveState() {
-            localStorage.setItem('questTodoState', JSON.stringify(state));
+            // Save current state to current profile
+            profiles[currentProfile] = {...state};
+            saveProfilesToStorage();
         }
 
         // Check for daily bonus challenge
@@ -1662,10 +1761,16 @@
             populateSubtaskSelection(task);
             
             // Reset time selections to defaults
-            document.querySelectorAll('.time-option').forEach(option => {
+            document.querySelectorAll('.focus-time-selector .time-option').forEach(option => {
                 option.classList.remove('selected');
-                if ((option.dataset.value === '25' && option.parentElement.classList.contains('time-selector')) || 
-                    (option.dataset.value === '5' && !option.parentElement.classList.contains('time-selector'))) {
+                if (option.dataset.value === '25') {
+                    option.classList.add('selected');
+                }
+            });
+            
+            document.querySelectorAll('.break-time-selector .time-option').forEach(option => {
+                option.classList.remove('selected');
+                if (option.dataset.value === '5') {
                     option.classList.add('selected');
                 }
             });
@@ -1785,7 +1890,7 @@
         
         // Select focus time
         function selectFocusTime(duration) {
-            document.querySelectorAll('.time-selector:first-of-type .time-option').forEach(option => {
+            document.querySelectorAll('.focus-time-selector .time-option').forEach(option => {
                 option.classList.remove('selected');
                 if (option.dataset.value == duration) {
                     option.classList.add('selected');
@@ -1797,7 +1902,7 @@
         
         // Select break time
         function selectBreakTime(duration) {
-            document.querySelectorAll('.time-selector:nth-of-type(2) .time-option').forEach(option => {
+            document.querySelectorAll('.break-time-selector .time-option').forEach(option => {
                 option.classList.remove('selected');
                 if (option.dataset.value == duration) {
                     option.classList.add('selected');
@@ -1870,79 +1975,76 @@
             
             switch (type) {
                 case 'forge':
-                    // Create forge elements
+                    // Create forge animation with 8-bit style elements
                     const character = document.createElement('div');
-                    character.className = 'character';
+                    character.className = 'pixel-art pixel-character';
                     
                     const forge = document.createElement('div');
-                    forge.className = 'forge';
+                    forge.className = 'pixel-art pixel-forge';
                     
                     const anvil = document.createElement('div');
-                    anvil.className = 'anvil';
+                    anvil.className = 'pixel-art pixel-anvil';
                     
                     const hammer = document.createElement('div');
-                    hammer.className = 'hammer';
+                    hammer.className = 'pixel-art pixel-hammer';
                     
-                    const sparks = document.createElement('div');
-                    sparks.className = 'sparks';
+                    // Add multiple sparks
+                    for (let i = 0; i < 3; i++) {
+                        const spark = document.createElement('div');
+                        spark.className = 'pixel-art pixel-sparks';
+                        spark.style.left = `${175 + Math.random() * 10}px`;
+                        spark.style.animationDelay = `${i * 0.2}s`;
+                        animationScene.appendChild(spark);
+                    }
                     
-                    animationScene.appendChild(character);
                     animationScene.appendChild(forge);
                     animationScene.appendChild(anvil);
                     animationScene.appendChild(hammer);
-                    animationScene.appendChild(sparks);
-                    
-                    // Add multiple sparks
-                    for (let i = 0; i < 5; i++) {
-                        const sparkClone = sparks.cloneNode();
-                        sparkClone.style.animationDelay = `${i * 0.1}s`;
-                        sparkClone.style.left = `${175 + Math.random() * 10}px`;
-                        animationScene.appendChild(sparkClone);
-                    }
+                    animationScene.appendChild(character);
                     break;
                     
                 case 'magic':
-                    // Create magic elements
-                    const magicCharacter = document.createElement('div');
-                    magicCharacter.className = 'character';
-                    magicCharacter.style.background = '#818cf8';
+                    // Create magic animation with 8-bit style elements
+                    const mage = document.createElement('div');
+                    mage.className = 'pixel-art pixel-mage';
                     
                     const magicCircle = document.createElement('div');
-                    magicCircle.className = 'magic-circle';
+                    magicCircle.className = 'pixel-art pixel-magic-circle';
                     
-                    animationScene.appendChild(magicCharacter);
-                    animationScene.appendChild(magicCircle);
-                    
-                    // Add multiple particles
-                    for (let i = 0; i < 8; i++) {
+                    // Add magic particles
+                    for (let i = 0; i < 5; i++) {
                         const particle = document.createElement('div');
-                        particle.className = 'magic-particles';
-                        particle.style.animationDelay = `${i * 0.4}s`;
+                        particle.className = 'pixel-art pixel-magic-particle';
+                        particle.style.bottom = `${30 + Math.random() * 40}px`;
                         particle.style.right = `${50 + Math.random() * 40}px`;
-                        particle.style.bottom = `${20 + Math.random() * 30}px`;
+                        particle.style.animationDelay = `${i * 0.5}s`;
                         animationScene.appendChild(particle);
                     }
+                    
+                    animationScene.appendChild(magicCircle);
+                    animationScene.appendChild(mage);
                     break;
                     
                 case 'combat':
-                    // Create combat elements
+                    // Create combat animation with 8-bit style elements
                     const warrior = document.createElement('div');
-                    warrior.className = 'character';
-                    warrior.style.background = '#ef4444';
+                    warrior.className = 'pixel-art pixel-warrior';
                     
                     // Add enemies
                     for (let i = 0; i < 3; i++) {
                         const enemy = document.createElement('div');
-                        enemy.className = 'character';
-                        enemy.style.background = '#4b5563';
-                        enemy.style.width = '20px';
-                        enemy.style.height = '25px';
-                        enemy.style.left = `${180 + i * 40}px`;
-                        enemy.style.animation = 'characterIdle 1.2s infinite alternate';
-                        enemy.style.animationDelay = `${i * 0.2}s`;
+                        enemy.className = 'pixel-art pixel-enemy';
+                        enemy.style.left = `${160 + i * 50}px`;
+                        enemy.style.animationDelay = `${i * 0.3}s`;
                         animationScene.appendChild(enemy);
                     }
                     
+                    // Add sword attack effect
+                    const sword = document.createElement('div');
+                    sword.className = 'pixel-art pixel-sword';
+                    sword.style.animationDelay = '0.5s';
+                    
+                    animationScene.appendChild(sword);
                     animationScene.appendChild(warrior);
                     break;
             }
@@ -2606,6 +2708,9 @@
                     </li>
                 `})
                 .join('');
+                
+            // Update profile selector
+            updateProfileSelector();
         }
 
         // Initialize
