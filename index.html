@@ -6,1827 +6,409 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quest Todo - Productivity RPG</title>
     <style>
-        :root {
-            --primary: #4f46e5;
-            --secondary: #818cf8;
-            --success: #22c55e;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-            --info: #0ea5e9;
-            --rare: #9333ea;
-            --epic: #c026d3;
-            --legendary: #fbbf24;
-            --focus: #7dd3fc;
-            --rest: #f43f5e;
-        }
-
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f3f4f6;
-            color: #1f2937;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .stats {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .credits {
-            background: var(--primary);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-        }
-
-        .streak {
-            background: var(--warning);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-        }
-
-        .level {
-            background: var(--info);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .card {
-            background: white;
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .card h2 {
-            margin-top: 0;
-            border-bottom: 2px solid #e5e7eb;
-            padding-bottom: 0.5rem;
-        }
-
-        button {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 0.25rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        button:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        button:active {
-            transform: translateY(1px);
-        }
-
-        button:disabled {
-            background: #9ca3af;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        input, select {
-            width: 100%;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
-            border: 1px solid #d1d5db;
-            border-radius: 0.25rem;
-        }
-
-        .task-list, .wishlist {
-            list-style: none;
-            padding: 0;
-        }
-
-        .task-list li, .wishlist li {
-            background: #f9fafb;
-            padding: 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0.25rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .task-list li:hover, .wishlist li:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .common {
-            border-left: 4px solid #9ca3af;
-        }
-
-        .uncommon {
-            border-left: 4px solid var(--success);
-        }
-
-        .rare {
-            border-left: 4px solid var(--rare);
-        }
-
-        .epic {
-            border-left: 4px solid var(--epic);
-        }
-
-        .legendary {
-            border-left: 4px solid var(--legendary);
-            background: linear-gradient(to right, #fef3c7, #f9fafb 30%);
-        }
-
-        .progress-bar {
-            background: #e5e7eb;
-            height: 1rem;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            margin-top: 0.5rem;
-            position: relative;
-        }
-
-        .progress-bar-fill {
-            background: var(--success);
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .milestone {
-            position: absolute;
-            height: 100%;
-            width: 2px;
-            background: var(--warning);
-        }
-
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            margin-left: 0.5rem;
-        }
-
-        .tooltip .tooltiptext {
-            visibility: hidden;
-            width: 200px;
-            background-color: #333;
-            color: #fff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-
-        .tooltip:hover .tooltiptext {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        .celebration {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-
-        .reward-notification {
-            background: var(--primary);
-            color: white;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            font-size: 1.25rem;
-            font-weight: bold;
-            transition: transform 0.5s, opacity 0.5s;
-            transform: translateY(20px);
-            opacity: 0;
-        }
-
-        .dice-roll {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 1rem 0;
-            gap: 1rem;
-            height: 0;
-            overflow: hidden;
-            transition: height 0.3s ease;
-        }
-
-        .dice-roll.show {
-            height: 60px;
-        }
-
-        .dice {
-            width: 50px;
-            height: 50px;
-            background: var(--primary);
-            color: white;
-            border-radius: 8px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            animation: roll 0.75s ease-out;
-        }
-
-        @keyframes roll {
-            0% { transform: rotateZ(0deg); }
-            100% { transform: rotateZ(720deg); }
-        }
-
-        .bonus-card {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) scale(0.9);
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            z-index: 1001;
-            text-align: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            max-width: 90%;
-            width: 400px;
-        }
-
-        .bonus-card.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-            pointer-events: all;
-        }
-
-        .bonus-card-options {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 2rem;
-        }
-
-        .bonus-option {
-            padding: 1rem;
-            border-radius: 0.5rem;
-            background: #f9fafb;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            flex: 1;
-            margin: 0 0.5rem;
-            border: 2px solid transparent;
-        }
-
-        .bonus-option:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
-        }
-
-        .level-bar {
-            background: #e5e7eb;
-            height: 0.5rem;
-            border-radius: 0.25rem;
-            overflow: hidden;
-            margin-top: 0.5rem;
-            width: 100px;
-        }
-
-        .level-bar-fill {
-            background: var(--info);
-            height: 100%;
-            transition: width 0.3s ease;
-        }
-
-        .level-container {
-            display: flex;
-            align-items: center;
-        }
-
-        .loot-table {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .loot-item {
-            background: #f9fafb;
-            padding: 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.875rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .rarity-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .task-buttons {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .task-info {
-            flex: 1;
-        }
-
-        .pomodoro-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .pomodoro-modal.show {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .pomodoro-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .timer-display {
-            font-size: 3rem;
-            text-align: center;
-            margin: 2rem 0;
-            font-weight: bold;
-        }
-
-        .phase-indicator {
-            text-align: center;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            font-weight: bold;
-        }
-
-        .timer-controls {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .focus-time {
-            color: var(--focus);
-        }
-
-        .rest-time {
-            color: var(--rest);
-        }
-
-        .pomodoro-stats {
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .pomodoro-progress {
-            display: flex;
-            margin-top: 1rem;
-        }
-
-        .pomodoro-segment {
-            flex: 1;
-            height: 8px;
-            margin: 0 2px;
-            border-radius: 4px;
-            background: #e5e7eb;
-        }
-
-        .pomodoro-segment.completed {
-            background: var(--success);
-        }
-
-        .pomodoro-segment.current {
-            background: var(--focus);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; }
-            100% { opacity: 0.6; }
-        }
-
-        .quest-icon, .reward-icon {
-            font-size: 1.5rem;
-            margin-right: 0.5rem;
-            width: 2rem;
-            height: 2rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: #f3f4f6;
-            border-radius: 50%;
-        }
-
-        .task-header, .reward-header {
-            display: flex;
-            align-items: center;
-        }
-
-        .subtasks {
-            margin-top: 0.5rem;
-            padding-left: 1rem;
-            border-left: 2px dashed #e5e7eb;
-        }
-
-        .subtask-item {
-            padding: 0.5rem;
-            margin-bottom: 0.25rem;
-            background: #f3f4f6;
-            border-radius: 0.25rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .subtask-completed {
-            text-decoration: line-through;
-            opacity: 0.7;
-        }
-
-        .pomodoro-btn {
-            background: var(--focus);
-        }
-
-        .complete-btn {
-            background: var(--success);
-        }
-
-        .abandon-btn {
-            background: var(--danger);
-        }
-
-        /* Setup for pomodoro animation */
-        .pomodoro-animation {
-            width: 100%;
-            height: 120px;
-            margin-top: 1rem;
-            position: relative;
-            overflow: hidden;
-            background: #000;
-            border-radius: 0.5rem;
-        }
-
+        /* Keep your existing styles... */
+        
+        /* Add this new section for CSS-only pixel art */
+        /* Animation containers */
         .pixel-scene {
+            background-color: #000;
+            position: relative;
             width: 100%;
             height: 100%;
-            position: relative;
-            image-rendering: pixelated;
             overflow: hidden;
         }
-
-        /* Pixel art elements - Updated to use CSS instead of background images */
-        .pixel-art {
-            position: absolute;
-            image-rendering: pixelated;
-        }
-
-        /* Forge animation elements */
+        
+        /* Character styles */
         .pixel-character {
             position: absolute;
             bottom: 30px;
             left: 40px;
-            width: 32px;
-            height: 48px;
+            width: 20px;
+            height: 40px;
             z-index: 10;
         }
-
-        .pixel-forge {
+        
+        /* Forge theme */
+        .forge-character {
+            background-color: #6d28d9;
+            animation: characterIdle 0.8s steps(1) infinite;
+        }
+        
+        .forge-character::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 2px;
+            width: 16px;
+            height: 10px;
+            background-color: #6d28d9;
+            border-radius: 50% 50% 0 0;
+        }
+        
+        .forge-character::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -5px;
+            width: 30px;
+            height: 10px;
+            background-color: #6d28d9;
+            clip-path: polygon(0 0, 33% 100%, 66% 100%, 100% 0);
+        }
+        
+        .forge-anvil {
             position: absolute;
             bottom: 30px;
             left: 100px;
             width: 40px;
-            height: 40px;
-            z-index: 5;
-        }
-
-        .pixel-anvil {
-            position: absolute;
-            bottom: 55px;
-            left: 160px;
-            width: 32px;
-            height: 16px;
+            height: 15px;
+            background-color: #71717a;
+            border-radius: 5px 5px 0 0;
             z-index: 8;
         }
-
-        .pixel-hammer {
+        
+        .forge-anvil::after {
+            content: '';
             position: absolute;
-            bottom: 60px;
-            left: 180px;
-            width: 16px;
-            height: 24px;
-            transform-origin: 50% 100%;
+            bottom: -5px;
+            left: 10px;
+            width: 20px;
+            height: 5px;
+            background-color: #52525b;
+        }
+        
+        .forge-hammer {
+            position: absolute;
+            bottom: 50px;
+            left: 70px;
+            width: 5px;
+            height: 20px;
+            background-color: #92400e;
+            transform-origin: bottom center;
+            animation: hammerSwing 1s infinite;
             z-index: 9;
         }
-
-        .pixel-sparks {
+        
+        .forge-hammer::before {
+            content: '';
             position: absolute;
-            bottom: 65px;
-            left: 175px;
-            width: 16px;
-            height: 16px;
+            top: -8px;
+            left: -5px;
+            width: 15px;
+            height: 8px;
+            background-color: #71717a;
+        }
+        
+        .forge-spark {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background-color: #fbbf24;
+            border-radius: 50%;
             opacity: 0;
-            z-index: 10;
+            z-index: 11;
         }
-
-        /* Animation keyframes - Keep these */
-        @keyframes characterForgeIdle {
-            0%, 50% { transform: translateX(0); }
-            25%, 75% { transform: translateX(-2px); }
+        
+        .forge-spark-1 {
+            bottom: 55px;
+            left: 105px;
+            animation: sparkFly 1s 0s infinite;
         }
-
-        @keyframes pixelHammerSwing {
+        
+        .forge-spark-2 {
+            bottom: 55px;
+            left: 105px;
+            animation: sparkFly 1s 0.3s infinite;
+        }
+        
+        .forge-spark-3 {
+            bottom: 55px;
+            left: 105px;
+            animation: sparkFly 1s 0.6s infinite;
+        }
+        
+        /* Magic theme */
+        .magic-character {
+            background-color: #8b5cf6;
+            animation: characterIdle 0.8s steps(1) infinite;
+        }
+        
+        .magic-character::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 2px;
+            width: 16px;
+            height: 10px;
+            background-color: #8b5cf6;
+            border-radius: 50% 50% 0 0;
+        }
+        
+        .magic-character::after {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 0;
+            width: 20px;
+            height: 5px;
+            background-color: #a78bfa;
+            clip-path: polygon(50% 0, 0 100%, 100% 100%);
+        }
+        
+        .magic-circle {
+            position: absolute;
+            bottom: 20px;
+            right: 60px;
+            width: 40px;
+            height: 10px;
+            border: 2px solid #a78bfa;
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: circlePulse 2s infinite;
+            z-index: 5;
+        }
+        
+        .magic-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background-color: #a78bfa;
+            border-radius: 50%;
+            opacity: 0;
+            z-index: 7;
+        }
+        
+        .magic-particle-1 {
+            bottom: 40px;
+            right: 70px;
+            animation: particleFloat 3s 0s infinite;
+        }
+        
+        .magic-particle-2 {
+            bottom: 30px;
+            right: 60px;
+            animation: particleFloat 3s 1s infinite;
+        }
+        
+        .magic-particle-3 {
+            bottom: 35px;
+            right: 80px;
+            animation: particleFloat 3s 2s infinite;
+        }
+        
+        /* Combat theme */
+        .combat-character {
+            background-color: #ef4444;
+            animation: characterIdle 0.8s steps(1) infinite;
+        }
+        
+        .combat-character::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 2px;
+            width: 16px;
+            height: 10px;
+            background-color: #ef4444;
+            border-radius: 50% 50% 0 0;
+        }
+        
+        .combat-enemy {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            width: 20px;
+            height: 35px;
+            background-color: #71717a;
+            animation: enemyIdle 0.8s steps(1) infinite;
+            z-index: 8;
+        }
+        
+        .combat-enemy::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 2px;
+            width: 16px;
+            height: 10px;
+            background-color: #71717a;
+            border-radius: 50% 50% 0 0;
+        }
+        
+        .combat-enemy-2 {
+            right: 80px;
+            animation-delay: 0.2s;
+        }
+        
+        .combat-enemy-3 {
+            right: 120px;
+            animation-delay: 0.4s;
+        }
+        
+        .combat-sword {
+            position: absolute;
+            bottom: 50px;
+            left: 60px;
+            width: 25px;
+            height: 5px;
+            background-color: #d1d5db;
+            transform-origin: left center;
+            opacity: 0;
+            animation: swordSlash 2s infinite;
+            z-index: 9;
+        }
+        
+        .combat-sword::after {
+            content: '';
+            position: absolute;
+            right: -5px;
+            top: -3px;
+            width: 8px;
+            height: 10px;
+            background-color: #9ca3af;
+        }
+        
+        /* Animation keyframes */
+        @keyframes characterIdle {
+            0%, 50% { transform: translateY(0); }
+            25%, 75% { transform: translateY(-2px); }
+        }
+        
+        @keyframes hammerSwing {
             0%, 10%, 100% { transform: rotate(-45deg); }
             20%, 30% { transform: rotate(30deg); }
             40%, 90% { transform: rotate(-45deg); }
         }
-
-        @keyframes pixelSparksFly {
+        
+        @keyframes sparkFly {
             0%, 90%, 100% { opacity: 0; transform: translate(0, 0); }
-            20%, 40% { opacity: 1; transform: translate(3px, -5px); }
-            60%, 80% { opacity: 0.7; transform: translate(8px, -12px); }
+            20%, 40% { opacity: 1; transform: translate(5px, -10px); }
+            60%, 80% { opacity: 0.7; transform: translate(10px, -20px); }
         }
-
-        @keyframes characterMagicIdle {
-            0%, 50% { transform: translateX(0); }
-            25%, 75% { transform: translateX(-2px); }
-        }
-
-        @keyframes magicCirclePulse {
+        
+        @keyframes circlePulse {
             0%, 100% { transform: scale(1); opacity: 0.7; }
             50% { transform: scale(1.2); opacity: 0.9; }
         }
-
-        @keyframes magicParticleFloat {
-            0%, 100% { transform: translate(0, 0); opacity: 0; }
+        
+        @keyframes particleFloat {
+            0%, 100% { opacity: 0; transform: translate(0, 0); }
             20%, 30% { opacity: 1; transform: translate(-10px, -15px); }
             40%, 60% { opacity: 0.8; transform: translate(-20px, -25px); }
             70%, 90% { opacity: 0.3; transform: translate(-30px, -40px); }
         }
-
-        @keyframes characterCombatIdle {
-            0%, 50% { transform: translateX(0); }
-            25%, 75% { transform: translateX(-2px); }
-        }
-
+        
         @keyframes enemyIdle {
             0%, 50% { transform: translateX(0); }
-            25%, 75% { transform: translateX(-2px); }
+            25%, 75% { transform: translateX(2px); }
         }
-
+        
         @keyframes swordSlash {
             0%, 80%, 100% { opacity: 0; transform: rotate(0deg); }
             10%, 20% { opacity: 1; transform: rotate(-30deg); }
             30%, 40% { opacity: 1; transform: rotate(45deg) translate(10px, -5px); }
             50%, 70% { opacity: 0.7; transform: rotate(60deg) translate(15px, -10px); }
         }
-
-        /* Pomodoro setup screens */
-        .pomodoro-setup {
-            padding: 1rem;
-            background: #f9fafb;
-            border-radius: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .pomodoro-setup h3 {
-            margin-top: 0;
-        }
-
-        .time-selector {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .time-option {
-            flex: 1;
-            text-align: center;
-            padding: 0.5rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .time-option:hover {
-            border-color: var(--secondary);
-            background: rgba(129, 140, 248, 0.1);
-        }
-
-        .time-option.selected {
-            border-color: var(--focus);
-            background: rgba(125, 211, 252, 0.1);
-        }
-
-        .subtask-selection {
-            margin-top: 1rem;
-        }
-
-        .subtask-option {
-            padding: 0.5rem;
-            margin-bottom: 0.5rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            cursor: pointer;
-        }
-
-        .subtask-option:hover {
-            border-color: var(--secondary);
-            background: rgba(129, 140, 248, 0.1);
-        }
-
-        .subtask-option.selected {
-            border-color: var(--focus);
-            background: rgba(125, 211, 252, 0.1);
-        }
-
-        .subtask-complete-prompt {
-            background: #f9fafb;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
-            text-align: center;
-            display: none;
-        }
-
-        .subtask-complete-prompt.show {
-            display: block;
-        }
-
-        .subtask-complete-options {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .animation-type-selector {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-            justify-content: center;
-        }
-
-        .animation-option {
-            padding: 0.5rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .animation-option:hover {
-            border-color: var(--secondary);
-            background: rgba(129, 140, 248, 0.1);
-        }
-
-        .animation-option.selected {
-            border-color: var(--focus);
-            background: rgba(125, 211, 252, 0.1);
-        }
-
-        /* Data Management UI */
-        .data-management {
-            margin-top: 1rem;
-            padding: 1rem;
-            background: #f9fafb;
-            border-radius: 0.5rem;
-        }
-
-        .profile-selector {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .profile-item {
-            flex: 1;
-            text-align: center;
-            padding: 0.5rem;
-            border: 2px solid #e5e7eb;
-            border-radius: 0.5rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            min-width: 100px;
-        }
-
-        .profile-item:hover {
-            border-color: var(--secondary);
-            background: rgba(129, 140, 248, 0.1);
-        }
-
-        .profile-item.active {
-            border-color: var(--primary);
-            background: rgba(79, 70, 229, 0.1);
-        }
-
-        .export-link {
-            display: inline-block;
-            margin: 0.5rem 0;
-            color: var(--primary);
-            text-decoration: none;
-        }
-
-        .export-link:hover {
-            text-decoration: underline;
-        }
-
-        #importData {
-            height: 100px;
-            resize: vertical;
-        }
-
-        @media (max-width: 768px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .task-list li {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .task-buttons {
-                width: 100%;
-                margin-top: 1rem;
-                justify-content: space-between;
-            }
-            
-            .stats {
-                flex-direction: column;
-                gap: 0.5rem;
-            }
-
-            .time-selector {
-                flex-direction: column;
-            }
-            
-            .profile-selector {
-                flex-direction: column;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="celebration">
-        <div class="reward-notification"></div>
-    </div>
-    
-    <div class="bonus-card">
-        <h2>Bonus Challenge!</h2>
-        <p>Choose your reward path:</p>
-        <div class="bonus-card-options">
-            <div class="bonus-option" onclick="selectBonusOption('safe')">
-                <h3>Safe</h3>
-                <p>Guaranteed <span id="safeAmount">20</span> credits</p>
-            </div>
-            <div class="bonus-option" onclick="selectBonusOption('risky')">
-                <h3>Risky</h3>
-                <p>50% chance of <span id="riskyAmount">40</span> credits</p>
-            </div>
-            <div class="bonus-option" onclick="selectBonusOption('epic')">
-                <h3>Epic</h3>
-                <p>20% chance of <span id="epicAmount">100</span> credits</p>
-            </div>
-        </div>
-    </div>
-    
-    <div class="pomodoro-modal" id="pomodoroModal">
-        <div class="pomodoro-container">
-            <h2 id="pomodoroTaskName">Task Name</h2>
-            
-            <!-- Pomodoro Setup -->
-            <div id="pomodoroSetup" class="pomodoro-setup">
-                <h3>Choose a Subtask</h3>
-                <div id="subtaskSelection" class="subtask-selection">
-                    <!-- Subtask options will be inserted here -->
-                    <div class="subtask-option" onclick="selectSubtask('new')">+ Create New Subtask</div>
-                </div>
-                
-                <div id="newSubtaskForm" style="display: none; margin-top: 1rem;">
-                    <input type="text" id="newSubtaskInput" placeholder="Enter subtask description">
-                    <button onclick="createSubtask()">Create</button>
-                </div>
-                
-                <h3>Focus Duration</h3>
-                <div class="time-selector focus-time-selector">
-                    <div class="time-option" data-value="15" onclick="selectFocusTime(15)">15 min</div>
-                    <div class="time-option selected" data-value="25" onclick="selectFocusTime(25)">25 min</div>
-                    <div class="time-option" data-value="45" onclick="selectFocusTime(45)">45 min</div>
-                </div>
-                
-                <h3>Break Duration</h3>
-                <div class="time-selector break-time-selector">
-                    <div class="time-option" data-value="3" onclick="selectBreakTime(3)">3 min</div>
-                    <div class="time-option selected" data-value="5" onclick="selectBreakTime(5)">5 min</div>
-                    <div class="time-option" data-value="10" onclick="selectBreakTime(10)">10 min</div>
-                </div>
-                
-                <h3>Animation Style</h3>
-                <div class="animation-type-selector">
-                    <div class="animation-option selected" data-type="forge" onclick="selectAnimationType('forge')">Forge ⚒️</div>
-                    <div class="animation-option" data-type="magic" onclick="selectAnimationType('magic')">Magic ✨</div>
-                    <div class="animation-option" data-type="combat" onclick="selectAnimationType('combat')">Combat ⚔️</div>
-                </div>
-                
-                <div style="margin-top: 1rem; text-align: center;">
-                    <button onclick="startFocusSession()">Start Session</button>
-                    <button onclick="closePomodoroModal()" style="background: #9ca3af;">Cancel</button>
-                </div>
-            </div>
-            
-            <!-- Timer Display (initially hidden) -->
-            <div id="pomodoroTimer" style="display: none;">
-                <div class="phase-indicator">
-                    <span id="phaseType" class="focus-time">Focus Time</span>
-                </div>
-                <div class="timer-display" id="timerDisplay">25:00</div>
-                
-                <div class="pomodoro-animation">
-                    <div class="pixel-scene" id="animationScene">
-                        <!-- Animation elements will be added dynamically -->
-                    </div>
-                </div>
-                
-                <div class="timer-controls">
-                    <button id="startTimer" onclick="startPomodoroTimer()">Start</button>
-                    <button id="pauseTimer" onclick="pausePomodoroTimer()" disabled>Pause</button>
-                    <button id="skipTimer" onclick="skipPomodoroPhase()">Skip</button>
-                    <button onclick="abandonPomodoroSession()">Exit</button>
-                </div>
-                
-                <div class="pomodoro-progress" id="pomodoroProgress">
-                    <!-- Pomodoro segments will be added here -->
-                </div>
-                
-                <div class="pomodoro-stats">
-                    <h3>Session Stats</h3>
-                    <p><strong>Working on:</strong> <span id="currentSubtask">Subtask name</span></p>
-                    <p>Sessions completed: <span id="completedPomodoros">0</span></p>
-                    <p>Efficiency bonus: +<span id="efficiencyBonus">0</span>% chance of bonus rewards</p>
-                </div>
-            </div>
-            
-            <!-- Subtask Completion Prompt (hidden until needed) -->
-            <div id="subtaskCompletePrompt" class="subtask-complete-prompt">
-                <h3>Time's up!</h3>
-                <p>Did you complete the subtask: <strong id="completionSubtaskName">Subtask name</strong>?</p>
-                <div class="subtask-complete-options">
-                    <button onclick="handleSubtaskComplete(true)" style="background: var(--success);">Yes, completed!</button>
-                    <button onclick="handleSubtaskComplete(false)" style="background: var(--primary);">Not yet, continue</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="container">
-        <div class="header">
-            <h1>Quest Todo</h1>
-            <div class="stats">
-                <div class="level-container">
-                    <div class="level">Level <span id="playerLevel">1</span></div>
-                    <div style="margin-left: 0.5rem;">
-                        <div class="level-bar">
-                            <div class="level-bar-fill" id="levelProgress" style="width: 0%"></div>
-                        </div>
-                        <div style="font-size: 0.75rem; text-align: center;"><span id="currentXP">0</span>/<span id="xpToNextLevel">100</span> XP</div>
-                    </div>
-                </div>
-                <div class="streak">Streak: <span id="currentStreak">0</span> days</div>
-                <div class="credits">Credits: <span id="totalCredits">0</span></div>
-            </div>
-        </div>
-
-        <div class="grid">
-            <div class="card">
-                <h2>Add Quest</h2>
-                <form id="taskForm">
-                    <input type="text" id="taskName" placeholder="Quest name" required>
-                    <input type="number" id="timeEstimate" placeholder="Time estimate (hours)" required min="0" step="0.5">
-                    <select id="importance" required>
-                        <option value="">Select difficulty</option>
-                        <option value="1">Easy ★</option>
-                        <option value="2">Normal ★★</option>
-                        <option value="3">Hard ★★★</option>
-                        <option value="4">Very Hard ★★★★</option>
-                        <option value="5">Epic ★★★★★</option>
-                    </select>
-                    <input type="date" id="deadline" required>
-                    <button type="submit">Create Quest</button>
-                </form>
-                
-                <div class="dice-roll" id="diceRollDisplay">
-                    <!-- Dice will be injected here when rolling -->
-                </div>
-                
-                <div style="margin-top: 1rem;">
-                    <h3>Loot Table</h3>
-                    <div class="loot-table">
-                        <div class="loot-item">
-                            <div class="rarity-dot" style="background: #9ca3af;"></div>
-                            Common (60%)
-                        </div>
-                        <div class="loot-item">
-                            <div class="rarity-dot" style="background: var(--success);"></div>
-                            Uncommon (25%)
-                        </div>
-                        <div class="loot-item">
-                            <div class="rarity-dot" style="background: var(--rare);"></div>
-                            Rare (10%)
-                        </div>
-                        <div class="loot-item">
-                            <div class="rarity-dot" style="background: var(--epic);"></div>
-                            Epic (4%)
-                        </div>
-                        <div class="loot-item">
-                            <div class="rarity-dot" style="background: var(--legendary);"></div>
-                            Legendary (1%)
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2>Add Reward</h2>
-                <form id="wishlistForm">
-                    <input type="text" id="itemName" placeholder="Reward name" required>
-                    <input type="number" id="itemCost" placeholder="Cost (HKD)" required min="0">
-                    <input type="number" id="timeline" placeholder="Timeline (weeks)" required min="1">
-                    <select id="desireLevel" required>
-                        <option value="">How much do you want this?</option>
-                        <option value="1">Nice to have</option>
-                        <option value="2">Want it</option>
-                        <option value="3">Really want it</option>
-                        <option value="4">Desperately want it</option>
-                        <option value="5">Must have it!</option>
-                    </select>
-                    <button type="submit">Add Reward</button>
-                </form>
-                
-                <!-- Data Management Section -->
-                <div class="data-management">
-                    <h3>Data Management</h3>
-                    <p>Save your progress across devices and browsers:</p>
-                    
-                    <div class="profile-section">
-                        <label for="profileName">Profile Name:</label>
-                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                            <input type="text" id="profileName" placeholder="Enter profile name">
-                            <button onclick="saveProfile()" style="width: auto;">Save</button>
-                        </div>
-                        
-                        <div id="profileSelector" class="profile-selector">
-                            <!-- Profiles will be added here -->
-                            <div class="profile-item active" onclick="selectProfile('default')">Default</div>
-                        </div>
-                    </div>
-                    
-                    <div style="margin-top: 1rem;">
-                        <button onclick="exportData()" style="background: var(--info);">Export Data</button>
-                        <a href="#" id="downloadLink" class="export-link" style="display: none;">Download Data</a>
-                    </div>
-                    
-                    <div style="margin-top: 1rem;">
-                        <h4>Import Data</h4>
-                        <textarea id="importData" placeholder="Paste your exported data here"></textarea>
-                        <button onclick="importData()" style="background: var(--warning);">Import</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="grid">
-            <div class="card">
-                <h2>Active Quests</h2>
-                <ul id="taskList" class="task-list"></ul>
-            </div>
-
-            <div class="card">
-                <h2>Rewards</h2>
-                <ul id="wishlist" class="wishlist"></ul>
-            </div>
-        </div>
-    </div>
+    <!-- Keep your existing HTML... -->
 
     <script>
-        // Store all profiles
-        let profiles = {};
-        let currentProfile = 'default';
+        // Keep your existing JavaScript, but update the setupAnimation function:
         
-        // State management
-        let state = {
-            tasks: [],
-            wishlist: [],
-            credits: 0,
-            streak: 0,
-            lastStreak: new Date().toDateString(),
-            notifications: [],
-            milestones: {},
-            level: 1,
-            xp: 0,
-            xpToNextLevel: 100,
-            lastDaily: null,
-            bonusChallenge: null,
-            completionHistory: [],
-            activePomodoro: null
-        };
-        
-        // Load icon mappings
-        const iconCategories = {
-            // Work and study category
-            "work": ["💼", "🏢", "📊", "💻", "📝"],
-            "study": ["📚", "🧠", "🎓", "📝", "✏️"],
-            // Health category
-            "health": ["❤️", "🏥", "🩺", "💊", "🥗"],
-            "exercise": ["🏃", "💪", "🏋️", "🧘", "🚴"],
-            // Home category
-            "home": ["🏠", "🧹", "🛏️", "🍽️", "🧺"],
-            // Entertainment category
-            "entertainment": ["🎮", "📺", "🎬", "🎵", "📚"],
-            // Finances category
-            "finance": ["💰", "💵", "💳", "📊", "💹"],
-            // Generic fallbacks
-            "task": ["📋", "✅", "⏰", "📝", "🎯"],
-            "reward": ["🎁", "🏆", "💎", "🎖️", "✨"]
-        };
-        
-        // Determine icon for a given text (simplified approach)
-        function determineIcon(text) {
-            if (!text) return "📝"; // Default fallback
+        // Set up pixel animation based on type - UPDATED to use CSS-only approach
+        function setupAnimation(type) {
+            const animationScene = document.getElementById('animationScene');
+            animationScene.innerHTML = '';
             
-            const lowerText = text.toLowerCase();
-            
-            // Check each category for keyword matches
-            for (const [category, icons] of Object.entries(iconCategories)) {
-                if (lowerText.includes(category)) {
-                    return icons[Math.floor(Math.random() * icons.length)];
-                }
-            }
-            
-            // Use a more deterministic approach for variety
-            const charCode = text.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
-            const allIcons = Object.values(iconCategories).flat();
-            return allIcons[charCode % allIcons.length];
-        }
-
-        // Initialize and load profiles
-        function initProfiles() {
-            const savedProfiles = localStorage.getItem('questTodoProfiles');
-            if (savedProfiles) {
-                profiles = JSON.parse(savedProfiles);
-                updateProfileSelector();
-            } else {
-                // Create default profile with current state
-                profiles = {
-                    'default': state
-                };
-                saveProfilesToStorage();
-            }
-        }
-        
-        // Save all profiles to localStorage
-        function saveProfilesToStorage() {
-            localStorage.setItem('questTodoProfiles', JSON.stringify(profiles));
-        }
-        
-        // Update the profile selector UI
-        function updateProfileSelector() {
-            const selector = document.getElementById('profileSelector');
-            selector.innerHTML = '';
-            
-            Object.keys(profiles).forEach(profile => {
-                const profileItem = document.createElement('div');
-                profileItem.className = 'profile-item' + (profile === currentProfile ? ' active' : '');
-                profileItem.textContent = profile;
-                profileItem.onclick = () => selectProfile(profile);
-                selector.appendChild(profileItem);
-            });
-        }
-        
-        // Select a profile
-        function selectProfile(profileName) {
-            if (profiles[profileName]) {
-                // Save current state to current profile first
-                if (currentProfile && profiles[currentProfile]) {
-                    profiles[currentProfile] = {...state};
-                }
-                
-                // Switch to new profile
-                currentProfile = profileName;
-                state = {...profiles[profileName]};
-                saveProfilesToStorage();
-                updateUI();
-                updateProfileSelector();
-                
-                showNotification(`Switched to profile: ${profileName}`, 'primary');
-            }
-        }
-        
-        // Save current state as a new profile
-        function saveProfile() {
-            const profileNameInput = document.getElementById('profileName');
-            const profileName = profileNameInput.value.trim();
-            
-            if (profileName) {
-                // Save current state to current profile
-                profiles[currentProfile] = {...state};
-                
-                // Create new profile if it doesn't exist
-                if (!profiles[profileName]) {
-                    profiles[profileName] = {...state};
-                    currentProfile = profileName;
-                    saveProfilesToStorage();
-                    updateProfileSelector();
-                    showNotification(`Created new profile: ${profileName}`, 'primary');
-                } else {
-                    // Update existing profile
-                    profiles[profileName] = {...state};
-                    currentProfile = profileName;
-                    saveProfilesToStorage();
-                    updateProfileSelector();
-                    showNotification(`Updated profile: ${profileName}`, 'primary');
-                }
-                
-                profileNameInput.value = '';
-            } else {
-                showNotification('Please enter a profile name', 'danger');
-            }
-        }
-        
-        // Export data to file
-        function exportData() {
-            // Save current state to current profile
-            profiles[currentProfile] = {...state};
-            saveProfilesToStorage();
-            
-            // Create a data URL for download
-            const dataStr = JSON.stringify(profiles);
-            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            
-            // Create download link
-            const downloadLink = document.getElementById('downloadLink');
-            downloadLink.setAttribute('href', dataUri);
-            downloadLink.setAttribute('download', 'quest-todo-data.json');
-            downloadLink.style.display = 'inline-block';
-            
-            // Also put in textarea for easy copying
-            document.getElementById('importData').value = dataStr;
-            
-            showNotification('Data ready for export!', 'primary');
-        }
-        
-        // Import data from textarea
-        function importData() {
-            const importData = document.getElementById('importData').value.trim();
-            
-            if (importData) {
-                try {
-                    const importedProfiles = JSON.parse(importData);
+            switch (type) {
+                case 'forge':
+                    // Create forge elements
+                    const forgeCharacter = document.createElement('div');
+                    forgeCharacter.className = 'pixel-character forge-character';
                     
-                    // Validate the imported data
-                    if (typeof importedProfiles === 'object' && Object.keys(importedProfiles).length > 0) {
-                        // Merge with existing profiles
-                        profiles = {...profiles, ...importedProfiles};
-                        saveProfilesToStorage();
-                        updateProfileSelector();
-                        
-                        showNotification('Data imported successfully!', 'success');
-                    } else {
-                        showNotification('Invalid data format', 'danger');
-                    }
-                } catch (error) {
-                    showNotification('Error importing data: ' + error.message, 'danger');
-                }
-            } else {
-                showNotification('Please enter data to import', 'danger');
-            }
-        }
-
-        // Load state from profiles
-        function loadState() {
-            // First initialize profiles
-            initProfiles();
-            
-            // Then load the current profile's state
-            if (profiles[currentProfile]) {
-                state = {...profiles[currentProfile]};
-                
-                // Backward compatibility
-                if (!state.level) state.level = 1;
-                if (!state.xp) state.xp = 0;
-                if (!state.xpToNextLevel) state.xpToNextLevel = 100;
-                if (!state.completionHistory) state.completionHistory = [];
-                if (!state.activePomodoro) state.activePomodoro = null;
-                
-                // Backward compatibility for icons and stats
-                state.tasks.forEach(task => {
-                    if (!task.icon) {
-                        task.icon = determineIcon(task.name);
-                    }
-                    if (!task.subtasks) {
-                        task.subtasks = [];
-                    }
-                    if (!task.pomodoroStats) {
-                        task.pomodoroStats = {
-                            completedSessions: 0,
-                            lootBonusPercent: 0
-                        };
-                    }
-                });
-                
-                state.wishlist.forEach(item => {
-                    if (!item.icon) {
-                        item.icon = determineIcon(item.name);
-                    }
-                });
-                
-                // Check if streak should continue or reset
-                const today = new Date().toDateString();
-                const lastStreakDate = new Date(state.lastStreak);
-                const dayDiff = Math.floor((new Date() - lastStreakDate) / (1000 * 60 * 60 * 24));
-                
-                if (dayDiff > 1) {
-                    // Reset streak if more than a day has passed
-                    state.streak = 0;
-                }
-                
-                // Check for active pomodoro session
-                if (state.activePomodoro) {
-                    // Resume active session or clean up if too much time has passed
-                    const now = new Date().getTime();
-                    const timeSinceLastActivity = now - state.activePomodoro.lastActive;
+                    const forgeAnvil = document.createElement('div');
+                    forgeAnvil.className = 'forge-anvil';
                     
-                    if (timeSinceLastActivity > 30 * 60 * 1000) { // 30 minutes
-                        // Too much time has passed, clean up
-                        state.activePomodoro = null;
-                    }
-                }
-                
-                // Check for daily bonus challenge
-                checkDailyChallenge();
-                
-                updateUI();
-            }
-        }
-
-        // Save state to current profile
-        function saveState() {
-            // Save current state to current profile
-            profiles[currentProfile] = {...state};
-            saveProfilesToStorage();
-        }
-
-        // Check for daily bonus challenge
-        function checkDailyChallenge() {
-            const today = new Date().toDateString();
-            if (state.lastDaily !== today) {
-                // 30% chance of bonus challenge
-                if (Math.random() < 0.3) {
-                    // Create bonus challenge
-                    const baseAmount = 20 + (state.level * 5);
-                    state.bonusChallenge = {
-                        safeAmount: baseAmount,
-                        riskyAmount: Math.round(baseAmount * 2),
-                        epicAmount: Math.round(baseAmount * 5),
-                        day: today
-                    };
+                    const forgeHammer = document.createElement('div');
+                    forgeHammer.className = 'forge-hammer';
                     
-                    // Update the UI with the amounts
-                    document.getElementById('safeAmount').textContent = state.bonusChallenge.safeAmount;
-                    document.getElementById('riskyAmount').textContent = state.bonusChallenge.riskyAmount;
-                    document.getElementById('epicAmount').textContent = state.bonusChallenge.epicAmount;
+                    // Add sparks
+                    const spark1 = document.createElement('div');
+                    spark1.className = 'forge-spark forge-spark-1';
                     
-                    // Show the bonus challenge
-                    setTimeout(() => {
-                        document.querySelector('.bonus-card').classList.add('show');
-                    }, 1000);
-                }
-                state.lastDaily = today;
-                saveState();
-            }
-        }
-        
-        // Select bonus option
-        function selectBonusOption(option) {
-            let amount = 0;
-            let message = '';
-            
-            switch(option) {
-                case 'safe':
-                    amount = state.bonusChallenge.safeAmount;
-                    message = `Safe choice! +${amount} credits`;
+                    const spark2 = document.createElement('div');
+                    spark2.className = 'forge-spark forge-spark-2';
+                    
+                    const spark3 = document.createElement('div');
+                    spark3.className = 'forge-spark forge-spark-3';
+                    
+                    // Add elements to the scene
+                    animationScene.appendChild(forgeAnvil);
+                    animationScene.appendChild(forgeHammer);
+                    animationScene.appendChild(spark1);
+                    animationScene.appendChild(spark2);
+                    animationScene.appendChild(spark3);
+                    animationScene.appendChild(forgeCharacter);
                     break;
-                case 'risky':
-                    if (Math.random() < 0.5) {
-                        amount = state.bonusChallenge.riskyAmount;
-                        message = `Risky paid off! +${amount} credits`;
-                    } else {
-                        message = 'Took a risk but no reward this time!';
-                    }
+                    
+                case 'magic':
+                    // Create magic elements
+                    const magicCharacter = document.createElement('div');
+                    magicCharacter.className = 'pixel-character magic-character';
+                    
+                    const magicCircle = document.createElement('div');
+                    magicCircle.className = 'magic-circle';
+                    
+                    // Add particles
+                    const particle1 = document.createElement('div');
+                    particle1.className = 'magic-particle magic-particle-1';
+                    
+                    const particle2 = document.createElement('div');
+                    particle2.className = 'magic-particle magic-particle-2';
+                    
+                    const particle3 = document.createElement('div');
+                    particle3.className = 'magic-particle magic-particle-3';
+                    
+                    // Add elements to the scene
+                    animationScene.appendChild(magicCircle);
+                    animationScene.appendChild(particle1);
+                    animationScene.appendChild(particle2);
+                    animationScene.appendChild(particle3);
+                    animationScene.appendChild(magicCharacter);
                     break;
-                case 'epic':
-                    if (Math.random() < 0.2) {
-                        amount = state.bonusChallenge.epicAmount;
-                        message = `EPIC WIN! +${amount} credits`;
-                    } else {
-                        message = 'Went for epic... but no luck today!';
-                    }
+                    
+                case 'combat':
+                    // Create combat elements
+                    const combatCharacter = document.createElement('div');
+                    combatCharacter.className = 'pixel-character combat-character';
+                    
+                    // Add enemies
+                    const enemy1 = document.createElement('div');
+                    enemy1.className = 'combat-enemy';
+                    
+                    const enemy2 = document.createElement('div');
+                    enemy2.className = 'combat-enemy combat-enemy-2';
+                    
+                    const enemy3 = document.createElement('div');
+                    enemy3.className = 'combat-enemy combat-enemy-3';
+                    
+                    // Add sword
+                    const sword = document.createElement('div');
+                    sword.className = 'combat-sword';
+                    
+                    // Add elements to the scene
+                    animationScene.appendChild(enemy1);
+                    animationScene.appendChild(enemy2);
+                    animationScene.appendChild(enemy3);
+                    animationScene.appendChild(sword);
+                    animationScene.appendChild(combatCharacter);
                     break;
             }
-            
-            if (amount > 0) {
-                state.credits += amount;
-                addXP(Math.round(amount / 2));
-            }
-            
-            document.querySelector('.bonus-card').classList.remove('show');
-            showNotification(message);
-            
-            state.bonusChallenge = null;
-            saveState();
-            updateUI();
         }
         
-        // Add XP and handle leveling up
-        function addXP(amount) {
-            state.xp += amount;
-            
-            // Check for level up
-            if (state.xp >= state.xpToNextLevel) {
-                state.level++;
-                // Carryover XP
-                const carryover = state.xp - state.xpToNextLevel;
-                // New XP threshold with increasing curve (harder to level up)
-                state.xpToNextLevel = Math.round(state.xpToNextLevel * 1.5);
-                state.xp = carryover;
-                
-                // Level up bonus
-                const levelBonus = state.level * 25;
-                state.credits += levelBonus;
-                
-                showNotification(`🎮 LEVEL UP! You're now level ${state.level}! +${levelBonus} credits bonus!`);
-            }
-            
-            saveState();
-        }
-
-        // Calculate task rarity based on importance, time and deadline proximity
-        function calculateTaskRarity(importance, timeEstimate, deadline) {
-            const daysRemaining = Math.max(0, (new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
-            const urgencyFactor = Math.max(1, 3 - (daysRemaining / 7)); // Higher urgency for closer deadlines
-            
-            // Task difficulty score (0-100)
-            const difficultyScore = (importance * 15) + (timeEstimate * 5) + (urgencyFactor * 10);
-            
-            // Determine rarity
-            if (difficultyScore >= 90) return 'legendary';
-            if (difficultyScore >= 70) return 'epic';
-            if (difficultyScore >= 50) return 'rare';
-            if (difficultyScore >= 30) return 'uncommon';
-            return 'common';
-        }
-        
-        // Calculate credits for a task with rarity modifier
-        function calculateCredits(importance, timeEstimate, deadline, rarity) {
-            const daysRemaining = Math.max(0, (new Date(deadline) - new Date()) / (1000 * 60 * 60 * 24));
-            const urgencyFactor = Math.max(1, 3 - (daysRemaining / 7)); // Higher urgency for closer deadlines
-            
-            // Base formula with some randomness for variable rewards
-            const variability = 0.9 + (Math.random() * 0.2); // 90%-110% variability
-            
-            // Rarity multipliers
-            const rarityMultipliers = {
-                'common': 1,
-                'uncommon': 1.5,
-                'rare': 2,
-                'epic': 3,
-                'legendary': 5
-            };
-            
-            // Base credits calculation
-            let baseCredits = (importance * 5 + Math.log(timeEstimate + 1) * 3) * urgencyFactor * variability;
-            
-            // Apply rarity modifier
-            baseCredits *= rarityMultipliers[rarity];
-            
-            // Apply anti-farming diminishing returns
-            const recentCompletions = countRecentCompletions();
-            if (recentCompletions > 5) {
-                const diminishingFactor = Math.max(0.5, 1 - ((recentCompletions - 5) * 0.05));
-                baseCredits *= diminishingFactor;
-            }
-            
-            return Math.round(baseCredits);
-        }
-        
-        // Count recent task completions (anti-farming)
-        function countRecentCompletions() {
-            const now = new Date();
-            const oneDayAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
-            
-            return state.completionHistory.filter(timestamp => {
-                return new Date(timestamp) > oneDayAgo;
-            }).length;
-        }
-
-        // Roll dice for critical success chance
-        function rollDice() {
-            const diceContainer = document.getElementById('diceRollDisplay');
-            diceContainer.innerHTML = '';
-            diceContainer.classList.add('show');
-            
-            // Create and show dice
-            const dice = document.createElement('div');
-            dice.className = 'dice';
-            diceContainer.appendChild(dice);
-            
-            // Animate dice roll
-            setTimeout(() => {
-                const roll = Math.floor(Math.random() * 20) + 1; // d20
-                dice.textContent = roll;
-                
-                // Determine if critical success
-                let criticalSuccess = false;
-                
-                // Base 5% chance (roll of 20)
-                if (roll === 20) {
-                    criticalSuccess = true;
-                } 
-                // Streak increases critical chance
-                else if (roll >= (20 - Math.min(5, Math.floor(state.streak / 2)))) {
-                    criticalSuccess = true;
-                }
-                
-                dice.style.background = criticalSuccess ? 'var(--legendary)' : 'var(--primary)';
-                
-                return criticalSuccess;
-            }, 750);
-            
-            // Hide dice after animation
-            setTimeout(() => {
-                diceContainer.classList.remove('show');
-            }, 3000);
-        }
-
-        // Show celebration/notification
-        function showNotification(message, type = 'success') {
-            const notificationEl = document.querySelector('.reward-notification');
-            notificationEl.textContent = message;
-            notificationEl.style.backgroundColor = type === 'success' ? 'var(--success)' : 'var(--primary)';
-            
-            document.querySelector('.celebration').style.opacity = '1';
-            notificationEl.style.opacity = '1';
-            notificationEl.style.transform = 'translateY(0)';
-            
-            setTimeout(() => {
-                notificationEl.style.opacity = '0';
-                notificationEl.style.transform = 'translateY(20px)';
-                document.querySelector('.celebration').style.opacity = '0';
-            }, 3000);
-        }
-
-        // Add task
-        document.getElementById('taskForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const taskName = document.getElementById('taskName').value;
-            const importance = parseInt(document.getElementById('importance').value);
-            const timeEstimate = parseFloat(document.getElementById('timeEstimate').value);
-            const deadline = document.getElementById('deadline').value;
-            
-            // Calculate task rarity
-            const rarity = calculateTaskRarity(importance, timeEstimate, deadline);
-            
-            // Determine a suitable icon
-            const icon = determineIcon(taskName);
-            
-            // Calculate recommended pomodoros based on time estimate
-            const recommendedPomodoros = Math.max(1, Math.ceil(timeEstimate * 2)); // 2 pomodoros per hour
-            
-            const task = {
-                name: taskName,
-                timeEstimate: timeEstimate,
-                importance: importance,
-                deadline: deadline,
-                completed: false,
-                rarity: rarity,
-                icon: icon,
-                credits: calculateCredits(importance, timeEstimate, deadline, rarity),
-                xp: Math.round(importance * 10 + timeEstimate * 5), // Base XP
-                created: new Date().toISOString(),
-                subtasks: [],
-                pomodoroStats: {
-                    completedSessions: 0,
-                    sessionsUsed: 0,
-                    lootBonusPercent: 0,
-                    sessionHistory: []
-                }
-            };
-            
-            state.tasks.push(task);
-            saveState();
-            updateUI();
-            e.target.reset();
-            
-            showNotification(`New ${rarity} quest added: ${task.name}!`, 'primary');
-        });
-
-        // Add wishlist item with psychology-based credit formula
-        document.getElementById('wishlistForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const itemName = document.getElementById('itemName').value;
-            const cost = parseFloat(document.getElementById('itemCost').value);
-            const timeline = parseInt(document.getElementById('timeline').value);
-            const desireLevel = parseInt(document.getElementById('desireLevel').value);
-            
-            // Determine a suitable icon
-            const icon = determineIcon(itemName);
-            
-            // Base multiplier with variability
-            const baseMultiplier = 9 + Math.random() * 2;
-            
-            // Progressive difficulty
-            const difficultyMultiplier = state.wishlist.length === 0 ? 
-                                        0.8 : // First item easier
-                                        1 + (state.wishlist.length * 0.05); // Gets progressively harder
-            
-            // Timeline factor (longer timeline = more credits)
-            const timelineFactor = 1 + (timeline / 20);
-            
-            // Desire discount (higher desire = slightly fewer credits)
-            const desireMultiplier = 1.2 - (desireLevel * 0.08);
-            
-            // Calculate final credits
-            const totalCredits = Math.round(cost * baseMultiplier * difficultyMultiplier * 
-                                timelineFactor * desireMultiplier);
-            
-            // Endowed progress (small head start)
-            const headStart = Math.min(0.05 * totalCredits, 50);
-            
-            const item = {
-                name: itemName,
-                icon: icon,
-                cost: cost,
-                timeline: timeline,
-                desireLevel: desireLevel,
-                credits: totalCredits,
-                progress: headStart,
-                displayProgress: headStart / totalCredits,
-                milestones: [0.25, 0.5, 0.75, 1], // Progress milestones at 25%, 50%, 75%, 100%
-                created: new Date().toISOString()
-            };
-            
-            // Apply the head start if user has enough credits
-            if (state.credits >= headStart) {
-                state.credits -= headStart;
-                showNotification(`Got a head start on "${item.name}"!`, 'primary');
-            } else {
-                item.progress = state.credits;
-                item.displayProgress = state.credits / totalCredits;
-                state.credits = 0;
-            }
-            
-            // Create a unique ID for this item
-            item.id = Date.now().toString();
-            
-            // Initialize milestones tracking
-            state.milestones[item.id] = [];
-            
-            state.wishlist.push(item);
-            saveState();
-            updateUI();
-            e.target.reset();
-            
-            showNotification(`New reward added: ${item.name}`, 'primary');
-        });
-        
-        // Open Pomodoro modal for a task
-        function startPomodoro(index) {
-            const task = state.tasks[index];
-            
-            // Update task name in the modal
-            document.getElementById('pomodoroTaskName').textContent = task.name;
-            
-            // Show setup screen, hide timer screen
-            document.getElementById('pomodoroSetup').style.display = 'block';
-            document.getElementById('pomodoroTimer').style.display = 'none';
-            document.getElementById('subtaskCompletePrompt').classList.remove('show');
-            
-            // Populate subtask selection
-            populateSubtaskSelection(task);
-            
-            // Reset time selections to defaults
-            document.querySelectorAll('.focus-time-selector .time-option').forEach(option => {
-                option.classList.remove('selected');
-                if (option.dataset.value === '25') {
-                    option.classList.add('selected');
-                }
-            });
-            
-            document.querySelectorAll('.break-time-selector .time-option').forEach(option => {
-                option.classList.remove('selected');
-                if (option.dataset.value === '5') {
-                    option.classList.add('selected');
-                }
-            });
-            
-            // Reset animation selection
-            document.querySelectorAll('.animation-option').forEach(option => {
-                option.classList.remove('selected');
-                if (option.dataset.type === 'forge') {
-                    option.classList.add('selected');
-                }
-            });
-            
-            // Store task index in activePomodoro
-            state.activePomodoro = {
-                taskIndex: index,
-                subtaskIndex: null,
-                focusDuration: 25,
-                breakDuration: 5,
-                phase: 'setup',
-                animationType: 'forge',
-                sessionsForCompletion: 0
-            };
-            
-            saveState();
-            
-            // Show the modal
-            document.getElementById('pomodoroModal').classList.add('show');
-        }
-        
-        // Populate subtask selection
-        function populateSubtaskSelection(task) {
-            const subtaskSelection = document.getElementById('subtaskSelection');
-            // Keep the "Create New Subtask" option
-            subtaskSelection.innerHTML = '<div class="subtask-option" onclick="selectSubtask(\'new\')">+ Create New Subtask</div>';
-            
-            // Add existing subtasks
-            if (task.subtasks && task.subtasks.length > 0) {
-                task.subtasks.forEach((subtask, index) => {
-                    if (!subtask.completed) {
-                        const subtaskOption = document.createElement('div');
-                        subtaskOption.className = 'subtask-option';
-                        subtaskOption.textContent = subtask.name;
-                        subtaskOption.onclick = () => selectSubtask(index);
-                        subtaskSelection.insertBefore(subtaskOption, subtaskSelection.firstChild);
-                    }
-                });
-            }
-            
-            // Hide new subtask form
-            document.getElementById('newSubtaskForm').style.display = 'none';
-        }
-        
-        // Select a subtask for pomodoro
-        function selectSubtask(index) {
-            // Remove selection from all options
-            document.querySelectorAll('.subtask-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            if (index === 'new') {
-                // Show new subtask form
-                document.getElementById('newSubtaskForm').style.display = 'block';
-                document.getElementById('newSubtaskInput').focus();
-                
-                // Mark the "Create New" option as selected
-                document.querySelector('.subtask-option').classList.add('selected');
-            } else {
-                // Hide new subtask form
-                document.getElementById('newSubtaskForm').style.display = 'none';
-                
-                // Update activePomodoro state
-                state.activePomodoro.subtaskIndex = index;
-                
-                // Mark the selected subtask
-                document.querySelectorAll('.subtask-option').forEach((option, i) => {
-                    if (i === index + 1) { // +1 because the first option is "Create New"
-                        option.classList.add('selected');
-                    }
-                });
-            }
-        }
-        
-        // Create a new subtask
-        function createSubtask() {
-            const subtaskInput = document.getElementById('newSubtaskInput');
-            const subtaskName = subtaskInput.value.trim();
-            
-            if (subtaskName && state.activePomodoro) {
-                const taskIndex = state.activePomodoro.taskIndex;
-                const task = state.tasks[taskIndex];
-                
-                const newSubtask = {
-                    name: subtaskName,
-                    completed: false,
-                    created: new Date().toISOString()
-                };
-                
-                task.subtasks.push(newSubtask);
-                
-                // Set the new subtask as the active one
-                state.activePomodoro.subtaskIndex = task.subtasks.length - 1;
-                
-                saveState();
-                populateSubtaskSelection(task);
-                
-                // Select the newly created subtask
-                document.querySelectorAll('.subtask-option').forEach((option, i) => {
-                    if (i === 0) { // The new subtask will be the first one
-                        option.classList.add('selected');
-                    }
-                });
-                
-                subtaskInput.value = '';
-                document.getElementById('newSubtaskForm').style.display = 'none';
-            }
-        }
-        
-        // Select focus time
-        function selectFocusTime(duration) {
-            // First remove selected class from all options
-            document.querySelectorAll('.focus-time-selector .time-option').forEach(option => {
-                option.classList.remove('selected');
-            });
-            
-            // Then add selected class to the clicked option
-            document.querySelector(`.focus-time-selector .time-option[data-value="${duration}"]`).classList.add('selected');
-            
-            if (state.activePomodoro) {
-                state.activePomodoro.focusDuration = duration;
-            }
-        }
-        
-        // Select break time - FIXED to correctly highlight the selected option
+        // Fix for the break time selection
         function selectBreakTime(duration) {
             // First remove selected class from all options
             document.querySelectorAll('.break-time-selector .time-option').forEach(option => {
@@ -1840,917 +422,6 @@
                 state.activePomodoro.breakDuration = duration;
             }
         }
-        
-        // Select animation type
-        function selectAnimationType(type) {
-            document.querySelectorAll('.animation-option').forEach(option => {
-                option.classList.remove('selected');
-                if (option.dataset.type === type) {
-                    option.classList.add('selected');
-                }
-            });
-            
-            state.activePomodoro.animationType = type;
-        }
-        
-        // Start the focus session
-        function startFocusSession() {
-            if (!state.activePomodoro || state.activePomodoro.subtaskIndex === null) {
-                alert("Please select a subtask first!");
-                return;
-            }
-            
-            const taskIndex = state.activePomodoro.taskIndex;
-            const subtaskIndex = state.activePomodoro.subtaskIndex;
-            const task = state.tasks[taskIndex];
-            const subtask = task.subtasks[subtaskIndex];
-            
-            // Hide setup, show timer
-            document.getElementById('pomodoroSetup').style.display = 'none';
-            document.getElementById('pomodoroTimer').style.display = 'block';
-            
-            // Set up timer display
-            document.getElementById('phaseType').textContent = 'Focus Time';
-            document.getElementById('phaseType').className = 'focus-time';
-            document.getElementById('timerDisplay').textContent = `${state.activePomodoro.focusDuration}:00`;
-            document.getElementById('currentSubtask').textContent = subtask.name;
-            
-            // Reset session stats in UI
-            document.getElementById('completedPomodoros').textContent = '0';
-            document.getElementById('efficiencyBonus').textContent = '0';
-            
-            // Create session info
-            state.activePomodoro.phase = 'focus';
-            state.activePomodoro.timeRemaining = state.activePomodoro.focusDuration * 60; // in seconds
-            state.activePomodoro.running = false;
-            state.activePomodoro.startTime = null;
-            state.activePomodoro.lastActive = new Date().getTime();
-            state.activePomodoro.sessionsCompleted = 0;
-            
-            // Set up animation based on selected type
-            setupAnimation(state.activePomodoro.animationType);
-            
-            // Reset buttons
-            document.getElementById('startTimer').disabled = false;
-            document.getElementById('pauseTimer').disabled = true;
-            
-            saveState();
-        }
-        
-        // Set up pixel animation based on type - UPDATED to use SVG instead of background images
-        function setupAnimation(type) {
-            const animationScene = document.getElementById('animationScene');
-            animationScene.innerHTML = '';
-            
-            switch (type) {
-                case 'forge':
-                    // Create character
-                    const character = document.createElement('div');
-                    character.className = 'pixel-art pixel-character';
-                    character.style.animation = 'characterForgeIdle 0.8s steps(1) infinite';
-                    character.innerHTML = `
-                        <svg width="32" height="48" viewBox="0 0 32 48">
-                            <rect x="12" y="8" width="8" height="8" fill="#6d28d9" />
-                            <rect x="10" y="16" width="12" height="16" fill="#6d28d9" />
-                            <rect x="6" y="18" width="4" height="8" fill="#6d28d9" />
-                            <rect x="22" y="18" width="4" height="8" fill="#6d28d9" />
-                            <rect x="10" y="32" width="4" height="12" fill="#6d28d9" />
-                            <rect x="18" y="32" width="4" height="12" fill="#6d28d9" />
-                        </svg>
-                    `;
-                    
-                    // Create forge
-                    const forge = document.createElement('div');
-                    forge.className = 'pixel-art pixel-forge';
-                    forge.innerHTML = `
-                        <svg width="40" height="40" viewBox="0 0 40 40">
-                            <rect x="5" y="20" width="30" height="15" fill="#71717a" />
-                            <rect x="10" y="10" width="20" height="10" fill="#ef4444" />
-                            <rect x="15" y="5" width="10" height="5" fill="#f59e0b" />
-                        </svg>
-                    `;
-                    
-                    // Create anvil
-                    const anvil = document.createElement('div');
-                    anvil.className = 'pixel-art pixel-anvil';
-                    anvil.innerHTML = `
-                        <svg width="32" height="16" viewBox="0 0 32 16">
-                            <rect x="4" y="4" width="24" height="8" fill="#71717a" />
-                            <rect x="8" y="12" width="16" height="4" fill="#52525b" />
-                        </svg>
-                    `;
-                    
-                    // Create hammer with animation
-                    const hammer = document.createElement('div');
-                    hammer.className = 'pixel-art pixel-hammer';
-                    hammer.style.animation = 'pixelHammerSwing 1s steps(1) infinite';
-                    hammer.innerHTML = `
-                        <svg width="16" height="24" viewBox="0 0 16 24">
-                            <rect x="4" y="2" width="8" height="6" fill="#71717a" />
-                            <rect x="6" y="8" width="4" height="14" fill="#92400e" />
-                        </svg>
-                    `;
-                    
-                    // Add sparks with animation
-                    for (let i = 0; i < 3; i++) {
-                        const sparks = document.createElement('div');
-                        sparks.className = 'pixel-art pixel-sparks';
-                        sparks.style.left = `${175 + i * 5}px`;
-                        sparks.style.animation = `pixelSparksFly 0.5s ${i * 0.2}s steps(1) infinite`;
-                        sparks.innerHTML = `
-                            <svg width="16" height="16" viewBox="0 0 16 16">
-                                <circle cx="8" cy="8" r="3" fill="#fbbf24" />
-                                <circle cx="8" cy="8" r="1" fill="#f59e0b" />
-                            </svg>
-                        `;
-                        animationScene.appendChild(sparks);
-                    }
-                    
-                    animationScene.appendChild(forge);
-                    animationScene.appendChild(anvil);
-                    animationScene.appendChild(hammer);
-                    animationScene.appendChild(character);
-                    break;
-                    
-                case 'magic':
-                    // Create mage character
-                    const mage = document.createElement('div');
-                    mage.className = 'pixel-art pixel-character';
-                    mage.style.animation = 'characterMagicIdle 0.8s steps(1) infinite';
-                    mage.innerHTML = `
-                        <svg width="32" height="48" viewBox="0 0 32 48">
-                            <rect x="12" y="4" width="8" height="8" fill="#8b5cf6" />
-                            <rect x="10" y="12" width="12" height="16" fill="#8b5cf6" />
-                            <rect x="6" y="14" width="4" height="8" fill="#8b5cf6" />
-                            <rect x="22" y="14" width="4" height="8" fill="#8b5cf6" />
-                            <rect x="10" y="28" width="4" height="12" fill="#8b5cf6" />
-                            <rect x="18" y="28" width="4" height="12" fill="#8b5cf6" />
-                            <polygon points="8,4 16,0 24,4 16,8" fill="#a78bfa" />
-                        </svg>
-                    `;
-                    
-                    // Create magic circle
-                    const magicCircle = document.createElement('div');
-                    magicCircle.className = 'pixel-art pixel-magic-circle';
-                    magicCircle.style.animation = 'magicCirclePulse 2s steps(1) infinite';
-                    magicCircle.innerHTML = `
-                        <svg width="48" height="16" viewBox="0 0 48 16">
-                            <ellipse cx="24" cy="8" rx="20" ry="6" fill="none" stroke="#a78bfa" stroke-width="2" />
-                            <ellipse cx="24" cy="8" rx="10" ry="3" fill="#a78bfa" opacity="0.5" />
-                        </svg>
-                    `;
-                    
-                    // Add magic particles
-                    for (let i = 0; i < 5; i++) {
-                        const particle = document.createElement('div');
-                        particle.className = 'pixel-art pixel-magic-particle';
-                        particle.style.bottom = `${30 + Math.random() * 40}px`;
-                        particle.style.right = `${50 + Math.random() * 40}px`;
-                        particle.style.animation = `magicParticleFloat 3s ${i * 0.5}s steps(1) infinite`;
-                        particle.innerHTML = `
-                            <svg width="16" height="16" viewBox="0 0 16 16">
-                                <circle cx="8" cy="8" r="4" fill="#a78bfa" />
-                                <circle cx="8" cy="8" r="2" fill="#c4b5fd" />
-                            </svg>
-                        `;
-                        animationScene.appendChild(particle);
-                    }
-                    
-                    animationScene.appendChild(magicCircle);
-                    animationScene.appendChild(mage);
-                    break;
-                    
-                case 'combat':
-                    // Create warrior character
-                    const warrior = document.createElement('div');
-                    warrior.className = 'pixel-art pixel-character';
-                    warrior.style.animation = 'characterCombatIdle 0.8s steps(1) infinite';
-                    warrior.innerHTML = `
-                        <svg width="32" height="48" viewBox="0 0 32 48">
-                            <rect x="12" y="8" width="8" height="8" fill="#ef4444" />
-                            <rect x="10" y="16" width="12" height="16" fill="#ef4444" />
-                            <rect x="6" y="18" width="4" height="8" fill="#ef4444" />
-                            <rect x="22" y="18" width="4" height="8" fill="#ef4444" />
-                            <rect x="10" y="32" width="4" height="12" fill="#ef4444" />
-                            <rect x="18" y="32" width="4" height="12" fill="#ef4444" />
-                        </svg>
-                    `;
-                    
-                    // Add enemies
-                    for (let i = 0; i < 3; i++) {
-                        const enemy = document.createElement('div');
-                        enemy.className = 'pixel-art pixel-enemy';
-                        enemy.style.left = `${160 + i * 50}px`;
-                        enemy.style.animation = `enemyIdle 0.8s ${i * 0.3}s steps(1) infinite`;
-                        enemy.innerHTML = `
-                            <svg width="24" height="40" viewBox="0 0 24 40">
-                                <rect x="8" y="4" width="8" height="8" fill="#71717a" />
-                                <rect x="6" y="12" width="12" height="16" fill="#71717a" />
-                                <rect x="4" y="14" width="2" height="6" fill="#71717a" />
-                                <rect x="18" y="14" width="2" height="6" fill="#71717a" />
-                                <rect x="6" y="28" width="4" height="8" fill="#71717a" />
-                                <rect x="14" y="28" width="4" height="8" fill="#71717a" />
-                            </svg>
-                        `;
-                        animationScene.appendChild(enemy);
-                    }
-                    
-                    // Create sword with animation
-                    const sword = document.createElement('div');
-                    sword.className = 'pixel-art pixel-sword';
-                    sword.style.animation = 'swordSlash 2s steps(1) infinite';
-                    sword.innerHTML = `
-                        <svg width="32" height="8" viewBox="0 0 32 8">
-                            <rect x="0" y="3" width="24" height="2" fill="#d1d5db" />
-                            <rect x="24" y="0" width="8" height="8" fill="#9ca3af" />
-                        </svg>
-                    `;
-                    
-                    animationScene.appendChild(sword);
-                    animationScene.appendChild(warrior);
-                    break;
-            }
-        }
-        
-        // Start Pomodoro timer
-        function startPomodoroTimer() {
-            if (!state.activePomodoro) return;
-            
-            // Update UI
-            document.getElementById('startTimer').disabled = true;
-            document.getElementById('pauseTimer').disabled = false;
-            
-            // Set start time if not already running
-            if (!state.activePomodoro.startTime) {
-                state.activePomodoro.startTime = new Date().getTime();
-            }
-            
-            state.activePomodoro.running = true;
-            saveState();
-            
-            // Start timer update interval
-            updatePomodoroTimer();
-        }
-        
-        // Update Pomodoro timer
-        function updatePomodoroTimer() {
-            if (!state.activePomodoro || !state.activePomodoro.running) return;
-            
-            const now = new Date().getTime();
-            const elapsed = Math.floor((now - state.activePomodoro.startTime) / 1000);
-            const phaseDuration = state.activePomodoro.phase === 'focus' ? 
-                                 state.activePomodoro.focusDuration * 60 : 
-                                 state.activePomodoro.breakDuration * 60;
-                                 
-            state.activePomodoro.timeRemaining = Math.max(0, phaseDuration - elapsed);
-            state.activePomodoro.lastActive = now;
-            
-            // Update display
-            const minutes = Math.floor(state.activePomodoro.timeRemaining / 60);
-            const seconds = state.activePomodoro.timeRemaining % 60;
-            document.getElementById('timerDisplay').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            
-            // Check if timer is complete
-            if (state.activePomodoro.timeRemaining <= 0) {
-                handlePomodoroPhaseComplete();
-            } else {
-                // Continue timer
-                saveState();
-                setTimeout(updatePomodoroTimer, 1000);
-            }
-        }
-        
-        // Handle Pomodoro phase completion
-        function handlePomodoroPhaseComplete() {
-            // Pause the timer
-            state.activePomodoro.running = false;
-            
-            if (state.activePomodoro.phase === 'focus') {
-                // Completed a focus session
-                state.activePomodoro.sessionsCompleted++;
-                
-                document.getElementById('completedPomodoros').textContent = state.activePomodoro.sessionsCompleted;
-                
-                // Show subtask completion prompt
-                document.getElementById('pomodoroTimer').style.display = 'none';
-                document.getElementById('subtaskCompletePrompt').classList.add('show');
-                
-                const taskIndex = state.activePomodoro.taskIndex;
-                const subtaskIndex = state.activePomodoro.subtaskIndex;
-                const task = state.tasks[taskIndex];
-                const subtask = task.subtasks[subtaskIndex];
-                
-                document.getElementById('completionSubtaskName').textContent = subtask.name;
-                
-                // Play completion sound
-                // const sound = new Audio('completion.mp3');
-                // sound.play();
-            } else {
-                // Completed a break phase
-                // Switch back to focus phase
-                state.activePomodoro.phase = 'focus';
-                state.activePomodoro.timeRemaining = state.activePomodoro.focusDuration * 60; // reset to full focus time
-                state.activePomodoro.startTime = null;
-                
-                // Update phase display
-                document.getElementById('phaseType').textContent = 'Focus Time';
-                document.getElementById('phaseType').className = 'focus-time';
-                document.getElementById('timerDisplay').textContent = `${state.activePomodoro.focusDuration}:00`;
-                
-                // Show timer screen
-                document.getElementById('pomodoroTimer').style.display = 'block';
-                document.getElementById('subtaskCompletePrompt').classList.remove('show');
-                
-                // Reset buttons
-                document.getElementById('startTimer').disabled = false;
-                document.getElementById('pauseTimer').disabled = true;
-                
-                showNotification(`Break complete! Ready for next focus session.`);
-            }
-            
-            saveState();
-        }
-        
-        // Handle subtask completion response
-        function handleSubtaskComplete(isCompleted) {
-            const taskIndex = state.activePomodoro.taskIndex;
-            const subtaskIndex = state.activePomodoro.subtaskIndex;
-            const task = state.tasks[taskIndex];
-            
-            if (isCompleted) {
-                // Mark subtask as completed
-                task.subtasks[subtaskIndex].completed = true;
-                
-                // Store how many sessions were needed for completion
-                state.activePomodoro.sessionsForCompletion = state.activePomodoro.sessionsCompleted;
-                
-                // Award XP for completing subtask
-                addXP(15);
-                
-                // Update pomodoro stats
-                task.pomodoroStats.completedSessions += state.activePomodoro.sessionsCompleted;
-                task.pomodoroStats.sessionsUsed += state.activePomodoro.sessionsCompleted;
-                
-                // Calculate efficiency bonus - the fewer sessions needed, the bigger the bonus
-                // We use a baseline of 2 sessions to determine efficiency
-                const expectedSessions = 2;
-                const efficiencyBonus = Math.max(0, Math.min(30, Math.round((expectedSessions / state.activePomodoro.sessionsCompleted) * 20)));
-                
-                // Update loot bonus chance
-                task.pomodoroStats.lootBonusPercent = Math.min(50, task.pomodoroStats.lootBonusPercent + efficiencyBonus);
-                
-                // Log the session
-                task.pomodoroStats.sessionHistory.push({
-                    subtask: task.subtasks[subtaskIndex].name,
-                    sessions: state.activePomodoro.sessionsCompleted,
-                    efficiencyBonus: efficiencyBonus,
-                    completed: true,
-                    timestamp: new Date().toISOString()
-                });
-                
-                // Update bonus display
-                document.getElementById('efficiencyBonus').textContent = efficiencyBonus;
-                
-                showNotification(`Subtask completed! +15 XP, Loot bonus +${efficiencyBonus}%!`);
-                
-                // Close the pomodoro modal
-                setTimeout(() => {
-                    closePomodoroModal();
-                }, 2000);
-            } else {
-                // Continue with the task - switch to break phase
-                state.activePomodoro.phase = 'rest';
-                state.activePomodoro.timeRemaining = state.activePomodoro.breakDuration * 60;
-                state.activePomodoro.startTime = null;
-                
-                // Update phase display
-                document.getElementById('phaseType').textContent = 'Rest Time';
-                document.getElementById('phaseType').className = 'rest-time';
-                document.getElementById('timerDisplay').textContent = `${state.activePomodoro.breakDuration}:00`;
-                
-                // Show timer screen again
-                document.getElementById('pomodoroTimer').style.display = 'block';
-                document.getElementById('subtaskCompletePrompt').classList.remove('show');
-                
-                // Reset buttons
-                document.getElementById('startTimer').disabled = false;
-                document.getElementById('pauseTimer').disabled = true;
-                
-                // Log the incomplete session
-                task.pomodoroStats.sessionsUsed += state.activePomodoro.sessionsCompleted;
-                task.pomodoroStats.sessionHistory.push({
-                    subtask: task.subtasks[subtaskIndex].name,
-                    sessions: state.activePomodoro.sessionsCompleted,
-                    completed: false,
-                    timestamp: new Date().toISOString()
-                });
-            }
-            
-            saveState();
-        }
-        
-        // Pause Pomodoro timer
-        function pausePomodoroTimer() {
-            if (!state.activePomodoro) return;
-            
-            state.activePomodoro.running = false;
-            saveState();
-            
-            // Update UI
-            document.getElementById('startTimer').disabled = false;
-            document.getElementById('pauseTimer').disabled = true;
-        }
-        
-        // Skip current Pomodoro phase
-        function skipPomodoroPhase() {
-            if (!state.activePomodoro) return;
-            
-            if (state.activePomodoro.phase === 'focus') {
-                // If skipping focus phase, don't count it as completed
-                handlePomodoroPhaseComplete();
-            } else {
-                // Simply end the break phase
-                state.activePomodoro.phase = 'focus';
-                state.activePomodoro.timeRemaining = state.activePomodoro.focusDuration * 60;
-                state.activePomodoro.startTime = null;
-                
-                // Update phase display
-                document.getElementById('phaseType').textContent = 'Focus Time';
-                document.getElementById('phaseType').className = 'focus-time';
-                document.getElementById('timerDisplay').textContent = `${state.activePomodoro.focusDuration}:00`;
-                
-                // Reset buttons
-                document.getElementById('startTimer').disabled = false;
-                document.getElementById('pauseTimer').disabled = true;
-            }
-            
-            state.activePomodoro.running = false;
-            saveState();
-        }
-        
-        // Abandon pomodoro session
-        function abandonPomodoroSession() {
-            // If any sessions were completed, still count them
-            if (state.activePomodoro && state.activePomodoro.sessionsCompleted > 0) {
-                const taskIndex = state.activePomodoro.taskIndex;
-                const subtaskIndex = state.activePomodoro.subtaskIndex;
-                const task = state.tasks[taskIndex];
-                
-                if (task && task.subtasks && task.subtasks[subtaskIndex]) {
-                    // Log the abandoned session
-                    task.pomodoroStats.sessionsUsed += state.activePomodoro.sessionsCompleted;
-                    task.pomodoroStats.sessionHistory.push({
-                        subtask: task.subtasks[subtaskIndex].name,
-                        sessions: state.activePomodoro.sessionsCompleted,
-                        completed: false,
-                        abandoned: true,
-                        timestamp: new Date().toISOString()
-                    });
-                }
-            }
-            
-            state.activePomodoro = null;
-            saveState();
-            closePomodoroModal();
-        }
-        
-        // Close Pomodoro modal
-        function closePomodoroModal() {
-            document.getElementById('pomodoroModal').classList.remove('show');
-            
-            // If timer was running, pause it
-            if (state.activePomodoro && state.activePomodoro.running) {
-                pausePomodoroTimer();
-            }
-            
-            updateUI();
-        }
-
-        // Complete task with chance for critical success and pomodoro bonus
-        function completeTask(index) {
-            const task = state.tasks[index];
-            if (!task.completed) {
-                // Log completion time to history (for anti-farming)
-                state.completionHistory.push(new Date().toISOString());
-                
-                // Roll dice for critical success
-                const diceContainer = document.getElementById('diceRollDisplay');
-                diceContainer.innerHTML = '';
-                diceContainer.classList.add('show');
-                
-                // Create and show dice
-                const dice = document.createElement('div');
-                dice.className = 'dice';
-                diceContainer.appendChild(dice);
-                
-                // Mark as completed first to prevent double-clicks
-                task.completed = true;
-                
-                // Adjust completion UI
-                const taskElements = document.querySelectorAll('.task-list li');
-                if (taskElements[index]) {
-                    const completeBtn = taskElements[index].querySelector('.complete-btn');
-                    if (completeBtn) {
-                        completeBtn.disabled = true;
-                        completeBtn.textContent = 'Rolling...';
-                    }
-                }
-                
-                // Animate dice roll
-                setTimeout(() => {
-                    // Roll the dice
-                    const roll = Math.floor(Math.random() * 20) + 1; // d20
-                    dice.textContent = roll;
-                    
-                    // Determine if critical success with pomodoro bonus
-                    let criticalSuccess = false;
-                    let criticalFail = false;
-                    
-                    // Pomodoro bonus increases critical chance
-                    const pomodoroBonus = task.pomodoroStats ? task.pomodoroStats.lootBonusPercent / 100 : 0;
-                    
-                    // Base critical chance
-                    if (roll === 20) {
-                        criticalSuccess = true;
-                    } 
-                    // Streak + Pomodoro increases critical chance
-                    else if (roll >= (20 - Math.min(5, Math.floor(state.streak / 2)) - Math.floor(pomodoroBonus * 10))) {
-                        criticalSuccess = true;
-                    }
-                    // Very small chance of critical fail
-                    else if (roll === 1) {
-                        criticalFail = true;
-                    }
-                    
-                    // Apply streak bonus
-                    let bonus = 1 + (state.streak * 0.1);
-                    
-                    // Apply early completion bonus
-                    const daysEarly = Math.max(0, (new Date(task.deadline) - new Date()) / (1000 * 60 * 60 * 24));
-                    const earlyBonus = daysEarly * 0.05;
-                    bonus += earlyBonus;
-                    
-                    // Apply pomodoro bonus
-                    if (pomodoroBonus > 0) {
-                        bonus += pomodoroBonus;
-                    }
-                    
-                    // Calculate subtask completion bonus
-                    const subtaskCompletionRate = task.subtasks.length ? 
-                       task.subtasks.filter(subtask => subtask.completed).length / task.subtasks.length : 0;
-                    
-                    const subtaskBonus = subtaskCompletionRate * 0.15; // Up to 15% bonus for all subtasks
-                    bonus += subtaskBonus;
-                    
-                    // Rarity multipliers for more variance
-                    const rarityMultipliers = {
-                        'common': 1,
-                        'uncommon': 1.2,
-                        'rare': 1.5,
-                        'epic': 2,
-                        'legendary': 3
-                    };
-                    
-                    // Base credits calculation
-                    let creditsEarned = Math.round(task.credits * bonus * rarityMultipliers[task.rarity]);
-                    let xpEarned = task.xp;
-                    
-                    if (criticalSuccess) {
-                        // Critical success - double rewards!
-                        creditsEarned = Math.round(creditsEarned * 2);
-                        xpEarned = Math.round(xpEarned * 2);
-                        dice.style.background = 'var(--legendary)';
-                        dice.style.boxShadow = '0 0 10px var(--legendary)';
-                    } else if (criticalFail) {
-                        // Critical fail - half rewards
-                        creditsEarned = Math.round(creditsEarned * 0.5);
-                        xpEarned = Math.round(xpEarned * 0.5);
-                        dice.style.background = 'var(--danger)';
-                    } else {
-                        dice.style.background = 'var(--primary)';
-                    }
-                    
-                    // Update player stats
-                    state.credits += creditsEarned;
-                    state.streak++;
-                    state.lastStreak = new Date().toDateString();
-                    addXP(xpEarned);
-                    
-                    // If this was the active pomodoro task, clear it
-                    if (state.activePomodoro && state.activePomodoro.taskIndex === index) {
-                        state.activePomodoro = null;
-                    }
-                    
-                    // Show the result message
-                    let message = '';
-                    if (criticalSuccess) {
-                        message = `🌟 CRITICAL SUCCESS! +${creditsEarned} credits, +${xpEarned} XP`;
-                    } else if (criticalFail) {
-                        message = `😓 Critical fail... +${creditsEarned} credits, +${xpEarned} XP`;
-                    } else {
-                        message = `Quest completed! +${creditsEarned} credits, +${xpEarned} XP`;
-                        if (state.streak > 1) {
-                            message += ` (${state.streak}x streak bonus!)`;
-                        }
-                        if (earlyBonus > 0) {
-                            message += ` (Early completion bonus!)`;
-                        }
-                        if (pomodoroBonus > 0) {
-                            message += ` (Pomodoro bonus: ${Math.round(pomodoroBonus * 100)}%!)`;
-                        }
-                        if (subtaskBonus > 0) {
-                            message += ` (Subtask bonus: ${Math.round(subtaskBonus * 100)}%!)`;
-                        }
-                    }
-                    
-                    // Chance for bonus loot for higher rarity tasks (Easter egg)
-                    if (['rare', 'epic', 'legendary'].includes(task.rarity) && Math.random() < 0.3) {
-                        const bonusCredits = Math.round(task.credits * 0.2);
-                        state.credits += bonusCredits;
-                        message += ` BONUS LOOT: +${bonusCredits} credits!`;
-                    }
-                    
-                    // Additional chance for bonus with pomodoro sessions
-                    if (task.pomodoroStats && task.pomodoroStats.completedSessions > 0 && Math.random() < pomodoroBonus) {
-                        const pomodoroBonus = Math.round(task.credits * 0.3);
-                        state.credits += pomodoroBonus;
-                        message += ` POMODORO CHEST: +${pomodoroBonus} credits!`;
-                    }
-                    
-                    // Show notification after roll
-                    setTimeout(() => {
-                        showNotification(message);
-                    }, 500);
-                    
-                    saveState();
-                    updateWishlistProgress();
-                    updateUI();
-                }, 750);
-                
-                // Hide dice after animation
-                setTimeout(() => {
-                    diceContainer.classList.remove('show');
-                }, 3000);
-            }
-        }
-        
-        // Abandon task (with penalty)
-        function abandonTask(index) {
-            const task = state.tasks[index];
-            if (!task.completed) {
-                // Apply penalty
-                const penalty = Math.round(task.credits * 0.25);
-                state.credits = Math.max(0, state.credits - penalty);
-                
-                // Reset streak
-                state.streak = 0;
-                
-                // Show notification
-                showNotification(`Quest abandoned! -${penalty} credits. Streak reset!`, 'danger');
-                
-                // If this was the active pomodoro task, clear it
-                if (state.activePomodoro && state.activePomodoro.taskIndex === index) {
-                    state.activePomodoro = null;
-                }
-                
-                // Remove task
-                state.tasks.splice(index, 1);
-                
-                saveState();
-                updateUI();
-            }
-        }
-
-        // Update wishlist progress with psychological enhancements
-        function updateWishlistProgress() {
-            state.wishlist.forEach(item => {
-                // Store previous progress for milestone checking
-                const previousProgress = item.progress / item.credits;
-                
-                // Base progress as a proportion of total credits needed
-                let baseProgress = Math.min(state.credits, item.credits - item.progress);
-                
-                // Goal-gradient effect - acceleration in final stretch
-                if ((item.progress / item.credits) > 0.7 && (item.progress / item.credits) < 1) {
-                    const goalGradientBonus = baseProgress * 0.1; // 10% bonus in final stretch
-                    baseProgress += goalGradientBonus;
-                }
-                
-                // Check if the user can allocate credits to this item
-                if (baseProgress > 0) {
-                    // Update item progress
-                    item.progress += baseProgress;
-                    state.credits -= baseProgress;
-                    
-                    // Update display progress with visual enhancement
-                    item.displayProgress = Math.min(1, item.progress / item.credits);
-                    
-                    // Check for milestones
-                    item.milestones.forEach(milestone => {
-                        if (previousProgress < milestone && item.displayProgress >= milestone) {
-                            if (!state.milestones[item.id] || !state.milestones[item.id].includes(milestone)) {
-                                if (!state.milestones[item.id]) state.milestones[item.id] = [];
-                                state.milestones[item.id].push(milestone);
-                                
-                                const percentComplete = Math.round(milestone * 100);
-                                showNotification(`${percentComplete}% progress on "${item.name}"!`);
-                                
-                                // Add XP for milestone
-                                if (milestone < 1) {
-                                    addXP(Math.round(milestone * 50));
-                                }
-                            }
-                        }
-                    });
-                    
-                    // Check if item is now complete
-                    if (item.displayProgress >= 1 && (!state.milestones[item.id] || !state.milestones[item.id].includes('completed'))) {
-                        if (!state.milestones[item.id]) state.milestones[item.id] = [];
-                        state.milestones[item.id].push('completed');
-                        showNotification(`🎉 Reward unlocked: "${item.name}"! 🎉`);
-                        
-                        // Bonus XP for completion
-                        addXP(100);
-                    }
-                }
-            });
-            
-            saveState();
-        }
-
-        // Update UI
-        function updateUI() {
-            // Update credits and level display
-            document.getElementById('totalCredits').textContent = state.credits;
-            document.getElementById('currentStreak').textContent = state.streak;
-            document.getElementById('playerLevel').textContent = state.level;
-            document.getElementById('currentXP').textContent = state.xp;
-            document.getElementById('xpToNextLevel').textContent = state.xpToNextLevel;
-            document.getElementById('levelProgress').style.width = `${(state.xp / state.xpToNextLevel) * 100}%`;
-
-            // Update tasks list
-            const taskList = document.getElementById('taskList');
-            taskList.innerHTML = state.tasks
-                .filter(task => !task.completed) // Show only uncompleted tasks
-                .map((task, index) => {
-                    const actualIndex = state.tasks.indexOf(task);
-                    
-                    // Format deadline with urgency coloring
-                    const today = new Date();
-                    const deadline = new Date(task.deadline);
-                    const daysRemaining = Math.floor((deadline - today) / (1000 * 60 * 60 * 24));
-                    
-                    let deadlineClass = '';
-                    if (daysRemaining < 0) {
-                        deadlineClass = 'style="color: var(--danger); font-weight: bold;"';
-                    } else if (daysRemaining < 2) {
-                        deadlineClass = 'style="color: var(--warning); font-weight: bold;"';
-                    }
-                    
-                    // Determine streak bonus
-                    const streakBonus = Math.round(task.credits * state.streak * 0.1);
-                    
-                    // Get rarity name with proper capitalization
-                    const rarityName = task.rarity.charAt(0).toUpperCase() + task.rarity.slice(1);
-                    
-                    // Show pomodoro progress if applicable
-                    let pomodoroProgress = '';
-                    if (task.pomodoroStats && task.pomodoroStats.lootBonusPercent > 0) {
-                        pomodoroProgress = `
-                            <div style="margin-top: 0.5rem;">
-                                <span style="font-size: 0.8rem;">Pomodoro bonus: +${task.pomodoroStats.lootBonusPercent}% chance of bonus rewards</span>
-                            </div>
-                        `;
-                    }
-                    
-                    // Show subtasks if any
-                    let subtasksHTML = '';
-                    if (task.subtasks && task.subtasks.length > 0) {
-                        const completedSubtasks = task.subtasks.filter(st => st.completed).length;
-                        const subtaskPercent = Math.round((completedSubtasks / task.subtasks.length) * 100);
-                        
-                        subtasksHTML = `
-                            <div style="margin-top: 0.5rem;">
-                                <span style="font-size: 0.8rem;">Subtasks: ${completedSubtasks}/${task.subtasks.length} (${subtaskPercent}%)</span>
-                                <div class="progress-bar" style="height: 0.5rem;">
-                                    <div class="progress-bar-fill" style="width: ${subtaskPercent}%;"></div>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    
-                    return `
-                    <li class="${task.rarity}">
-                        <div class="task-info">
-                            <div class="task-header">
-                                <div class="quest-icon">${task.icon}</div>
-                                <strong>${task.name}</strong> <span style="font-size: 0.8em; color: var(--${task.rarity === 'common' ? 'secondary' : task.rarity});">[${rarityName}]</span>
-                            </div>
-                            <div style="margin-top: 0.5rem;">
-                                ${task.importance}★ | ${task.timeEstimate}h | Due: <span ${deadlineClass}>${task.deadline}</span><br>
-                                Reward: ${task.credits} credits (+${streakBonus} streak bonus), ${task.xp} XP
-                                <div class="tooltip">ⓘ
-                                    <span class="tooltiptext">
-                                        Critical success chance: ${5 + Math.min(5, Math.floor(state.streak / 2))}%<br>
-                                        Pomodoro bonus: +${task.pomodoroStats ? task.pomodoroStats.lootBonusPercent : 0}%<br>
-                                        Total critical chance: ${5 + Math.min(5, Math.floor(state.streak / 2)) + (task.pomodoroStats ? task.pomodoroStats.lootBonusPercent : 0)}%
-                                    </span>
-                                </div>
-                            </div>
-                            ${pomodoroProgress}
-                            ${subtasksHTML}
-                        </div>
-                        <div class="task-buttons">
-                            <button onclick="startPomodoro(${actualIndex})" class="pomodoro-btn">Pomodoro</button>
-                            <button onclick="completeTask(${actualIndex})" class="complete-btn">Complete</button>
-                            <button onclick="abandonTask(${actualIndex})" class="abandon-btn">Abandon</button>
-                        </div>
-                    </li>
-                `})
-                .join('');
-
-            // Add completed tasks at the bottom (show only most recent 5)
-            const completedTasks = state.tasks
-                .filter(task => task.completed)
-                .sort((a, b) => new Date(b.completed) - new Date(a.completed))
-                .slice(0, 5)
-                .map((task) => `
-                    <li style="opacity: 0.7;" class="${task.rarity}">
-                        <div>
-                            <div class="task-header">
-                                <div class="quest-icon">${task.icon}</div>
-                                <strong>${task.name}</strong> <span style="font-size: 0.8em; color: var(--${task.rarity === 'common' ? 'secondary' : task.rarity});">[${task.rarity.charAt(0).toUpperCase() + task.rarity.slice(1)}]</span>
-                            </div>
-                            ${task.importance}★ | ${task.timeEstimate}h | Completed
-                        </div>
-                        <span style="color: var(--success)">✓ Done</span>
-                    </li>
-                `)
-                .join('');
-                
-            if (completedTasks) {
-                taskList.innerHTML += `<h4>Completed quests</h4>${completedTasks}`;
-            }
-
-            // Update wishlist with enhanced progress display
-            const wishlist = document.getElementById('wishlist');
-            wishlist.innerHTML = state.wishlist
-                .map((item, index) => {
-                    // Build milestone markers
-                    const milestonesHTML = item.milestones
-                        .map(milestone => `
-                            <div class="milestone" style="left: ${milestone * 100}%;"></div>
-                        `)
-                        .join('');
-                    
-                    // Calculate progress and display progress
-                    const progressPercent = (item.progress / item.credits) * 100;
-                    const displayProgressPercent = item.displayProgress * 100;
-                    
-                    // Check if item is complete
-                    const isComplete = displayProgressPercent >= 100;
-                    
-                    return `
-                    <li>
-                        <div style="width: 100%;">
-                            <div class="reward-header">
-                                <div class="reward-icon">${item.icon}</div>
-                                <strong>${item.name}</strong> ${isComplete ? '✅' : ''}
-                            </div>
-                            <div style="margin-top: 0.5rem;">
-                                ${item.cost} HKD | ${item.timeline} weeks | Desire: ${item.desireLevel}/5
-                                <br>
-                                ${Math.round(progressPercent)}% complete | ${Math.round(item.progress)}/${item.credits} credits
-                            </div>
-                            <div class="progress-bar" style="position: relative;">
-                                ${milestonesHTML}
-                                <div class="progress-bar-fill" style="width: ${Math.min(100, displayProgressPercent)}%"></div>
-                            </div>
-                        </div>
-                    </li>
-                `})
-                .join('');
-                
-            // Update profile selector
-            updateProfileSelector();
-        }
-
-        // Initialize
-        loadState();
-
-        // Daily credit decay (check on page load)
-        const lastDecay = localStorage.getItem('lastCreditDecay');
-        const now = new Date().toDateString();
-        if (lastDecay !== now) {
-            // Apply a small decay to maintain engagement
-            state.credits = Math.max(0, Math.round(state.credits * 0.98));
-            localStorage.setItem('lastCreditDecay', now);
-            saveState();
-        }
-
-        // Auto-update wishlist progress when page loads
-        updateWishlistProgress();
-        updateUI();
     </script>
 </body>
 </html>
